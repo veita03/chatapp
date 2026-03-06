@@ -18,6 +18,17 @@ export default function Home() {
   const scrollContainerRef = useRef<HTMLElement>(null);
   const [hasUnread, setHasUnread] = useState(false);
   const [lastSeenMessageId, setLastSeenMessageId] = useState<string | null>(null);
+  const [currentTime, setCurrentTime] = useState<number>(0);
+
+  // Set the initial time after the first render to avoid Hydration/Purity errors, and periodically update
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setCurrentTime(Date.now());
+    const timer = setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 60000);
+    return () => clearInterval(timer);
+  }, []);
 
   // Auto-scroll on initial load or if already at the bottom when a new message arrives
   useEffect(() => {
@@ -80,6 +91,8 @@ export default function Home() {
     e.preventDefault();
     if (!author.trim()) {
       setAuthorError(true);
+      // Remove error after 3 seconds
+      setTimeout(() => setAuthorError(false), 3000);
       return;
     }
     setAuthorError(false);
@@ -93,6 +106,59 @@ export default function Home() {
     setTimeout(scrollToBottomContext, 50);
   };
 
+  // Helper functions for formatting dates and times
+  const formatRelativeTime = (timestampMs: number) => {
+    if (currentTime === 0) return ""; // prevent hydration mismatch before client mount
+    // const rtf = new Intl.RelativeTimeFormat("sl-SI", { numeric: "always", style: "short" });
+    const diffInSeconds = Math.round((timestampMs - currentTime) / 1000);
+    const diffInMinutes = Math.round(diffInSeconds / 60);
+    const diffInHours = Math.round(diffInMinutes / 60);
+
+    if (Math.abs(diffInSeconds) < 60) {
+      return "pravkar";
+    } else if (Math.abs(diffInMinutes) < 60) {
+      return `pred ${Math.abs(diffInMinutes)} min`;
+    } else if (Math.abs(diffInHours) < 24) {
+      return `pred ${Math.abs(diffInHours)} h`;
+    }
+
+    // fallback for older messages
+    return new Intl.DateTimeFormat("sl-SI", {
+      hour: "2-digit",
+      minute: "2-digit",
+    }).format(timestampMs);
+  };
+
+  const getDaySeparatorLabel = (timestampMs: number) => {
+    const messageDate = new Date(timestampMs);
+    const today = new Date(currentTime);
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+
+    if (
+      messageDate.getDate() === today.getDate() &&
+      messageDate.getMonth() === today.getMonth() &&
+      messageDate.getFullYear() === today.getFullYear()
+    ) {
+      return "DANES";
+    }
+
+    if (
+      messageDate.getDate() === yesterday.getDate() &&
+      messageDate.getMonth() === yesterday.getMonth() &&
+      messageDate.getFullYear() === yesterday.getFullYear()
+    ) {
+      return "VČERAJ";
+    }
+
+    return new Intl.DateTimeFormat("sl-SI", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(messageDate).toUpperCase();
+  };
+
+
   return (
     <div className="flex flex-col h-[100dvh] bg-[#F4F6F8] text-[#444] font-sans overflow-hidden">
       {/* Sport2GO Header (Sticky) */}
@@ -103,38 +169,38 @@ export default function Home() {
             alt="SPORT2GO Logo" 
             className="h-7 md:h-8 w-auto drop-shadow-sm"
           />
-          <span className="text-xl md:text-2xl text-white tracking-widest leading-none drop-shadow-sm flex items-baseline select-none">
-            <span className="font-extrabold pr-0.5">SPORT</span>
-            <span className="font-semibold opacity-90">2GO</span>
+          <span className="text-xl md:text-2xl text-white tracking-widest leading-none drop-shadow-sm flex items-baseline select-none font-sans" style={{fontFamily: 'var(--font-montserrat)'}}>
+            <span className="font-extrabold pr-0.5" style={{fontWeight: 800}}>SPORT</span>
+            <span className="font-medium opacity-90" style={{fontWeight: 500}}>2GO</span>
           </span>
         </div>
         <div className="flex flex-col items-end space-y-1">
-          <div className="flex items-center space-x-2">
-            <label className="text-xs text-black/70 font-semibold" htmlFor="authorInput">
-              Ime: <span className="text-red-700">*</span>
-            </label>
-            <input
-              id="authorInput"
-              type="text"
-              className={`bg-white/95 text-sm border ${
-                authorError 
-                  ? "border-red-500 ring-2 ring-red-500" 
-                  : !author.trim()
-                    ? "border-white/80 ring-2 ring-white/60 animate-[pulse_2s_ease-in-out_infinite]"
-                    : "border-white/50"
-              } text-gray-800 font-medium rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-[#5BA582] focus:border-transparent focus:animate-none outline-none w-32 md:w-48 transition-all shadow-sm placeholder-gray-400`}
-              value={author}
-              onChange={(e) => {
-                setAuthor(e.target.value);
-                if (e.target.value.trim()) setAuthorError(false);
-              }}
-              placeholder="Vpiši ime"
-              maxLength={20}
-            />
-          </div>
-          {authorError && (
-            <span className="text-[10px] text-red-800 font-bold tracking-wide absolute -bottom-4 right-5 drop-shadow-sm">Ime je obvezno!</span>
-          )}
+          <input
+            id="authorInput"
+            type="text"
+            className={`transition-all placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#f1dfb2] ${
+              authorError ? "border-red-400 focus:ring-red-400" : ""
+            }`}
+            style={{
+              padding: "8px 15px",
+              boxShadow: "none",
+              background: "#fff",
+              width: "120px",
+              margin: "0 auto",
+              fontWeight: 300,
+              fontSize: "14px",
+              borderRadius: "4px",
+              border: authorError ? "1px solid #fca5a5" : "1px solid #f1dfb2",
+              color: "#444"
+            }}
+            value={author}
+            onChange={(e) => {
+              setAuthor(e.target.value);
+              if (e.target.value.trim()) setAuthorError(false);
+            }}
+            placeholder="Vpiši ime"
+            maxLength={20}
+          />
         </div>
       </header>
 
@@ -153,48 +219,88 @@ export default function Home() {
             </div>
           </div>
         ) : (
-          messages.slice().reverse().map((msg) => {
+          messages.slice().reverse().map((msg, index, arr) => {
             const isMe = msg.author === author;
-            // Format the creation time
-            const timestamp = new Intl.DateTimeFormat("sl-SI", {
-              hour: "2-digit",
-              minute: "2-digit",
-            }).format(msg._creationTime);
+            
+            // Check if day changed from previous message
+            let showDateSeparator = false;
+            let dateLabel = "";
+            if (index === 0) {
+              showDateSeparator = true;
+              dateLabel = getDaySeparatorLabel(msg._creationTime);
+            } else {
+              const prevMsg = arr[index - 1];
+              const currentMsgDate = new Date(msg._creationTime);
+              const prevMsgDate = new Date(prevMsg._creationTime);
+              
+              if (
+                currentMsgDate.getDate() !== prevMsgDate.getDate() ||
+                currentMsgDate.getMonth() !== prevMsgDate.getMonth() ||
+                currentMsgDate.getFullYear() !== prevMsgDate.getFullYear()
+              ) {
+                showDateSeparator = true;
+                dateLabel = getDaySeparatorLabel(msg._creationTime);
+              }
+            }
 
-            const dateLabelText = new Intl.DateTimeFormat("sl-SI", {
-              day: "numeric",
-              month: "short",
-              year: "numeric"
-            }).format(msg._creationTime);
+            const timeLabel = formatRelativeTime(msg._creationTime);
 
             return (
-              <div
-                key={msg._id}
-                className={`flex flex-col ${
-                  isMe ? "items-end" : "items-start"
-                } animate-in fade-in slide-in-from-bottom-2 duration-300`}
-              >
-                {!isMe && (
-                  <span className="text-[11px] text-gray-500 font-semibold mb-1 ml-2 tracking-wide uppercase">
-                    {msg.author}
-                  </span>
+              <div key={msg._id} className="flex flex-col space-y-4">
+                {/* Date Separator */}
+                {showDateSeparator && (
+                  <div className="flex justify-center my-2">
+                    <span className="bg-gray-200/60 text-gray-500 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">
+                      {dateLabel}
+                    </span>
+                  </div>
                 )}
+                
+                {/* Message Bubble Row */}
                 <div
-                  className={`px-5 py-3 text-sm md:text-[15px] leading-relaxed max-w-[85%] break-words shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-gray-100/50 ${
-                    isMe
-                      ? "bg-[#5BA582] text-white font-medium rounded-2xl rounded-tr-sm"
-                      : "bg-white text-gray-700 rounded-2xl rounded-tl-sm"
-                  }`}
+                  className={`flex ${
+                    isMe ? "justify-end" : "justify-start"
+                  } items-end space-x-2 animate-in fade-in slide-in-from-bottom-2 duration-300 w-full`}
                 >
-                  {msg.text}
-                </div>
-                <div className="flex items-center space-x-1 mt-1.5 mx-2">
-                  <span className="text-[10px] text-gray-400 font-medium">
-                    {dateLabelText},{' '}
-                  </span>
-                  <span className="text-[10px] text-gray-400 font-medium">
-                    {timestamp}
-                  </span>
+                  {/* Avatar for Others */}
+                  {!isMe && (
+                    <div className="w-8 h-8 rounded-full bg-gray-200 flex-shrink-0 flex items-center justify-center shadow-sm border border-gray-300 overflow-hidden mb-6">
+                      <svg className="w-5 h-5 text-gray-400 mt-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"></path>
+                      </svg>
+                    </div>
+                  )}
+
+                  <div className={`flex flex-col max-w-[75%] md:max-w-[70%] ${isMe ? "items-end" : "items-start"}`}>
+                    {!isMe && (
+                      <span className="text-[11px] text-gray-500 font-medium mb-1 ml-1 tracking-wide uppercase">
+                        {msg.author}
+                      </span>
+                    )}
+                    <div
+                      className={`px-4 py-2.5 text-sm md:text-[15px] leading-relaxed break-words shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-gray-100/50 ${
+                        isMe
+                          ? "bg-[#5BA582] text-white font-medium rounded-2xl rounded-br-sm"
+                          : "bg-white text-gray-700 rounded-2xl rounded-bl-sm"
+                      }`}
+                    >
+                      {msg.text}
+                    </div>
+                    <div className="flex items-center space-x-1 mt-1 mx-1">
+                      <span className="text-[10px] text-gray-400 font-medium whitespace-nowrap">
+                        {timeLabel}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Avatar for Me */}
+                  {isMe && (
+                    <div className="w-8 h-8 rounded-full bg-[#5BA582]/20 flex-shrink-0 flex items-center justify-center shadow-sm border border-[#5BA582]/30 overflow-hidden mb-6">
+                      <svg className="w-5 h-5 text-[#5BA582] mt-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"></path>
+                      </svg>
+                    </div>
+                  )}
                 </div>
               </div>
             );
@@ -215,6 +321,15 @@ export default function Home() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
             </svg>
           </button>
+        </div>
+      )}
+
+      {/* Name Required Toast (Tooltip) */}
+      {authorError && (
+        <div className="absolute top-24 left-1/2 transform -translate-x-1/2 z-40 pointer-events-none animate-in slide-in-from-top-4 fade-in duration-300">
+          <div className="bg-red-500/90 backdrop-blur-sm text-white font-semibold text-xs py-2 px-4 rounded-full shadow-[0_4px_14px_rgba(239,68,68,0.4)] border border-red-400">
+            Ime je obvezno!
+          </div>
         </div>
       )}
 
@@ -253,9 +368,9 @@ export default function Home() {
             </div>
 
             {/* Quick Actions Content */}
-            <div className="flex items-center space-x-2 w-full max-w-4xl mx-auto px-1 overflow-x-auto pb-1 scrollbar-hide">
+            <div className="flex items-center space-x-2 w-full max-w-4xl mx-auto px-1 overflow-x-auto pb-1 scrollbar-hide h-[60px]">
               {quickActionTab === "emoji" ? (
-                <>
+                <div className="flex items-center space-x-2 my-auto">
                   <button
                     type="button"
                     onClick={() => setNewMessageText((prev) => prev + "🟨 ")}
@@ -301,38 +416,38 @@ export default function Home() {
                   >
                     ⏱️
                   </button>
-                </>
+                </div>
               ) : (
-                <>
+                <div className="flex items-center space-x-2 my-auto h-full pb-2">
                   <button
                     type="button"
                     onClick={() => setNewMessageText("Danes si bil zanič! 👎")}
-                    className="text-xs font-medium bg-white border border-gray-200 text-gray-700 px-4 py-2.5 rounded-full whitespace-nowrap hover:bg-[#5BA582] hover:text-white hover:border-[#5BA582] transition-colors shadow-sm active:scale-95"
+                    className="text-xs font-medium bg-white border border-gray-200 text-gray-700 px-4 py-2.5 rounded-full whitespace-nowrap hover:bg-[#5BA582] hover:text-white hover:border-[#5BA582] transition-colors shadow-sm active:scale-95 h-fit"
                   >
                     Danes si bil zanič
                   </button>
                   <button
                     type="button"
                     onClick={() => setNewMessageText("Dobra igra! 👏")}
-                    className="text-xs font-medium bg-white border border-gray-200 text-gray-700 px-4 py-2.5 rounded-full whitespace-nowrap hover:bg-[#5BA582] hover:text-white hover:border-[#5BA582] transition-colors shadow-sm active:scale-95"
+                    className="text-xs font-medium bg-white border border-gray-200 text-gray-700 px-4 py-2.5 rounded-full whitespace-nowrap hover:bg-[#5BA582] hover:text-white hover:border-[#5BA582] transition-colors shadow-sm active:scale-95 h-fit"
                   >
                     Dobra igra
                   </button>
                   <button
                     type="button"
                     onClick={() => setNewMessageText("Častiš pivo! 🍻")}
-                    className="text-xs font-medium bg-white border border-gray-200 text-gray-700 px-4 py-2.5 rounded-full whitespace-nowrap hover:bg-[#5BA582] hover:text-white hover:border-[#5BA582] transition-colors shadow-sm active:scale-95"
+                    className="text-xs font-medium bg-white border border-gray-200 text-gray-700 px-4 py-2.5 rounded-full whitespace-nowrap hover:bg-[#5BA582] hover:text-white hover:border-[#5BA582] transition-colors shadow-sm active:scale-95 h-fit"
                   >
                     Častiš pivo
                   </button>
                   <button
                     type="button"
                     onClick={() => setNewMessageText("Spet zamujaš! ⏳")}
-                    className="text-xs font-medium bg-white border border-gray-200 text-gray-700 px-4 py-2.5 rounded-full whitespace-nowrap hover:bg-[#5BA582] hover:text-white hover:border-[#5BA582] transition-colors shadow-sm active:scale-95"
+                    className="text-xs font-medium bg-white border border-gray-200 text-gray-700 px-4 py-2.5 rounded-full whitespace-nowrap hover:bg-[#5BA582] hover:text-white hover:border-[#5BA582] transition-colors shadow-sm active:scale-95 h-fit"
                   >
                     Spet zamujaš
                   </button>
-                </>
+                </div>
               )}
             </div>
           </div>
