@@ -270,8 +270,8 @@ function LandingPage() {
           <div className="flex items-center space-x-2">
             <img src="https://www.sport2go.app/image/logo.svg" alt="SPORT2GO Logo" className="h-6 md:h-8 w-auto brightness-0 invert"/>
             <span className="text-xl md:text-2xl text-white tracking-widest leading-none drop-shadow-sm flex items-baseline select-none" style={{fontFamily: 'var(--font-montserrat)'}}>
-              <span className="pr-0.5" style={{fontWeight: 400}}>sport</span>
-              <span className="opacity-90" style={{fontWeight: 600}}>2go</span>
+              <span className="pr-0.5" style={{fontWeight: 400}}>SPORT</span>
+              <span className="opacity-90" style={{fontWeight: 600}}>2GO</span>
             </span>
           </div>
           {/* Right nav */}
@@ -472,8 +472,8 @@ function LandingPage() {
           <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
              <div className="col-span-1">
                 <span className="text-2xl text-gray-400 tracking-widest leading-none drop-shadow-sm flex items-baseline select-none mb-4" style={{fontFamily: 'var(--font-montserrat)'}}>
-                  <span className="pr-0.5" style={{fontWeight: 400}}>sport</span>
-                  <span className="opacity-90" style={{fontWeight: 600}}>2go</span>
+                  <span className="pr-0.5" style={{fontWeight: 400}}>SPORT</span>
+                  <span className="opacity-90" style={{fontWeight: 600}}>2GO</span>
                 </span>
                 <p className="text-xs text-gray-400 hover:text-gray-600 transition-colors cursor-pointer inline-block" style={{fontFamily: 'var(--font-cabin)'}}>info@sport2go.app</p>
              </div>
@@ -759,8 +759,8 @@ export default function Home() {
             className="h-7 md:h-8 w-auto drop-shadow-sm"
           />
           <span className="text-xl md:text-2xl text-white tracking-widest leading-none drop-shadow-sm flex items-baseline select-none font-sans" style={{fontFamily: 'var(--font-montserrat)'}}>
-            <span className="pr-0.5" style={{fontWeight: 400}}>sport</span>
-            <span className="opacity-90" style={{fontWeight: 600}}>2go</span>
+            <span className="pr-0.5" style={{fontWeight: 400}}>SPORT</span>
+            <span className="opacity-90" style={{fontWeight: 600}}>2GO</span>
           </span>
         </div>
 
