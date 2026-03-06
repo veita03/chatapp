@@ -11,8 +11,9 @@ export const get = query({
 
 export const send = mutation({
   args: {
-    text: v.string(),
     author: v.string(),
+    authorImage: v.optional(v.string()),
+    text: v.string(),
     type: v.optional(v.string()),
     pollData: v.optional(
       v.object({
@@ -38,6 +39,7 @@ export const send = mutation({
     await ctx.db.insert("messages", {
       text: args.text,
       author: args.author,
+      ...(args.authorImage && { authorImage: args.authorImage }),
       ...(args.type && { type: args.type }),
       ...(args.pollData && { pollData: args.pollData }),
       ...(args.locationData && { locationData: args.locationData }),
