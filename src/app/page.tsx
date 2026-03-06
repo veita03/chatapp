@@ -6,14 +6,17 @@ import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
 import { useState, useRef, useEffect } from "react";
 import { useAuthActions } from "@convex-dev/auth/react";
+import Cookies from "js-cookie";
+import { translations, Language } from "./i18n";
 
-function DualAuthLogin({ initialTab = "login", onClose }: { initialTab?: "login"|"register", onClose: () => void }) {
+function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { initialTab?: "login"|"register", onClose: () => void, currentLang?: Language }) {
   const { signIn } = useAuthActions();
   const [tab, setTab] = useState<"login" | "register">(initialTab);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const t = translations[currentLang];
   const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -23,12 +26,12 @@ function DualAuthLogin({ initialTab = "login", onClose }: { initialTab?: "login"
     setError(null);
 
     if (tab === "register" && password !== confirmPassword) {
-      setError("Gesli se ne ujemata!");
+      setError(t.passwordMismatch);
       return;
     }
 
     if (password.length < 8) {
-      setError("Geslo mora imeti vsaj 8 znakov.");
+      setError(t.passwordLength);
       return;
     }
 
@@ -61,31 +64,37 @@ function DualAuthLogin({ initialTab = "login", onClose }: { initialTab?: "login"
            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
 
-        <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-2xl space-y-6 border border-gray-100">
-          <div className="flex flex-col items-center space-y-3 mb-4">
+        <div className="bg-white rounded-xl shadow-2xl overflow-hidden border border-gray-100/50 flex flex-col">
+          {/* Header/Tabs Area replacing old logo area */}
+          <div className="bg-[#eeaf53] px-6 py-6 pb-0 flex flex-col items-center justify-center">
             <img 
               src="https://www.sport2go.app/image/logo.svg" 
               alt="SPORT2GO Logo" 
-              className="h-12 w-auto drop-shadow-md mb-1"
+              className="h-10 w-auto mb-6 brightness-0 invert"
             />
-            <h1 className="text-2xl font-extrabold text-gray-800 tracking-tight" style={{fontFamily: 'var(--font-montserrat)'}}>SPORT2GO</h1>
+            {/* Tabs integrated into the header block */}
+            <div className="flex w-full mt-2">
+              <button
+                onClick={() => { setTab("login"); setError(null); }}
+                className={`flex-1 py-4 text-[15px] font-bold tracking-wide uppercase transition-colors ${tab === "login" ? "bg-[#5BA582] text-white" : "bg-white text-gray-700 hover:bg-gray-50"}`}
+                style={{fontFamily: 'var(--font-cabin)'}}
+              >
+                {t.login}
+              </button>
+              <button
+                onClick={() => { setTab("register"); setError(null); }}
+                className={`flex-1 py-4 text-[15px] font-bold tracking-wide uppercase transition-colors ${tab === "register" ? "bg-white text-gray-700" : "bg-[#5BA582] text-white hover:bg-[#4d8c6f]"}`}
+                style={{fontFamily: 'var(--font-cabin)'}}
+              >
+                {t.register}
+              </button>
+            </div>
           </div>
-          
-          {/* Tabs */}
-          <div className="flex bg-gray-100/80 p-1 rounded-xl">
-            <button
-              onClick={() => { setTab("login"); setError(null); }}
-              className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${tab === "login" ? "bg-white text-[#5BA582] shadow-sm transform scale-100" : "text-gray-500 hover:text-gray-700"}`}
-            >
-              Prijava
-            </button>
-            <button
-              onClick={() => { setTab("register"); setError(null); }}
-              className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${tab === "register" ? "bg-white text-[#5BA582] shadow-sm transform scale-100" : "text-gray-500 hover:text-gray-700"}`}
-            >
-              Registracija
-            </button>
-          </div>
+
+          <div className="p-6 sm:p-8 pt-6">
+            <h2 className="text-2xl font-bold text-gray-800 tracking-tight mb-6 uppercase" style={{fontFamily: 'var(--font-cabin)'}}>
+              {tab === "login" ? t.login : t.register}
+            </h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
@@ -98,7 +107,7 @@ function DualAuthLogin({ initialTab = "login", onClose }: { initialTab?: "login"
             )}
 
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">E-pošta</label>
+              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">{t.email}</label>
               <input
                 type="email"
                 value={email}
@@ -110,7 +119,7 @@ function DualAuthLogin({ initialTab = "login", onClose }: { initialTab?: "login"
             </div>
 
             <div className="relative">
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">Geslo</label>
+              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">{t.password}</label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -142,7 +151,7 @@ function DualAuthLogin({ initialTab = "login", onClose }: { initialTab?: "login"
 
             {tab === "register" && (
               <div className="relative animate-in fade-in slide-in-from-top-2 duration-300">
-                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">Potrdi geslo</label>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">{t.confirmPassword}</label>
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
@@ -179,7 +188,7 @@ function DualAuthLogin({ initialTab = "login", onClose }: { initialTab?: "login"
                   className="w-4 h-4 text-[#5BA582] bg-gray-50 border-gray-300 rounded focus:ring-[#5BA582] focus:ring-2 accent-[#5BA582]"
                 />
                 <label htmlFor="remember" className="text-xs font-medium text-gray-500 cursor-pointer select-none">
-                  Zapomni si me
+                  {t.rememberMe}
                 </label>
               </div>
             )}
@@ -191,29 +200,30 @@ function DualAuthLogin({ initialTab = "login", onClose }: { initialTab?: "login"
             >
               {isLoading ? (
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              ) : tab === "login" ? "Prijava v sistem" : "Ustvari račun"}
+              ) : tab === "login" ? t.loginBtn : t.registerBtn}
             </button>
           </form>
 
           <div className="relative flex py-2 items-center">
             <div className="flex-grow border-t border-gray-200"></div>
-            <span className="flex-shrink-0 mx-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Ali</span>
+            <span className="flex-shrink-0 mx-4 text-xs font-bold text-gray-400 uppercase tracking-widest">{t.or}</span>
             <div className="flex-grow border-t border-gray-200"></div>
           </div>
 
-          <button
-            onClick={() => void signIn("google")}
-            className="w-full bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 font-bold text-[14px] py-3.5 px-6 rounded-xl transition-all flex items-center justify-center space-x-3 active:scale-[0.98] shadow-sm"
-          >
-            <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" xmlns="http://www.w3.org/2000/svg">
-              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-              <path d="M1 1h22v22H1z" fill="none"/>
-            </svg>
-            <span>Nadaljuj z Google</span>
-          </button>
+            <button
+              onClick={() => void signIn("google")}
+              className="w-full bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 font-bold text-[14px] py-3.5 px-6 rounded-xl transition-all flex items-center justify-center space-x-3 active:scale-[0.98] shadow-sm"
+            >
+              <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                <path d="M1 1h22v22H1z" fill="none"/>
+              </svg>
+              <span>{t.continueGoogle}</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -222,11 +232,35 @@ function DualAuthLogin({ initialTab = "login", onClose }: { initialTab?: "login"
 
 function LandingPage() {
   const [authModal, setAuthModal] = useState<"login" | "register" | null>(null);
+  
+  // Set initial state from cookie or default to sl
+  const [currentLang, setCurrentLang] = useState<Language>(() => {
+    if (typeof window !== "undefined") {
+      const saved = Cookies.get("lang") as Language;
+      if (saved && ["sl", "en", "es"].includes(saved)) return saved;
+    }
+    return "sl";
+  });
+  
+  const [isLangOpen, setIsLangOpen] = useState(false);
+  const t = translations[currentLang];
+  
+  const handleLangChange = (lang: Language) => {
+    setCurrentLang(lang);
+    Cookies.set("lang", lang, { expires: 365 });
+    setIsLangOpen(false);
+  };
+
+  const flags = {
+    sl: "sl-SI",
+    en: "en-gb",
+    es: "es-es"
+  };
 
   return (
     <div className="min-h-[100dvh] bg-white font-sans flex flex-col overflow-x-hidden">
        {/* Header */}
-       <header className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between p-4 md:px-8 lg:px-12">
+       <header className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-4 md:px-8 lg:px-12" style={{height: '60px', background: 'linear-gradient(90deg, #eeaf53 0%, #edca78 50%, #ecdf9b 100%)', padding: '0 2rem'}}>
           {/* Logo */}
           <div className="flex items-center space-x-2">
             <img src="https://www.sport2go.app/image/logo.svg" alt="SPORT2GO Logo" className="h-6 md:h-8 w-auto brightness-0 invert"/>
@@ -236,94 +270,224 @@ function LandingPage() {
             </span>
           </div>
           {/* Right nav */}
-          <div className="flex items-center space-x-2 md:space-x-4">
-             <button onClick={() => setAuthModal("login")} className="text-white hover:text-white/80 font-medium text-sm md:text-base px-2 py-2 transition-colors">Prijava</button>
-             <button onClick={() => setAuthModal("register")} className="bg-[#31574d] hover:bg-[#25423a] text-white text-sm md:text-base font-semibold px-4 md:px-6 py-2 md:py-2.5 rounded-lg shadow-sm transition-all focus:ring-2 focus:ring-white/50">Registracija</button>
-             <div className="w-7 h-7 md:w-8 md:h-8 rounded-full overflow-hidden border-2 border-white/20 ml-1 md:ml-2 flex flex-shrink-0 cursor-pointer hover:border-white transition-colors">
-               <img src="https://flagcdn.com/w40/si.png" alt="Slovenian" className="w-full h-full object-cover"/>
+          <div className="flex items-center space-x-3">
+             <button onClick={() => setAuthModal("login")} className="text-white hover:text-white/80 font-medium text-sm md:text-[15px] transition-colors uppercase tracking-wide" style={{fontFamily: 'var(--font-cabin)'}}>{t.login}</button>
+             <button onClick={() => setAuthModal("register")} className="bg-[#31574d] hover:bg-[#25423a] text-white text-sm md:text-[15px] px-5 py-1.5 rounded-sm transition-all uppercase tracking-wide" style={{fontFamily: 'var(--font-cabin)'}}>{t.register}</button>
+             
+             {/* Language Dropdown Area */}
+             <div className="relative ml-1">
+               <button 
+                 onClick={() => setIsLangOpen(!isLangOpen)}
+                 className="flex items-center justify-center w-8 h-8 rounded-full bg-white/20 border border-white/40 cursor-pointer overflow-visible hover:bg-white/30 transition-colors"
+               >
+                 <img src={`https://www.sport2go.app/front/language/${flags[currentLang]}/${flags[currentLang]}.png`} alt={currentLang} className="w-[18px] h-[12px] object-cover rounded-sm"/>
+               </button>
+               
+               {isLangOpen && (
+                 <>
+                   <div className="fixed inset-0 z-30" onClick={() => setIsLangOpen(false)}></div>
+                   <div className="absolute right-0 mt-2 w-36 bg-white rounded-md shadow-xl py-1 z-40 border border-gray-100 animate-in fade-in zoom-in-95 duration-150">
+                     <button onClick={() => handleLangChange('sl')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2">
+                       <img src="https://www.sport2go.app/front/language/sl-SI/sl-SI.png" alt="Slovenščina" className="w-[18px] h-[12px] object-cover rounded-sm"/>
+                       <span style={{fontFamily: 'var(--font-cabin)'}}>Slovenščina</span>
+                     </button>
+                     <button onClick={() => handleLangChange('en')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2">
+                       <img src="https://www.sport2go.app/front/language/en-gb/en-gb.png" alt="English" className="w-[18px] h-[12px] object-cover rounded-sm"/>
+                       <span style={{fontFamily: 'var(--font-cabin)'}}>English</span>
+                     </button>
+                     <button onClick={() => handleLangChange('es')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2">
+                       <img src="https://www.sport2go.app/front/language/es-es/es-es.png" alt="Español" className="w-[18px] h-[12px] object-cover rounded-sm"/>
+                       <span style={{fontFamily: 'var(--font-cabin)'}}>Español</span>
+                     </button>
+                   </div>
+                 </>
+               )}
              </div>
           </div>
        </header>
 
        {/* Hero Section */}
-       <section className="relative pt-28 pb-32 md:pt-40 md:pb-56 bg-gradient-to-b from-[#f8bc5c] to-[#e4a142] overflow-hidden flex-shrink-0">
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center">
+       <section id="slider-wrapper" className="relative w-full overflow-hidden bg-white">
+          <div id="slider" className="relative w-full h-[550px] md:h-[600px] lg:h-[650px]">
              
-             {/* Text Content */}
-             <div className="w-full lg:w-1/2 text-center lg:text-left pt-2 lg:pt-0 flex flex-col items-center lg:items-start space-y-6">
-                <h1 className="text-[2.5rem] md:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1] drop-shadow-sm">
-                  Manj stresa,<br className="hidden lg:block"/> več časa za igro
-                </h1>
-                <p className="text-base md:text-lg text-white/95 max-w-lg leading-relaxed font-medium mx-auto lg:mx-0">
-                  Sport2go je spletna platforma s katero lahko preprosto načrtujete prihajajoče športne termine oziroma skupinske športne aktivnosti
-                </p>
-                <button 
-                  onClick={() => setAuthModal("register")}
-                  className="bg-[#31574d] hover:bg-[#25423a] text-white font-bold text-base md:text-lg px-8 py-4 rounded-xl shadow-[0_8px_20px_rgba(49,87,77,0.4)] hover:shadow-[0_12px_24px_rgba(49,87,77,0.5)] transition-all hover:-translate-y-0.5 mt-2 active:scale-95"
-                >
-                  PRIDRUŽI SE
-                </button>
-             </div>
+             {/* Background Overlay */}
+             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[3000px] h-full bg-[#efc463] z-0" style={{ borderRadius: '50% / 0 0 100% 100%' }}></div>
 
-             {/* Illustration */}
-             <div className="w-full lg:w-1/2 mt-12 lg:mt-0 relative flex justify-center lg:justify-end">
-                <img src="https://www.sport2go.app/image/demo/intro3.png" alt="Sports Illustration" className="w-full max-w-[320px] sm:max-w-md lg:max-w-2xl object-contain drop-shadow-2xl z-10 relative pointer-events-none"/>
-             </div>
-          </div>
+             {/* Container */}
+             <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+                
+                {/* Text Content */}
+                <div className="absolute top-[120px] md:top-[160px] lg:top-[180px] left-4 sm:left-6 lg:left-8 w-[90%] md:w-[50%] lg:w-[45%] text-left flex flex-col items-start space-y-5 lg:space-y-6 z-20">
+                  <h1 className="text-[2.2rem] md:text-[2.8rem] lg:text-[45px] font-bold text-white tracking-tight leading-[1.1] drop-shadow-sm" style={{fontFamily: 'var(--font-montserrat)'}}>
+                    {t.heroTitle1}<br className="hidden md:block"/> {t.heroTitle2}
+                  </h1>
+                  <p className="text-[15px] sm:text-base md:text-[17px] text-white/95 max-w-[420px] leading-relaxed font-light" style={{fontFamily: 'var(--font-cabin)'}}>
+                    {t.heroSubtitle}
+                  </p>
+                  <button 
+                    onClick={() => setAuthModal("register")}
+                    className="bg-[#31574d] hover:bg-[#25423a] text-white font-semibold text-sm md:text-[15px] px-8 py-3 rounded-[4px] shadow-sm hover:shadow-md transition-all active:scale-95 uppercase tracking-wider mt-2"
+                    style={{fontFamily: 'var(--font-cabin)'}}
+                  >
+                    {t.joinBtn}
+                  </button>
+                </div>
 
-          {/* Curved Wave Bottom */}
-          <div className="absolute -bottom-1 left-0 right-0 w-full overflow-hidden leading-none z-20">
-            <svg className="relative block w-full h-[60px] md:h-[120px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,120.35,187.72,111.9,235.24,104.83,280.9,78.29,321.39,56.44Z" fill="#ffffff"></path>
-            </svg>
+                {/* Illustration */}
+                <div className="absolute overflow-hidden md:overflow-visible bottom-0 right-0 w-[85%] sm:w-[70%] md:w-[60%] lg:w-[55%] flex justify-end z-10 pointer-events-none">
+                  <img 
+                    src="https://www.sport2go.app/image/demo/intro3.png" 
+                    alt="Sports Illustration" 
+                    className="w-[120%] max-w-[900px] object-contain drop-shadow-2xl relative translate-x-[10%] md:translate-x-0" 
+                    style={{ transform: "rotate(0.7deg)", top: "35px" }}
+                  />
+                </div>
+             </div>
           </div>
        </section>
 
        {/* Features Section */}
-       <section className="bg-white py-12 md:py-24 relative z-30 flex-1">
+       <section className="bg-white py-16 md:py-24 relative z-30 flex-1">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 lg:gap-12 text-center">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16 lg:gap-24 text-center">
                
                {/* Feature 1 */}
                <div className="flex flex-col items-center">
-                  <div className="w-28 h-28 md:w-36 md:h-36 lg:w-44 lg:h-44 rounded-full bg-white shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 flex items-center justify-center mb-6 hover:shadow-[0_8px_30px_rgb(0,0,0,0.1)] transition-shadow">
-                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.2} stroke="currentColor" className="w-14 h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 text-[#31574d]">
+                  <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-white shadow-[0_4px_30px_rgb(0,0,0,0.08)] border border-gray-50 flex items-center justify-center mb-6">
+                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-16 h-16 text-gray-700">
                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
                      </svg>
                   </div>
-                  <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-3 tracking-tight">Upravljaj ekipo</h3>
-                  <p className="text-gray-500 text-sm md:text-[15px] max-w-xs mx-auto leading-relaxed">Ustvari prihajajoče športne dogodke, povabi prijatelje in spremljaj prijave.</p>
+                  <h3 className="text-xl md:text-[22px] font-bold text-gray-800 mb-4" style={{fontFamily: 'var(--font-montserrat)'}}>{t.feature1Title}</h3>
+                  <p className="text-gray-500 text-[15px] font-light max-w-xs mx-auto mb-6" style={{fontFamily: 'var(--font-cabin)'}}>{t.feature1Desc}</p>
+                  <button className="bg-[#eeaf53] hover:bg-[#e4a142] text-white font-bold text-xs px-8 py-2.5 rounded-sm uppercase tracking-wider" style={{fontFamily: 'var(--font-cabin)'}}>{t.moreBtn}</button>
                </div>
                
                {/* Feature 2 */}
                <div className="flex flex-col items-center">
-                  <div className="w-28 h-28 md:w-36 md:h-36 lg:w-44 lg:h-44 rounded-full bg-white shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 flex items-center justify-center mb-6 hover:shadow-[0_8px_30px_rgb(0,0,0,0.1)] transition-shadow">
-                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.2} stroke="currentColor" className="w-14 h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 text-[#31574d]">
+                  <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-white shadow-[0_4px_30px_rgb(0,0,0,0.08)] border border-gray-50 flex items-center justify-center mb-6">
+                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-16 h-16 text-gray-700">
                        <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
                      </svg>
                   </div>
-                  <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-3 tracking-tight">Pridruži se drugim ekipam</h3>
-                  <p className="text-gray-500 text-sm md:text-[15px] max-w-xs mx-auto leading-relaxed">V kolikor igraš različne športe ustvari različne profile in išči nove ekipe.</p>
+                  <h3 className="text-xl md:text-[22px] font-bold text-gray-800 mb-4" style={{fontFamily: 'var(--font-montserrat)'}}>{t.feature2Title}</h3>
+                  <p className="text-gray-500 text-[15px] font-light max-w-xs mx-auto mb-6" style={{fontFamily: 'var(--font-cabin)'}}>{t.feature2Desc}</p>
+                  <button className="bg-[#eeaf53] hover:bg-[#e4a142] text-white font-bold text-xs px-8 py-2.5 rounded-sm uppercase tracking-wider" style={{fontFamily: 'var(--font-cabin)'}}>{t.moreBtn}</button>
                </div>
 
                {/* Feature 3 */}
                <div className="flex flex-col items-center">
-                  <div className="w-28 h-28 md:w-36 md:h-36 lg:w-44 lg:h-44 rounded-full bg-white shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 flex items-center justify-center mb-6 hover:shadow-[0_8px_30px_rgb(0,0,0,0.1)] transition-shadow">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.2} stroke="currentColor" className="w-14 h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 text-[#31574d]">
+                  <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-white shadow-[0_4px_30px_rgb(0,0,0,0.08)] border border-gray-50 flex items-center justify-center mb-6">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-16 h-16 text-gray-700">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 7.5A2.25 2.25 0 0 1 7.5 5.25h9a2.25 2.25 0 0 1 2.25 2.25v9a2.25 2.25 0 0 1-2.25 2.25h-9a2.25 2.25 0 0 1-2.25-2.25v-9Z" />
                         <path strokeLinecap="round" strokeLinejoin="round" d="M18.75 10.5h1.5a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-1.5M7.5 5.25c0-1.516.425-2.923 1.15-4.103a.375.375 0 0 1 .634-.01 5.952 5.952 0 0 0 1.258 1.637c.451.41.97.77 1.58.985a6.685 6.685 0 0 0 2.756.284 3.75 3.75 0 0 1 1.144.17c.504.168.895.503 1.15.938" />
                         <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 8.25v8.25M12 8.25v8.25M15.75 8.25v8.25" />
                      </svg>
                   </div>
-                  <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-3 tracking-tight">Zabava</h3>
-                  <p className="text-gray-500 text-sm md:text-[15px] max-w-xs mx-auto leading-relaxed">Določitev igralca meseca in možnost organizacije pijače po tekmi.</p>
+                  <h3 className="text-xl md:text-[22px] font-bold text-gray-800 mb-4" style={{fontFamily: 'var(--font-montserrat)'}}>{t.feature3Title}</h3>
+                  <p className="text-gray-500 text-[15px] font-light max-w-xs mx-auto mb-6" style={{fontFamily: 'var(--font-cabin)'}}>{t.feature3Desc}</p>
+                  <button className="bg-[#eeaf53] hover:bg-[#e4a142] text-white font-bold text-xs px-8 py-2.5 rounded-sm uppercase tracking-wider" style={{fontFamily: 'var(--font-cabin)'}}>{t.moreBtn}</button>
                </div>
             </div>
           </div>
        </section>
 
+       {/* Kako začeti Section (Hardware Mockups) */}
+       <section className="bg-gradient-to-br from-[#eeaf53] to-[#e4a142] pt-16 pb-16 md:pt-24 md:pb-20 relative">
+          <div className="max-w-6xl mx-auto px-4 md:px-8">
+            <div className="bg-white rounded-[24px] overflow-visible shadow-2xl flex flex-col md:flex-row items-center relative pr-4 lg:pr-12 pl-8 lg:pl-16 py-12 lg:py-16">
+              <div className="w-full md:w-5/12 z-10 space-y-5 pb-8 md:pb-0">
+                <h2 className="text-3xl md:text-[34px] font-bold text-[#353b41]" style={{fontFamily: 'var(--font-montserrat)'}}>{t.howToStart}</h2>
+                <p className="text-gray-500 text-base leading-relaxed max-w-sm font-light" style={{fontFamily: 'var(--font-cabin)'}}>
+                  {t.howToStartDesc}
+                </p>
+                <div className="pt-2">
+                  <button className="bg-[#31574d] hover:bg-[#25423a] text-white px-6 py-2.5 text-xs font-bold uppercase rounded-sm tracking-widest shadow-lg transition-colors" style={{fontFamily: 'var(--font-cabin)'}}>
+                    {t.benefitsBtn}
+                  </button>
+                </div>
+              </div>
+              
+              <div className="w-full md:w-7/12 relative mt-16 md:mt-0 right-0 flex justify-end">
+                <div className="relative w-[130%] md:w-[150%] max-w-[800px] h-[300px] md:h-[400px] -mr-16 md:-mr-32">
+                   {/* Fallback mockup positioning matching original site layout */}
+                   <img src="https://www.sport2go.app/image/demo/screens.png" alt="Sport2Go screens" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[45%] md:-translate-y-[55%] w-full h-auto object-contain z-10 scale-[1.3] md:scale-[1.4] origin-left" />
+                </div>
+              </div>
+            </div>
+          </div>
+       </section>
+
+       {/* Bottom Badges */}
+       <section className="bg-[#fafafa] py-12 border-b border-gray-200">
+         <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-center divide-y md:divide-y-0 md:divide-x divide-gray-200">
+            <div className="flex flex-col items-center py-6 md:py-0 px-12">
+               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 text-[#eeaf53] mb-3">
+                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.712 4.33a9.027 9.027 0 0 1 1.652 1.306c.51.51.944 1.064 1.306 1.652M9.252 2.982a9.022 9.022 0 0 1 2.748-.482v.002a9.022 9.022 0 0 1 2.748.482M4.33 7.288a9.027 9.027 0 0 1 1.306-1.652c.51-.51 1.064-.944 1.652-1.306M2.5 12a9.022 9.022 0 0 1 .482-2.748h.002A9.022 9.022 0 0 1 2.982 12m18.036 4.712a9.027 9.027 0 0 1-1.652 1.306c-.51.51-.944 1.064-1.306 1.652M14.748 21.018a9.022 9.022 0 0 1-2.748.482v-.002a9.022 9.022 0 0 1-2.748-.482M19.67 16.712a9.027 9.027 0 0 1-1.306 1.652c-.51.51-1.064.944-1.652 1.306M21.5 12c0 .93-.162 1.825-.482 2.748h-.002A9.022 9.022 0 0 1 21.018 12M12 12v6m0-12v2m-6 4h2m10 0h-2m-4.596 4.596 1.414-1.414m-5.656-5.656L7.404 9.404m12.728 0-1.414 1.414m-5.656-5.656 1.414 1.414" />
+               </svg>
+               <span className="text-sm font-semibold text-[#eeaf53] tracking-wide" style={{fontFamily: 'var(--font-cabin)'}}>{t.footerSupport}</span>
+            </div>
+            <div className="flex flex-col items-center py-6 md:py-0 px-12">
+               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 text-[#eeaf53] mb-3">
+                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
+               </svg>
+               <span className="text-sm text-gray-400 tracking-wide" style={{fontFamily: 'var(--font-cabin)'}}>{t.footerSecurity1} <span className="font-semibold text-[#eeaf53]">{t.footerSecurity2}</span></span>
+            </div>
+            <div className="flex flex-col items-center py-6 md:py-0 px-12">
+               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 text-[#eeaf53] mb-3">
+                 <path strokeLinecap="round" strokeLinejoin="round" d="M11.412 15.655 9.75 21.75l3.745-4.012M9.257 13.5H3.75l2.659-2.849m2.048-2.194L14.25 2.25 12 10.5h8.25l-4.707 5.043M8.457 8.457 3 3m5.457 5.457 7.086 7.086m0 0L21 21" />
+               </svg>
+               <span className="text-sm font-semibold text-[#eeaf53] tracking-wide" style={{fontFamily: 'var(--font-cabin)'}}>{t.footerUptime1} <span className="text-gray-400 font-normal">{t.footerUptime2}</span></span>
+            </div>
+         </div>
+       </section>
+       
+       {/* Footer */}
+       <footer className="bg-white py-12 pb-16">
+          <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+             <div className="col-span-1">
+                <span className="text-2xl text-gray-400 tracking-widest leading-none drop-shadow-sm flex items-baseline select-none mb-4" style={{fontFamily: 'var(--font-montserrat)'}}>
+                  <span className="font-extrabold pr-0.5" style={{fontWeight: 800}}>SPORT</span>
+                  <span className="font-medium opacity-90" style={{fontWeight: 500}}>2GO</span>
+                </span>
+                <p className="text-xs text-gray-400 hover:text-gray-600 transition-colors cursor-pointer inline-block" style={{fontFamily: 'var(--font-cabin)'}}>info@sport2go.app</p>
+             </div>
+             <div className="col-span-1 flex flex-col space-y-4">
+               <a href="#" className="text-sm font-bold text-gray-800 hover:text-[#eeaf53] transition-colors" style={{fontFamily: 'var(--font-cabin)'}}>{t.footerLinks.solutions}</a>
+               <a href="#" className="text-sm font-bold text-gray-800 hover:text-[#eeaf53] transition-colors" style={{fontFamily: 'var(--font-cabin)'}}>{t.footerLinks.contact}</a>
+             </div>
+             <div className="col-span-1 flex flex-col space-y-4">
+               <a href="#" className="text-sm font-bold text-gray-800 hover:text-[#eeaf53] transition-colors" style={{fontFamily: 'var(--font-cabin)'}}>{t.footerLinks.gdpr}</a>
+               <a href="#" className="text-sm font-bold text-gray-800 hover:text-[#eeaf53] transition-colors" style={{fontFamily: 'var(--font-cabin)'}}>{t.footerLinks.terms}</a>
+             </div>
+             <div className="col-span-1">
+                <h4 className="text-sm font-bold text-gray-800 mb-4" style={{fontFamily: 'var(--font-cabin)'}}>{t.comingSoon}</h4>
+                <div className="flex flex-row md:flex-col lg:flex-row space-x-2 md:space-x-0 lg:space-x-2 space-y-0 md:space-y-2 lg:space-y-0">
+                   {/* Placeholders for App Store buttons */}
+                   <div className="bg-black/95 rounded-md text-white px-3 py-1.5 flex items-center justify-center cursor-pointer hover:bg-black/80 transition-colors w-full border border-gray-800">
+                     <svg className="w-5 h-5 mr-2" viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
+                     <div className="flex flex-col items-start leading-none -mt-0.5">
+                       <span className="text-[8px] uppercase tracking-wide">Download on the</span>
+                       <span className="text-xs font-semibold">App Store</span>
+                     </div>
+                   </div>
+                   <div className="bg-black/95 rounded-md text-white px-3 py-1.5 flex items-center justify-center cursor-pointer hover:bg-black/80 transition-colors w-full border border-gray-800">
+                     <svg className="w-5 h-5 mr-1" viewBox="0 0 512 512" fill="currentColor"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>
+                     <div className="flex flex-col items-start leading-none -mt-0.5 ml-1">
+                       <span className="text-[8px] uppercase tracking-wide">GET IT ON</span>
+                       <span className="text-xs font-semibold">Google Play</span>
+                     </div>
+                   </div>
+                </div>
+             </div>
+          </div>
+          <div className="text-center text-[10px] text-gray-400 font-light" style={{fontFamily: 'var(--font-cabin)'}}>
+             {t.rights}
+          </div>
+       </footer>
+
        {authModal && (
-         <DualAuthLogin initialTab={authModal} onClose={() => setAuthModal(null)} />
+         <DualAuthLogin initialTab={authModal} onClose={() => setAuthModal(null)} currentLang={currentLang} />
        )}
     </div>
   );
