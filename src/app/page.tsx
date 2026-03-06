@@ -263,7 +263,7 @@ function LandingPage() {
   const [currentLang, setCurrentLang] = useState<Language>(() => {
     if (typeof window !== "undefined") {
       const saved = Cookies.get("lang") as Language;
-      if (saved && ["sl", "en", "es", "it", "fr", "hr", "sr", "de"].includes(saved)) return saved;
+      if (saved && ["sl", "en", "es", "it", "fr", "hr", "sr", "de", "tr", "ar", "mx", "at", "us"].includes(saved)) return saved;
     }
     return "sl";
   });
@@ -277,7 +277,7 @@ function LandingPage() {
     setIsLangOpen(false);
   };
 
-  const flags = {
+  const flags: Record<Language, string> = {
     sl: "sl",
     en: "en",
     es: "es",
@@ -285,7 +285,12 @@ function LandingPage() {
     fr: "fr",
     hr: "hr",
     sr: "sr",
-    de: "de"
+    de: "de",
+    tr: "tr",
+    ar: "ar",
+    mx: "mx",
+    at: "at",
+    us: "us"
   };
 
   return (
@@ -349,6 +354,26 @@ function LandingPage() {
                       <button onClick={() => handleLangChange('de')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 border-b border-gray-50 last:border-0">
                         <img src="/flags/de.png" alt="Deutsch" className="w-5 h-5 object-cover rounded-full shadow-sm"/>
                         <span style={{fontFamily: 'var(--font-cabin)'}}>Deutsch</span>
+                      </button>
+                      <button onClick={() => handleLangChange('at')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 border-b border-gray-50 last:border-0">
+                        <img src="/flags/at.png" alt="Deutsch (AT)" className="w-5 h-5 object-cover rounded-full shadow-sm"/>
+                        <span style={{fontFamily: 'var(--font-cabin)'}}>Deutsch (AT)</span>
+                      </button>
+                      <button onClick={() => handleLangChange('tr')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 border-b border-gray-50 last:border-0">
+                        <img src="/flags/tr.png" alt="Türkçe" className="w-5 h-5 object-cover rounded-full shadow-sm"/>
+                        <span style={{fontFamily: 'var(--font-cabin)'}}>Türkçe</span>
+                      </button>
+                      <button onClick={() => handleLangChange('ar')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 border-b border-gray-50 last:border-0">
+                        <img src="/flags/ar.png" alt="Español (AR)" className="w-5 h-5 object-cover rounded-full shadow-sm"/>
+                        <span style={{fontFamily: 'var(--font-cabin)'}}>Español (AR)</span>
+                      </button>
+                      <button onClick={() => handleLangChange('mx')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 border-b border-gray-50 last:border-0">
+                        <img src="/flags/mx.png" alt="Español (MX)" className="w-5 h-5 object-cover rounded-full shadow-sm"/>
+                        <span style={{fontFamily: 'var(--font-cabin)'}}>Español (MX)</span>
+                      </button>
+                      <button onClick={() => handleLangChange('us')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 border-b border-gray-50 last:border-0">
+                        <img src="/flags/us.png" alt="English (US)" className="w-5 h-5 object-cover rounded-full shadow-sm"/>
+                        <span style={{fontFamily: 'var(--font-cabin)'}}>English (US)</span>
                       </button>
                     </div>
                   </>
