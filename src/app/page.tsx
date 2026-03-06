@@ -237,7 +237,7 @@ function LandingPage() {
   const [currentLang, setCurrentLang] = useState<Language>(() => {
     if (typeof window !== "undefined") {
       const saved = Cookies.get("lang") as Language;
-      if (saved && ["sl", "en", "es"].includes(saved)) return saved;
+      if (saved && ["sl", "en", "es", "it", "fr", "hr", "sr", "de"].includes(saved)) return saved;
     }
     return "sl";
   });
@@ -254,7 +254,12 @@ function LandingPage() {
   const flags = {
     sl: "sl-SI",
     en: "en-gb",
-    es: "es-es"
+    es: "es-es",
+    it: "it-it",
+    fr: "fr-fr",
+    hr: "hr-hr",
+    sr: "sr-rs",
+    de: "de-de"
   };
 
   return (
@@ -286,20 +291,40 @@ function LandingPage() {
                {isLangOpen && (
                  <>
                    <div className="fixed inset-0 z-30" onClick={() => setIsLangOpen(false)}></div>
-                   <div className="absolute right-0 mt-2 w-36 bg-white rounded-md shadow-xl py-1 z-40 border border-gray-100 animate-in fade-in zoom-in-95 duration-150">
-                     <button onClick={() => handleLangChange('sl')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2">
-                       <img src="https://www.sport2go.app/front/language/sl-SI/sl-SI.png" alt="Slovenščina" className="w-[18px] h-[12px] object-cover rounded-sm"/>
-                       <span style={{fontFamily: 'var(--font-cabin)'}}>Slovenščina</span>
-                     </button>
-                     <button onClick={() => handleLangChange('en')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2">
-                       <img src="https://www.sport2go.app/front/language/en-gb/en-gb.png" alt="English" className="w-[18px] h-[12px] object-cover rounded-sm"/>
-                       <span style={{fontFamily: 'var(--font-cabin)'}}>English</span>
-                     </button>
-                     <button onClick={() => handleLangChange('es')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2">
-                       <img src="https://www.sport2go.app/front/language/es-es/es-es.png" alt="Español" className="w-[18px] h-[12px] object-cover rounded-sm"/>
-                       <span style={{fontFamily: 'var(--font-cabin)'}}>Español</span>
-                     </button>
-                   </div>
+                   <div className="absolute right-0 mt-2 w-44 bg-white rounded-md shadow-xl py-1 z-40 border border-gray-100 animate-in fade-in zoom-in-95 duration-150 max-h-[300px] overflow-y-auto">
+                      <button onClick={() => handleLangChange('sl')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2">
+                        <img src="https://www.sport2go.app/front/language/sl-SI/sl-SI.png" alt="Slovenščina" className="w-[18px] h-[12px] object-cover rounded-sm"/>
+                        <span style={{fontFamily: 'var(--font-cabin)'}}>Slovenščina</span>
+                      </button>
+                      <button onClick={() => handleLangChange('en')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2">
+                        <img src="https://www.sport2go.app/front/language/en-gb/en-gb.png" alt="English" className="w-[18px] h-[12px] object-cover rounded-sm"/>
+                        <span style={{fontFamily: 'var(--font-cabin)'}}>English</span>
+                      </button>
+                      <button onClick={() => handleLangChange('es')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2">
+                        <img src="https://www.sport2go.app/front/language/es-es/es-es.png" alt="Español" className="w-[18px] h-[12px] object-cover rounded-sm"/>
+                        <span style={{fontFamily: 'var(--font-cabin)'}}>Español</span>
+                      </button>
+                      <button onClick={() => handleLangChange('it')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2">
+                        <img src="https://www.sport2go.app/front/language/it-it/it-it.png" alt="Italiano" className="w-[18px] h-[12px] object-cover rounded-sm"/>
+                        <span style={{fontFamily: 'var(--font-cabin)'}}>Italiano</span>
+                      </button>
+                      <button onClick={() => handleLangChange('fr')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2">
+                        <img src="https://www.sport2go.app/front/language/fr-fr/fr-fr.png" alt="Français" className="w-[18px] h-[12px] object-cover rounded-sm"/>
+                        <span style={{fontFamily: 'var(--font-cabin)'}}>Français</span>
+                      </button>
+                      <button onClick={() => handleLangChange('hr')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2">
+                        <img src="https://www.sport2go.app/front/language/hr-hr/hr-hr.png" alt="Hrvatski" className="w-[18px] h-[12px] object-cover rounded-sm"/>
+                        <span style={{fontFamily: 'var(--font-cabin)'}}>Hrvatski</span>
+                      </button>
+                      <button onClick={() => handleLangChange('sr')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2">
+                        <img src="https://www.sport2go.app/front/language/sr-rs/sr-rs.png" alt="Srpski" className="w-[18px] h-[12px] object-cover rounded-sm"/>
+                        <span style={{fontFamily: 'var(--font-cabin)'}}>Srpski</span>
+                      </button>
+                      <button onClick={() => handleLangChange('de')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2">
+                        <img src="https://www.sport2go.app/front/language/de-de/de-de.png" alt="Deutsch" className="w-[18px] h-[12px] object-cover rounded-sm"/>
+                        <span style={{fontFamily: 'var(--font-cabin)'}}>Deutsch</span>
+                      </button>
+                    </div>
                  </>
                )}
              </div>
