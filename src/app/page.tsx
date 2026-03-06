@@ -9,7 +9,8 @@ export default function Home() {
   const sendMessage = useMutation(api.messages.send);
 
   const [newMessageText, setNewMessageText] = useState("");
-  const [author, setAuthor] = useState("Anonymous");
+  const [author, setAuthor] = useState("");
+  const [authorError, setAuthorError] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -19,6 +20,12 @@ export default function Home() {
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!author.trim()) {
+      setAuthorError(true);
+      return;
+    }
+    setAuthorError(false);
+    
     if (!newMessageText.trim()) return;
 
     await sendMessage({ text: newMessageText, author });
@@ -32,17 +39,28 @@ export default function Home() {
         <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
           Convex Chat
         </h1>
-        <div className="flex items-center space-x-2">
-          <label className="text-xs text-neutral-400" htmlFor="authorInput">
-            Zaslon ime:
-          </label>
-          <input
-            id="authorInput"
-            type="text"
-            className="bg-neutral-800 text-sm border-none rounded-md px-3 py-1.5 focus:ring-2 focus:ring-blue-500 focus:outline-none w-32"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-          />
+        <div className="flex flex-col items-end space-y-1">
+          <div className="flex items-center space-x-2">
+            <label className="text-xs text-neutral-400" htmlFor="authorInput">
+              Zaslon ime: <span className="text-red-500">*</span>
+            </label>
+            <input
+              id="authorInput"
+              type="text"
+              className={`bg-neutral-800 text-sm border ${
+                authorError ? "border-red-500" : "border-neutral-700"
+              } rounded-md px-3 py-1.5 focus:ring-2 focus:ring-blue-500 focus:outline-none w-32 transition-colors`}
+              value={author}
+              onChange={(e) => {
+                setAuthor(e.target.value);
+                if (e.target.value.trim()) setAuthorError(false);
+              }}
+              placeholder="Tvoje ime"
+            />
+          </div>
+          {authorError && (
+            <span className="text-[10px] text-red-500">Ime je obvezno!</span>
+          )}
         </div>
       </header>
 
@@ -59,6 +77,14 @@ export default function Home() {
         ) : (
           messages.slice().reverse().map((msg) => {
             const isMe = msg.author === author;
+            // Format the creation time
+            const timestamp = new Intl.DateTimeFormat("sl-SI", {
+              hour: "2-digit",
+              minute: "2-digit",
+              day: "numeric",
+              month: "numeric",
+            }).format(msg._creationTime);
+
             return (
               <div
                 key={msg._id}
@@ -80,6 +106,9 @@ export default function Home() {
                 >
                   {msg.text}
                 </div>
+                <span className="text-[10px] text-neutral-500 mt-1 mx-1">
+                  {timestamp}
+                </span>
               </div>
             );
           })
