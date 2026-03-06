@@ -308,16 +308,16 @@ function LandingPage() {
 
        {/* Hero Section */}
        <section id="slider-wrapper" className="relative w-full overflow-hidden bg-white">
-          <div id="slider" className="relative w-full h-[550px] md:h-[600px] lg:h-[650px]">
+          <div id="slider" className="relative w-full h-[400px] md:h-[420px] lg:h-[460px] pt-[20px] md:pt-[30px]">
              
              {/* Background Overlay */}
              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[3000px] h-full bg-[#efc463] z-0" style={{ borderRadius: '50% / 0 0 100% 100%' }}></div>
 
              {/* Container */}
-             <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+             <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col md:flex-row items-center justify-between">
                 
                 {/* Text Content */}
-                <div className="absolute top-[120px] md:top-[160px] lg:top-[180px] left-4 sm:left-6 lg:left-8 w-[90%] md:w-[50%] lg:w-[45%] text-left flex flex-col items-start space-y-5 lg:space-y-6 z-20">
+                <div className="w-full md:w-[45%] text-left flex flex-col items-start space-y-4 lg:space-y-5 z-20 mb-8 md:mb-0">
                   <h1 className="text-[2.2rem] md:text-[2.8rem] lg:text-[45px] font-bold text-white tracking-tight leading-[1.1] drop-shadow-sm" style={{fontFamily: 'var(--font-montserrat)'}}>
                     {t.heroTitle1}<br className="hidden md:block"/> {t.heroTitle2}
                   </h1>
@@ -334,12 +334,12 @@ function LandingPage() {
                 </div>
 
                 {/* Illustration */}
-                <div className="absolute overflow-hidden md:overflow-visible bottom-0 right-0 w-[85%] sm:w-[70%] md:w-[60%] lg:w-[55%] flex justify-end z-10 pointer-events-none">
+                <div className="w-[90%] sm:w-[70%] md:w-[60%] lg:w-[55%] flex justify-end z-10 pointer-events-none absolute right-0 bottom-0 md:relative md:bottom-auto">
                   <img 
                     src="https://www.sport2go.app/image/demo/intro3.png" 
                     alt="Sports Illustration" 
-                    className="w-[120%] max-w-[900px] object-contain drop-shadow-2xl relative translate-x-[10%] md:translate-x-0" 
-                    style={{ transform: "rotate(0.7deg)", top: "35px" }}
+                    className="w-[120%] max-w-[900px] object-contain drop-shadow-2xl relative translate-x-[10%] md:translate-x-[5%] animate-flyin" 
+                    style={{ top: "-80px" }}
                   />
                 </div>
              </div>
