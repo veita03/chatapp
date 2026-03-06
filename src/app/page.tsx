@@ -291,9 +291,9 @@ function LandingPage() {
   return (
     <div className="min-h-[100dvh] bg-white font-sans flex flex-col overflow-x-hidden">
        {/* Header */}
-       <header className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-4 md:px-8 lg:px-12" style={{height: '60px', background: 'linear-gradient(90deg, #eeaf53 0%, #edca78 50%, #ecdf9b 100%)', padding: '0 2rem'}}>
+       <header className="absolute top-0 left-0 right-0 z-20 flex flex-col md:flex-row items-center justify-between px-4 md:px-8 lg:px-12 py-3 md:py-0" style={{minHeight: '60px', background: 'linear-gradient(90deg, #eeaf53 0%, #edca78 50%, #ecdf9b 100%)'}}>
           {/* Logo */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 mb-2 md:mb-0">
             <img src="https://www.sport2go.app/image/logo.svg" alt="SPORT2GO Logo" className="h-6 md:h-8 w-auto brightness-0 invert"/>
             <span className="text-xl md:text-2xl text-white tracking-wide leading-none drop-shadow-sm flex items-baseline select-none" style={{fontFamily: 'var(--font-montserrat)'}}>
               <span className="pr-0.5" style={{fontWeight: 400}}>SPORT</span>
@@ -301,7 +301,7 @@ function LandingPage() {
             </span>
           </div>
           {/* Right nav */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2 md:space-x-3">
              <button onClick={() => setAuthModal("login")} className="text-white hover:text-white/80 font-medium text-sm md:text-[15px] transition-colors uppercase tracking-wide" style={{fontFamily: 'var(--font-cabin)'}}>{t.login}</button>
              <button onClick={() => setAuthModal("register")} className="bg-[#31574d] hover:bg-[#25423a] text-white text-sm md:text-[15px] px-5 py-1.5 rounded-sm transition-all uppercase tracking-wide" style={{fontFamily: 'var(--font-cabin)'}}>{t.register}</button>
              
@@ -359,20 +359,20 @@ function LandingPage() {
 
        {/* Hero Section */}
        <section id="slider-wrapper" className="relative w-full overflow-hidden bg-white">
-          <div id="slider" className="relative w-full h-[400px] md:h-[420px] lg:h-[460px] pt-[20px] md:pt-[30px]">
+          <div id="slider" className="relative w-full min-h-[600px] md:h-[420px] lg:h-[460px] pt-[80px] md:pt-[30px] flex flex-col">
              
              {/* Background Overlay */}
-             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[3000px] h-full bg-[#efc463] z-0" style={{ borderRadius: '50% / 0 0 100% 100%' }}></div>
+             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[3000px] h-[500px] md:h-full bg-[#efc463] z-0" style={{ borderRadius: '50% / 0 0 100% 100%' }}></div>
 
              {/* Container */}
              <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col md:flex-row items-center justify-between">
                 
                 {/* Text Content */}
-                <div className="w-full md:w-[45%] text-left flex flex-col items-start space-y-4 lg:space-y-5 z-20 mb-8 md:mb-0">
-                  <h1 className="text-[2.2rem] md:text-[2.8rem] lg:text-[45px] font-bold text-white tracking-tight leading-[1.1] drop-shadow-sm" style={{fontFamily: 'var(--font-montserrat)'}}>
+                <div className="w-full md:w-[45%] text-center md:text-left flex flex-col items-center md:items-start space-y-4 lg:space-y-5 z-20 mb-8 md:mb-0 mt-8 md:mt-0">
+                  <h1 className="text-[1.8rem] sm:text-[2.2rem] md:text-[2.8rem] lg:text-[45px] font-bold text-white tracking-tight leading-[1.1] drop-shadow-sm" style={{fontFamily: 'var(--font-montserrat)'}}>
                     {t.heroTitle1}<br className="hidden md:block"/> {t.heroTitle2}
                   </h1>
-                  <p className="text-[15px] sm:text-base md:text-[17px] text-white/95 max-w-[420px] leading-relaxed font-light" style={{fontFamily: 'var(--font-cabin)'}}>
+                  <p className="text-[14px] sm:text-base md:text-[17px] text-white/95 max-w-[420px] leading-relaxed font-light" style={{fontFamily: 'var(--font-cabin)'}}>
                     {t.heroSubtitle}
                   </p>
                   <button 
@@ -385,12 +385,12 @@ function LandingPage() {
                 </div>
 
                 {/* Illustration */}
-                <div className="w-[90%] sm:w-[70%] md:w-[60%] lg:w-[55%] flex justify-end z-10 pointer-events-none absolute right-0 bottom-0 md:relative md:bottom-auto">
+                <div className="w-full sm:w-[80%] md:w-[60%] lg:w-[55%] flex justify-center md:justify-end z-10 pointer-events-none relative md:absolute md:right-0 md:bottom-0">
                   <img 
                     src="https://www.sport2go.app/image/demo/intro3.png" 
                     alt="Sports Illustration" 
-                    className="w-[120%] max-w-[900px] object-contain drop-shadow-2xl relative translate-x-[10%] md:translate-x-[5%] animate-flyin" 
-                    style={{ top: "-30px" }}
+                    className="w-[110%] md:w-[120%] max-w-[900px] object-contain drop-shadow-2xl relative translate-x-0 md:translate-x-[5%] animate-flyin" 
+                    style={{ top: "0px" }}
                   />
                 </div>
              </div>
