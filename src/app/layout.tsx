@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Simple Chat App",
-  description: "Next.js + Convex Chat App",
+  title: "SPORT2GO Chat",
+  description: "SPORT2GO Realtime Group Chat",
 };
 
 export default function RootLayout({
