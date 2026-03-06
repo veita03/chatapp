@@ -277,21 +277,21 @@ function LandingPage() {
     setIsLangOpen(false);
   };
 
-  const flags: Record<Language, string> = {
-    sl: "sl",
-    en: "en",
-    es: "es",
-    it: "it",
-    fr: "fr",
-    hr: "hr",
-    sr: "sr",
-    de: "de",
-    tr: "tr",
-    ar: "ar",
-    mx: "mx",
-    at: "at",
-    us: "us"
-  };
+  const languageOptions: { key: Language; label: string }[] = [
+    { key: 'de', label: 'Deutsch' },
+    { key: 'at', label: 'Deutsch (AT)' },
+    { key: 'en', label: 'English' },
+    { key: 'us', label: 'English (US)' },
+    { key: 'es', label: 'Español' },
+    { key: 'ar', label: 'Español (AR)' },
+    { key: 'mx', label: 'Español (MX)' },
+    { key: 'fr', label: 'Français' },
+    { key: 'hr', label: 'Hrvatski' },
+    { key: 'it', label: 'Italiano' },
+    { key: 'sl', label: 'Slovenščina' },
+    { key: 'sr', label: 'Srpski' },
+    { key: 'tr', label: 'Türkçe' },
+  ];
 
   return (
     <div className="min-h-[100dvh] bg-white font-sans flex flex-col overflow-x-hidden">
@@ -323,58 +323,23 @@ function LandingPage() {
                   <>
                     <div className="fixed inset-0 z-30" onClick={() => setIsLangOpen(false)}></div>
                     <div className="absolute right-0 mt-2 w-44 bg-white rounded-md shadow-xl py-1 z-40 border border-gray-100 animate-in fade-in zoom-in-95 duration-150 max-h-[600px] overflow-y-auto style-scrollbar">
-                      <button onClick={() => handleLangChange('sl')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 border-b border-gray-50 last:border-0">
-                        <img src="/flags/sl.png" alt="Slovenščina" className="w-5 h-5 object-cover rounded-full shadow-sm"/>
-                        <span style={{fontFamily: 'var(--font-cabin)'}}>Slovenščina</span>
-                      </button>
-                      <button onClick={() => handleLangChange('en')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 border-b border-gray-50 last:border-0">
-                        <img src="/flags/en.png" alt="English" className="w-5 h-5 object-cover rounded-full shadow-sm"/>
-                        <span style={{fontFamily: 'var(--font-cabin)'}}>English</span>
-                      </button>
-                      <button onClick={() => handleLangChange('es')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 border-b border-gray-50 last:border-0">
-                        <img src="/flags/es.png" alt="Español" className="w-5 h-5 object-cover rounded-full shadow-sm"/>
-                        <span style={{fontFamily: 'var(--font-cabin)'}}>Español</span>
-                      </button>
-                      <button onClick={() => handleLangChange('it')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 border-b border-gray-50 last:border-0">
-                        <img src="/flags/it.png" alt="Italiano" className="w-5 h-5 object-cover rounded-full shadow-sm"/>
-                        <span style={{fontFamily: 'var(--font-cabin)'}}>Italiano</span>
-                      </button>
-                      <button onClick={() => handleLangChange('fr')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 border-b border-gray-50 last:border-0">
-                        <img src="/flags/fr.png" alt="Français" className="w-5 h-5 object-cover rounded-full shadow-sm"/>
-                        <span style={{fontFamily: 'var(--font-cabin)'}}>Français</span>
-                      </button>
-                      <button onClick={() => handleLangChange('hr')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 border-b border-gray-50 last:border-0">
-                        <img src="/flags/hr.png" alt="Hrvatski" className="w-5 h-5 object-cover rounded-full shadow-sm"/>
-                        <span style={{fontFamily: 'var(--font-cabin)'}}>Hrvatski</span>
-                      </button>
-                      <button onClick={() => handleLangChange('sr')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 border-b border-gray-50 last:border-0">
-                        <img src="/flags/sr.png" alt="Srpski" className="w-5 h-5 object-cover rounded-full shadow-sm"/>
-                        <span style={{fontFamily: 'var(--font-cabin)'}}>Srpski</span>
-                      </button>
-                      <button onClick={() => handleLangChange('de')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 border-b border-gray-50 last:border-0">
-                        <img src="/flags/de.png" alt="Deutsch" className="w-5 h-5 object-cover rounded-full shadow-sm"/>
-                        <span style={{fontFamily: 'var(--font-cabin)'}}>Deutsch</span>
-                      </button>
-                      <button onClick={() => handleLangChange('at')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 border-b border-gray-50 last:border-0">
-                        <img src="/flags/at.png" alt="Deutsch (AT)" className="w-5 h-5 object-cover rounded-full shadow-sm"/>
-                        <span style={{fontFamily: 'var(--font-cabin)'}}>Deutsch (AT)</span>
-                      </button>
-                      <button onClick={() => handleLangChange('tr')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 border-b border-gray-50 last:border-0">
-                        <img src="/flags/tr.png" alt="Türkçe" className="w-5 h-5 object-cover rounded-full shadow-sm"/>
-                        <span style={{fontFamily: 'var(--font-cabin)'}}>Türkçe</span>
-                      </button>
-                      <button onClick={() => handleLangChange('ar')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 border-b border-gray-50 last:border-0">
-                        <img src="/flags/ar.png" alt="Español (AR)" className="w-5 h-5 object-cover rounded-full shadow-sm"/>
-                        <span style={{fontFamily: 'var(--font-cabin)'}}>Español (AR)</span>
-                      </button>
-                      <button onClick={() => handleLangChange('mx')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 border-b border-gray-50 last:border-0">
-                        <img src="/flags/mx.png" alt="Español (MX)" className="w-5 h-5 object-cover rounded-full shadow-sm"/>
-                        <span style={{fontFamily: 'var(--font-cabin)'}}>Español (MX)</span>
-                      </button>
-                      <button onClick={() => handleLangChange('us')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 border-b border-gray-50 last:border-0">
-                        <img src="/flags/us.png" alt="English (US)" className="w-5 h-5 object-cover rounded-full shadow-sm"/>
-                        <span style={{fontFamily: 'var(--font-cabin)'}}>English (US)</span>
-                      </button>
+                      {languageOptions.map((lang) => (
+                        <button 
+                          key={lang.key}
+                          onClick={() => handleLangChange(lang.key)} 
+                          className={`w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center justify-between border-b border-gray-50 last:border-0 ${currentLang === lang.key ? 'bg-orange-50/50' : ''}`}
+                        >
+                          <div className="flex items-center space-x-2">
+                            <img src={`/flags/${flags[lang.key]}.png`} alt={lang.label} className="w-5 h-5 object-cover rounded-full shadow-sm"/>
+                            <span style={{fontFamily: 'var(--font-cabin)'}} className={currentLang === lang.key ? 'font-bold' : ''}>{lang.label}</span>
+                          </div>
+                          {currentLang === lang.key && (
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5 text-[#eeaf53]">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                            </svg>
+                          )}
+                        </button>
+                      ))}
                     </div>
                   </>
                 )}
