@@ -117,8 +117,12 @@ export default function Home() {
               id="authorInput"
               type="text"
               className={`bg-white/95 text-sm border ${
-                authorError ? "border-red-500 ring-2 ring-red-500" : "border-white/50"
-              } text-gray-800 font-medium rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-[#5BA582] focus:border-transparent outline-none w-32 md:w-48 transition-all shadow-sm placeholder-gray-400`}
+                authorError 
+                  ? "border-red-500 ring-2 ring-red-500" 
+                  : !author.trim()
+                    ? "border-white/80 ring-2 ring-white/60 animate-[pulse_2s_ease-in-out_infinite]"
+                    : "border-white/50"
+              } text-gray-800 font-medium rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-[#5BA582] focus:border-transparent focus:animate-none outline-none w-32 md:w-48 transition-all shadow-sm placeholder-gray-400`}
               value={author}
               onChange={(e) => {
                 setAuthor(e.target.value);
