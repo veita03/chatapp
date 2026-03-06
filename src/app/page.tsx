@@ -7,9 +7,9 @@ import { Id } from "../../convex/_generated/dataModel";
 import { useState, useRef, useEffect } from "react";
 import { useAuthActions } from "@convex-dev/auth/react";
 
-function DualAuthLogin() {
+function DualAuthLogin({ initialTab = "login", onClose }: { initialTab?: "login"|"register", onClose: () => void }) {
   const { signIn } = useAuthActions();
-  const [tab, setTab] = useState<"login" | "register">("login");
+  const [tab, setTab] = useState<"login" | "register">(initialTab);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -52,19 +52,24 @@ function DualAuthLogin() {
   };
 
   return (
-    <div className="flex flex-col h-[100dvh] bg-[#F4F6F8] items-center justify-center p-4 sm:p-6 overflow-y-auto">
-      <div className="w-full max-w-md my-auto">
-        <div className="flex flex-col items-center space-y-3 mb-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <img 
-            src="https://www.sport2go.app/image/logo.svg" 
-            alt="SPORT2GO Logo" 
-            className="h-16 w-auto drop-shadow-md mb-2"
-          />
-          <h1 className="text-3xl font-extrabold text-gray-800 tracking-tight" style={{fontFamily: 'var(--font-montserrat)'}}>SPORT2GO</h1>
-          <p className="text-sm text-gray-500 font-medium text-center">Klepetalnica za vašo ekipo</p>
-        </div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/50 backdrop-blur-sm overflow-y-auto w-full h-full">
+      <div className="w-full max-w-md relative animate-in fade-in zoom-in-95 duration-200 my-auto">
+        <button 
+          onClick={onClose} 
+          className="absolute right-4 top-4 text-gray-400 hover:text-gray-700 z-10 p-2 bg-gray-50/80 rounded-full hover:bg-gray-100 transition-colors"
+        >
+           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
 
-        <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-xl space-y-6 border border-gray-100 animate-in fade-in slide-in-from-bottom-8 duration-700">
+        <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-2xl space-y-6 border border-gray-100">
+          <div className="flex flex-col items-center space-y-3 mb-4">
+            <img 
+              src="https://www.sport2go.app/image/logo.svg" 
+              alt="SPORT2GO Logo" 
+              className="h-12 w-auto drop-shadow-md mb-1"
+            />
+            <h1 className="text-2xl font-extrabold text-gray-800 tracking-tight" style={{fontFamily: 'var(--font-montserrat)'}}>SPORT2GO</h1>
+          </div>
           
           {/* Tabs */}
           <div className="flex bg-gray-100/80 p-1 rounded-xl">
@@ -211,6 +216,115 @@ function DualAuthLogin() {
           </button>
         </div>
       </div>
+    </div>
+  );
+}
+
+function LandingPage() {
+  const [authModal, setAuthModal] = useState<"login" | "register" | null>(null);
+
+  return (
+    <div className="min-h-[100dvh] bg-white font-sans flex flex-col overflow-x-hidden">
+       {/* Header */}
+       <header className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between p-4 md:px-8 lg:px-12">
+          {/* Logo */}
+          <div className="flex items-center space-x-2">
+            <img src="https://www.sport2go.app/image/logo.svg" alt="SPORT2GO Logo" className="h-6 md:h-8 w-auto brightness-0 invert"/>
+            <span className="text-xl md:text-2xl text-white tracking-widest leading-none drop-shadow-sm flex items-baseline select-none" style={{fontFamily: 'var(--font-montserrat)'}}>
+              <span className="font-extrabold pr-0.5" style={{fontWeight: 800}}>SPORT</span>
+              <span className="font-medium opacity-90" style={{fontWeight: 500}}>2GO</span>
+            </span>
+          </div>
+          {/* Right nav */}
+          <div className="flex items-center space-x-2 md:space-x-4">
+             <button onClick={() => setAuthModal("login")} className="text-white hover:text-white/80 font-medium text-sm md:text-base px-2 py-2 transition-colors">Prijava</button>
+             <button onClick={() => setAuthModal("register")} className="bg-[#31574d] hover:bg-[#25423a] text-white text-sm md:text-base font-semibold px-4 md:px-6 py-2 md:py-2.5 rounded-lg shadow-sm transition-all focus:ring-2 focus:ring-white/50">Registracija</button>
+             <div className="w-7 h-7 md:w-8 md:h-8 rounded-full overflow-hidden border-2 border-white/20 ml-1 md:ml-2 flex flex-shrink-0 cursor-pointer hover:border-white transition-colors">
+               <img src="https://flagcdn.com/w40/si.png" alt="Slovenian" className="w-full h-full object-cover"/>
+             </div>
+          </div>
+       </header>
+
+       {/* Hero Section */}
+       <section className="relative pt-28 pb-32 md:pt-40 md:pb-56 bg-gradient-to-b from-[#f8bc5c] to-[#e4a142] overflow-hidden flex-shrink-0">
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center">
+             
+             {/* Text Content */}
+             <div className="w-full lg:w-1/2 text-center lg:text-left pt-2 lg:pt-0 flex flex-col items-center lg:items-start space-y-6">
+                <h1 className="text-[2.5rem] md:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1] drop-shadow-sm">
+                  Manj stresa,<br className="hidden lg:block"/> več časa za igro
+                </h1>
+                <p className="text-base md:text-lg text-white/95 max-w-lg leading-relaxed font-medium mx-auto lg:mx-0">
+                  Sport2go je spletna platforma s katero lahko preprosto načrtujete prihajajoče športne termine oziroma skupinske športne aktivnosti
+                </p>
+                <button 
+                  onClick={() => setAuthModal("register")}
+                  className="bg-[#31574d] hover:bg-[#25423a] text-white font-bold text-base md:text-lg px-8 py-4 rounded-xl shadow-[0_8px_20px_rgba(49,87,77,0.4)] hover:shadow-[0_12px_24px_rgba(49,87,77,0.5)] transition-all hover:-translate-y-0.5 mt-2 active:scale-95"
+                >
+                  PRIDRUŽI SE
+                </button>
+             </div>
+
+             {/* Illustration */}
+             <div className="w-full lg:w-1/2 mt-12 lg:mt-0 relative flex justify-center lg:justify-end">
+                <img src="https://www.sport2go.app/image/demo/intro3.png" alt="Sports Illustration" className="w-full max-w-[320px] sm:max-w-md lg:max-w-2xl object-contain drop-shadow-2xl z-10 relative pointer-events-none"/>
+             </div>
+          </div>
+
+          {/* Curved Wave Bottom */}
+          <div className="absolute -bottom-1 left-0 right-0 w-full overflow-hidden leading-none z-20">
+            <svg className="relative block w-full h-[60px] md:h-[120px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,120.35,187.72,111.9,235.24,104.83,280.9,78.29,321.39,56.44Z" fill="#ffffff"></path>
+            </svg>
+          </div>
+       </section>
+
+       {/* Features Section */}
+       <section className="bg-white py-12 md:py-24 relative z-30 flex-1">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 lg:gap-12 text-center">
+               
+               {/* Feature 1 */}
+               <div className="flex flex-col items-center">
+                  <div className="w-28 h-28 md:w-36 md:h-36 lg:w-44 lg:h-44 rounded-full bg-white shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 flex items-center justify-center mb-6 hover:shadow-[0_8px_30px_rgb(0,0,0,0.1)] transition-shadow">
+                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.2} stroke="currentColor" className="w-14 h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 text-[#31574d]">
+                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
+                     </svg>
+                  </div>
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-3 tracking-tight">Upravljaj ekipo</h3>
+                  <p className="text-gray-500 text-sm md:text-[15px] max-w-xs mx-auto leading-relaxed">Ustvari prihajajoče športne dogodke, povabi prijatelje in spremljaj prijave.</p>
+               </div>
+               
+               {/* Feature 2 */}
+               <div className="flex flex-col items-center">
+                  <div className="w-28 h-28 md:w-36 md:h-36 lg:w-44 lg:h-44 rounded-full bg-white shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 flex items-center justify-center mb-6 hover:shadow-[0_8px_30px_rgb(0,0,0,0.1)] transition-shadow">
+                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.2} stroke="currentColor" className="w-14 h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 text-[#31574d]">
+                       <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+                     </svg>
+                  </div>
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-3 tracking-tight">Pridruži se drugim ekipam</h3>
+                  <p className="text-gray-500 text-sm md:text-[15px] max-w-xs mx-auto leading-relaxed">V kolikor igraš različne športe ustvari različne profile in išči nove ekipe.</p>
+               </div>
+
+               {/* Feature 3 */}
+               <div className="flex flex-col items-center">
+                  <div className="w-28 h-28 md:w-36 md:h-36 lg:w-44 lg:h-44 rounded-full bg-white shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 flex items-center justify-center mb-6 hover:shadow-[0_8px_30px_rgb(0,0,0,0.1)] transition-shadow">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.2} stroke="currentColor" className="w-14 h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 text-[#31574d]">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 7.5A2.25 2.25 0 0 1 7.5 5.25h9a2.25 2.25 0 0 1 2.25 2.25v9a2.25 2.25 0 0 1-2.25 2.25h-9a2.25 2.25 0 0 1-2.25-2.25v-9Z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M18.75 10.5h1.5a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-1.5M7.5 5.25c0-1.516.425-2.923 1.15-4.103a.375.375 0 0 1 .634-.01 5.952 5.952 0 0 0 1.258 1.637c.451.41.97.77 1.58.985a6.685 6.685 0 0 0 2.756.284 3.75 3.75 0 0 1 1.144.17c.504.168.895.503 1.15.938" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 8.25v8.25M12 8.25v8.25M15.75 8.25v8.25" />
+                     </svg>
+                  </div>
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-3 tracking-tight">Zabava</h3>
+                  <p className="text-gray-500 text-sm md:text-[15px] max-w-xs mx-auto leading-relaxed">Določitev igralca meseca in možnost organizacije pijače po tekmi.</p>
+               </div>
+            </div>
+          </div>
+       </section>
+
+       {authModal && (
+         <DualAuthLogin initialTab={authModal} onClose={() => setAuthModal(null)} />
+       )}
     </div>
   );
 }
@@ -442,7 +556,7 @@ export default function Home() {
   }
 
   if (!isAuthenticated) {
-    return <DualAuthLogin />;
+    return <LandingPage />;
   }
 
   return (
