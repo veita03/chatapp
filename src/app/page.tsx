@@ -322,7 +322,7 @@ function LandingPage() {
                 {isLangOpen && (
                   <>
                     <div className="fixed inset-0 z-30" onClick={() => setIsLangOpen(false)}></div>
-                    <div className="absolute right-0 mt-2 w-44 bg-white rounded-md shadow-xl py-1 z-40 border border-gray-100 animate-in fade-in zoom-in-95 duration-150 max-h-[300px] overflow-y-auto style-scrollbar">
+                    <div className="absolute right-0 mt-2 w-44 bg-white rounded-md shadow-xl py-1 z-40 border border-gray-100 animate-in fade-in zoom-in-95 duration-150 max-h-[600px] overflow-y-auto style-scrollbar">
                       <button onClick={() => handleLangChange('sl')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2 border-b border-gray-50 last:border-0">
                         <img src="/flags/sl.png" alt="Slovenščina" className="w-5 h-5 object-cover rounded-full shadow-sm"/>
                         <span style={{fontFamily: 'var(--font-cabin)'}}>Slovenščina</span>
