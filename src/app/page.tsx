@@ -225,7 +225,7 @@ export default function Home() {
   // Current authenticated user profile - only run query if we know user is authenticated
   const currentUser = useQuery(api.users.current, isAuthenticated ? {} : "skip");
   const [newMessageText, setNewMessageText] = useState("");
-  const author = currentUser?.name ?? "";
+  const author = currentUser?.name || currentUser?.email?.split("@")[0] || "Uporabnik";
   const authorImage = currentUser?.image ?? "";
   
   const [quickActionTab, setQuickActionTab] = useState<"emoji" | "text" | "poll" | "location">("emoji");
