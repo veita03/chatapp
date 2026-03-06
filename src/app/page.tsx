@@ -55,46 +55,72 @@ function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/50 backdrop-blur-sm overflow-y-auto w-full h-full">
-      <div className="w-full max-w-md relative animate-in fade-in zoom-in-95 duration-200 my-auto">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/50 backdrop-blur-sm overflow-y-auto w-full h-full"
+      onClick={onClose}
+    >
+      <div 
+        className="w-full max-w-md relative animate-in fade-in zoom-in-95 duration-200 my-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button 
           onClick={onClose} 
-          className="absolute right-4 top-4 text-gray-400 hover:text-gray-700 z-10 p-2 bg-gray-50/80 rounded-full hover:bg-gray-100 transition-colors"
+          className="absolute right-4 top-3 text-white/80 hover:text-white z-20 p-2 bg-black/10 rounded-full hover:bg-black/20 transition-colors"
         >
            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
 
-        <div className="bg-white rounded-xl shadow-2xl overflow-hidden border border-gray-100/50 flex flex-col">
-          {/* Header/Tabs Area replacing old logo area */}
-          <div className="bg-[#eeaf53] px-6 py-6 pb-0 flex flex-col items-center justify-center">
+        <div className="bg-white rounded-xl shadow-2xl overflow-hidden border border-gray-100 flex flex-col">
+          {/* Modern Header with Logo + Text */}
+          <div className="bg-gradient-to-r from-[#F0CA68] to-[#EAA145] px-6 py-4 flex items-center justify-center space-x-3 shadow-inner">
             <img 
               src="https://www.sport2go.app/image/logo.svg" 
               alt="SPORT2GO Logo" 
-              className="h-10 w-auto mb-6 brightness-0 invert"
+              className="h-8 w-auto brightness-0 invert"
             />
-            {/* Tabs integrated into the header block */}
-            <div className="flex w-full mt-2">
-              <button
-                onClick={() => { setTab("login"); setError(null); }}
-                className={`flex-1 py-4 text-[15px] font-bold tracking-wide uppercase transition-colors ${tab === "login" ? "bg-[#5BA582] text-white" : "bg-white text-gray-700 hover:bg-gray-50"}`}
-                style={{fontFamily: 'var(--font-cabin)'}}
-              >
-                {t.login}
-              </button>
-              <button
-                onClick={() => { setTab("register"); setError(null); }}
-                className={`flex-1 py-4 text-[15px] font-bold tracking-wide uppercase transition-colors ${tab === "register" ? "bg-white text-gray-700" : "bg-[#5BA582] text-white hover:bg-[#4d8c6f]"}`}
-                style={{fontFamily: 'var(--font-cabin)'}}
-              >
-                {t.register}
-              </button>
-            </div>
+            <span className="text-xl md:text-2xl text-white tracking-wide leading-none drop-shadow-sm flex items-baseline select-none" style={{fontFamily: 'var(--font-montserrat)'}}>
+              <span className="pr-0.5" style={{fontWeight: 400}}>SPORT</span>
+              <span className="opacity-95" style={{fontWeight: 600}}>2GO</span>
+            </span>
           </div>
 
-          <div className="p-6 sm:p-8 pt-6">
-            <h2 className="text-2xl font-bold text-gray-800 tracking-tight mb-6 uppercase" style={{fontFamily: 'var(--font-cabin)'}}>
-              {tab === "login" ? t.login : t.register}
-            </h2>
+          {/* Tab Selection area below header */}
+          <div className="bg-gray-50 border-b border-gray-100 p-3">
+             <div className="flex bg-gray-200/50 rounded-xl p-1 gap-1">
+               <button
+                 onClick={() => { setTab("login"); setError(null); }}
+                 className={`flex-1 py-2.5 text-xs font-bold tracking-wider uppercase transition-all rounded-lg ${
+                   tab === "login" 
+                   ? "bg-white text-[#5BA582] shadow-sm transform scale-[1.02]" 
+                   : "text-gray-500 hover:text-gray-700 active:scale-95"
+                 }`}
+                 style={{fontFamily: 'var(--font-cabin)'}}
+               >
+                 {t.login}
+               </button>
+               <button
+                 onClick={() => { setTab("register"); setError(null); }}
+                 className={`flex-1 py-2.5 text-xs font-bold tracking-wider uppercase transition-all rounded-lg ${
+                   tab === "register" 
+                   ? "bg-white text-[#5BA582] shadow-sm transform scale-[1.02]" 
+                   : "text-gray-500 hover:text-gray-700 active:scale-95"
+                 }`}
+                 style={{fontFamily: 'var(--font-cabin)'}}
+               >
+                 {t.register}
+               </button>
+             </div>
+          </div>
+
+          <div className="p-6 sm:p-8 pt-5">
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold text-gray-800 tracking-tight uppercase leading-none" style={{fontFamily: 'var(--font-cabin)'}}>
+                {tab === "login" ? t.login : t.register}
+              </h2>
+              <p className="text-xs text-gray-400 mt-2 font-medium" style={{fontFamily: 'var(--font-cabin)'}}>
+                {tab === "login" ? "Pozdravljeni nazaj! Prosimo, vpišite svoje podatke." : "Ustvarite račun in se pridružite skupnosti."}
+              </p>
+            </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
