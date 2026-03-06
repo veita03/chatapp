@@ -495,14 +495,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* Name Required Toast (Tooltip) */}
-      {authorError && (
-        <div className="absolute top-24 left-1/2 transform -translate-x-1/2 z-40 pointer-events-none animate-in slide-in-from-top-4 fade-in duration-300">
-          <div className="bg-red-500/90 backdrop-blur-sm text-white font-semibold text-xs py-2 px-4 rounded-full shadow-[0_4px_14px_rgba(239,68,68,0.4)] border border-red-400">
-            Ime je obvezno!
-          </div>
-        </div>
-      )}
+
 
       {/* Input Area (Sticky Footer) */}
       <footer className="bg-white border-t border-gray-200 flex-shrink-0 z-20 pb-safe shadow-[0_-5px_20px_-5px_rgba(0,0,0,0.04)]">
