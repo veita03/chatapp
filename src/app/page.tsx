@@ -9,7 +9,7 @@ import { useAuthActions } from "@convex-dev/auth/react";
 
 export default function Home() {
   const { isAuthenticated, isLoading } = useConvexAuth();
-  const { signIn } = useAuthActions();
+  const { signIn, signOut } = useAuthActions();
 
   const messages = useQuery(api.messages.get);
   const sendMessage = useMutation(api.messages.send);
@@ -26,6 +26,7 @@ export default function Home() {
   // Poll state
   const [pollQuestion, setPollQuestion] = useState("");
   const [pollOptions, setPollOptions] = useState<string[]>(["", ""]);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLElement>(null);
@@ -269,7 +270,7 @@ export default function Home() {
   return (
     <div className="flex flex-col h-[100dvh] bg-[#F4F6F8] text-[#444] font-sans overflow-hidden">
       {/* Sport2GO Header (Sticky) */}
-      <header className="bg-gradient-to-r from-[#F0CA68] to-[#EAA145] border-b border-[#EAA145]/30 p-4 shadow-md flex items-center justify-between z-20 flex-shrink-0 relative h-[72px]">
+      <header className="bg-gradient-to-r from-[#F0CA68] to-[#EAA145] border-b border-[#EAA145]/30 p-4 shadow-md flex items-center justify-between z-30 flex-shrink-0 relative h-[72px]">
         <div className="flex items-center space-x-2">
           <img 
             src="https://www.sport2go.app/image/logo.svg" 
@@ -281,6 +282,50 @@ export default function Home() {
             <span className="font-medium opacity-90" style={{fontWeight: 500}}>2GO</span>
           </span>
         </div>
+
+        {/* User Profile / Logout Dropdown */}
+        {isAuthenticated && currentUser && (
+          <div className="relative">
+            <button
+              onClick={() => setIsProfileOpen(!isProfileOpen)}
+              className="flex items-center space-x-2.5 bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/20 px-3 py-1.5 rounded-full transition-all duration-200 active:scale-95 cursor-pointer"
+            >
+              <div className="w-7 h-7 rounded-full bg-white/50 border border-white/30 flex items-center justify-center overflow-hidden flex-shrink-0">
+                {authorImage ? (
+                  <img src={authorImage} alt={author} className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-[#EAA145] text-[12px] font-black uppercase">{author.charAt(0) || "?"}</span>
+                )}
+              </div>
+              <span className="text-white font-semibold text-[15px] drop-shadow-sm hidden sm:block max-w-[140px] truncate">{author}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className={`w-3.5 h-3.5 text-white transition-transform duration-200 drop-shadow-sm ${isProfileOpen ? "rotate-180" : ""}`}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+              </svg>
+            </button>
+
+            {/* Dropdown Menu */}
+            {isProfileOpen && (
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setIsProfileOpen(false)}></div>
+                <div className="absolute right-0 mt-3 w-[200px] bg-white rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-gray-100 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="px-4 py-3 sm:hidden border-b border-gray-100 bg-gray-50/50">
+                    <p className="text-[11px] text-gray-400 font-bold uppercase tracking-wider mb-0.5">Prijavljen(a)</p>
+                    <p className="text-[15px] font-black text-gray-800 truncate">{author}</p>
+                  </div>
+                  <button
+                    onClick={() => void signOut()}
+                    className="w-full text-left px-4 py-3.5 text-[14px] font-bold text-red-500 hover:bg-red-50 hover:text-red-600 transition-colors flex items-center space-x-2.5 cursor-pointer"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+                    </svg>
+                    <span>Odjava</span>
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        )}
       </header>
 
       {/* Chat Area (Scrollable) */}
