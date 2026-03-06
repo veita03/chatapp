@@ -269,7 +269,7 @@ function LandingPage() {
           {/* Logo */}
           <div className="flex items-center space-x-2">
             <img src="https://www.sport2go.app/image/logo.svg" alt="SPORT2GO Logo" className="h-6 md:h-8 w-auto brightness-0 invert"/>
-            <span className="text-xl md:text-2xl text-white tracking-widest leading-none drop-shadow-sm flex items-baseline select-none" style={{fontFamily: 'var(--font-montserrat)'}}>
+            <span className="text-xl md:text-2xl text-white tracking-wide leading-none drop-shadow-sm flex items-baseline select-none" style={{fontFamily: 'var(--font-montserrat)'}}>
               <span className="pr-0.5" style={{fontWeight: 400}}>SPORT</span>
               <span className="opacity-90" style={{fontWeight: 600}}>2GO</span>
             </span>
@@ -471,7 +471,7 @@ function LandingPage() {
        <footer className="bg-white py-12 pb-16">
           <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
              <div className="col-span-1">
-                <span className="text-2xl text-gray-400 tracking-widest leading-none drop-shadow-sm flex items-baseline select-none mb-4" style={{fontFamily: 'var(--font-montserrat)'}}>
+                <span className="text-2xl text-gray-400 tracking-wide leading-none drop-shadow-sm flex items-baseline select-none mb-4" style={{fontFamily: 'var(--font-montserrat)'}}>
                   <span className="pr-0.5" style={{fontWeight: 400}}>SPORT</span>
                   <span className="opacity-90" style={{fontWeight: 600}}>2GO</span>
                 </span>
@@ -758,7 +758,7 @@ export default function Home() {
             alt="SPORT2GO Logo" 
             className="h-7 md:h-8 w-auto drop-shadow-sm"
           />
-          <span className="text-xl md:text-2xl text-white tracking-widest leading-none drop-shadow-sm flex items-baseline select-none font-sans" style={{fontFamily: 'var(--font-montserrat)'}}>
+          <span className="text-xl md:text-2xl text-white tracking-wide leading-none drop-shadow-sm flex items-baseline select-none font-sans" style={{fontFamily: 'var(--font-montserrat)'}}>
             <span className="pr-0.5" style={{fontWeight: 400}}>SPORT</span>
             <span className="opacity-90" style={{fontWeight: 600}}>2GO</span>
           </span>
