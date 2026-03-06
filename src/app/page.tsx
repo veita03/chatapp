@@ -27,8 +27,8 @@ function DualAuthLogin() {
       return;
     }
 
-    if (password.length < 6) {
-      setError("Geslo mora imeti vsaj 6 znakov.");
+    if (password.length < 8) {
+      setError("Geslo mora imeti vsaj 8 znakov.");
       return;
     }
 
