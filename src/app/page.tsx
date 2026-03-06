@@ -2,18 +2,24 @@
 
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
+import { Id } from "../../convex/_generated/dataModel";
 import { useState, useRef, useEffect } from "react";
 
 export default function Home() {
   const messages = useQuery(api.messages.get);
   const sendMessage = useMutation(api.messages.send);
+  const votePoll = useMutation(api.messages.votePoll);
 
   const [newMessageText, setNewMessageText] = useState("");
   const [author, setAuthor] = useState("");
   const [authorError, setAuthorError] = useState(false);
-  const [quickActionTab, setQuickActionTab] = useState<"emoji" | "text">("emoji");
+  const [quickActionTab, setQuickActionTab] = useState<"emoji" | "text" | "poll" | "location">("emoji");
   const [isQuickActionsOpen, setIsQuickActionsOpen] = useState(false);
   
+  // Poll state
+  const [pollQuestion, setPollQuestion] = useState("");
+  const [pollOptions, setPollOptions] = useState<string[]>(["", ""]);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLElement>(null);
   const [hasUnread, setHasUnread] = useState(false);
@@ -104,6 +110,76 @@ export default function Home() {
     await sendMessage({ text: messageToSend, author });
     // Scroll down aggressively after sending
     setTimeout(scrollToBottomContext, 50);
+  };
+
+  const handleSendPoll = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!author.trim()) {
+      setAuthorError(true);
+      setTimeout(() => setAuthorError(false), 3000);
+      return;
+    }
+    const cleanOptions = pollOptions.filter(opt => opt.trim() !== "");
+    if (!pollQuestion.trim() || cleanOptions.length < 2) return;
+
+    await sendMessage({
+      author,
+      text: "Poslal/a je anketo.",
+      type: "poll",
+      pollData: {
+        question: pollQuestion,
+        options: cleanOptions.map((opt, i) => ({
+          id: `opt-${Date.now()}-${i}`,
+          text: opt,
+          votes: []
+        }))
+      }
+    });
+
+    setPollQuestion("");
+    setPollOptions(["", ""]);
+    setIsQuickActionsOpen(false);
+    setTimeout(scrollToBottomContext, 50);
+  };
+
+  const handleSendLocation = async () => {
+    if (!author.trim()) {
+      setAuthorError(true);
+      setTimeout(() => setAuthorError(false), 3000);
+      return;
+    }
+
+    if (!navigator.geolocation) {
+      alert("Geolokacija ni podprta v vašem brskalniku.");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        await sendMessage({
+          author,
+          text: "Poslal/a je lokacijo.",
+          type: "location",
+          locationData: { lat: latitude, lng: longitude }
+        });
+        setIsQuickActionsOpen(false);
+        setTimeout(scrollToBottomContext, 50);
+      },
+      (error) => {
+        alert("Ne morem dobiti lokacije. Preverite pravice za dostop.");
+        console.error(error);
+      }
+    );
+  };
+
+  const handleVotePoll = async (messageId: Id<"messages">, optionId: string) => {
+    if (!author.trim()) {
+      setAuthorError(true);
+      setTimeout(() => setAuthorError(false), 3000);
+      return;
+    }
+    await votePoll({ messageId, optionId, author });
   };
 
   // Helper functions for formatting dates and times
@@ -271,21 +347,107 @@ export default function Home() {
                     </div>
                   )}
 
-                  <div className={`flex flex-col max-w-[75%] md:max-w-[70%] ${isMe ? "items-end" : "items-start"}`}>
+                  <div className={`flex flex-col max-w-[85%] md:max-w-[75%] ${isMe ? "items-end" : "items-start"}`}>
                     {!isMe && (
                       <span className="text-[11px] text-gray-500 font-medium mb-1 ml-1 tracking-wide uppercase">
                         {msg.author}
                       </span>
                     )}
-                    <div
-                      className={`px-4 py-2.5 text-sm md:text-[15px] leading-relaxed break-words shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-gray-100/50 ${
-                        isMe
-                          ? "bg-[#5BA582] text-white font-medium rounded-2xl rounded-br-sm"
-                          : "bg-white text-gray-700 rounded-2xl rounded-bl-sm"
-                      }`}
-                    >
-                      {msg.text}
-                    </div>
+
+                    {/* Rich Message: Location */}
+                    {msg.type === "location" && msg.locationData ? (
+                      <div className={`p-2 shadow-[0_2px_8px_rgba(0,0,0,0.06)] border border-gray-100/50 ${
+                        isMe ? "bg-[#5BA582] rounded-2xl rounded-br-sm" : "bg-white rounded-2xl rounded-bl-sm"
+                      }`}>
+                        <div className="rounded-xl overflow-hidden bg-gray-100 relative w-[220px] h-[140px] md:w-[260px] md:h-[160px]">
+                          <iframe
+                            width="100%"
+                            height="100%"
+                            style={{ border: 0 }}
+                            loading="lazy"
+                            allowFullScreen
+                            src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyB(REPLACE_WITH_NO_API_KEY)&q=${msg.locationData.lat},${msg.locationData.lng}`} // Fallback below
+                          ></iframe>
+                          {/* Fallback to simple maps link for free usage without Maps API key */}
+                          <div className="absolute inset-0 bg-gray-100 z-10 flex flex-col items-center justify-center border border-gray-200 cursor-pointer hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open(`https://www.google.com/maps?q=${msg.locationData?.lat},${msg.locationData?.lng}`, '_blank')}
+                          >
+                             <span className="text-3xl mb-2">🗺️</span>
+                             <span className="text-xs font-bold text-[#5BA582] text-center px-2">Odpri Zemljevid<br/>({msg.locationData.lat.toFixed(4)}, {msg.locationData.lng.toFixed(4)})</span>
+                          </div>
+                        </div>
+                      </div>
+                    ) : msg.type === "poll" && msg.pollData ? (
+                      /* Rich Message: Poll */
+                      <div className={`w-[240px] md:w-[280px] p-4 shadow-[0_2px_12px_rgba(0,0,0,0.06)] border ${
+                        isMe ? "bg-[#ebf4ef] border-[#5BA582]/20 rounded-2xl rounded-br-sm" : "bg-white border-gray-100 rounded-2xl rounded-bl-sm"
+                      }`}>
+                        <div className="flex items-start space-x-2 mb-3">
+                          <span className="text-lg">📊</span>
+                          <h4 className="font-bold text-gray-800 text-[14px] leading-tight mt-0.5">{msg.pollData.question}</h4>
+                        </div>
+                        <div className="flex flex-col space-y-2">
+                          {msg.pollData.options.map((opt) => {
+                            const totalVotes = msg.pollData!.options.reduce((sum, o) => sum + o.votes.length, 0);
+                            const percent = totalVotes === 0 ? 0 : Math.round((opt.votes.length / totalVotes) * 100);
+                            const hasVoted = opt.votes.includes(author);
+
+                            return (
+                              <button
+                                key={opt.id}
+                                onClick={() => handleVotePoll(msg._id, opt.id)}
+                                disabled={!author.trim()}
+                                className={`relative w-full text-left overflow-hidden rounded-lg border transition-all active:scale-[0.98] ${
+                                  hasVoted 
+                                    ? "border-[#5BA582] bg-white ring-1 ring-[#5BA582]/50" 
+                                    : "border-gray-200 bg-white hover:border-[#5BA582]/50"
+                                }`}
+                              >
+                                {/* Progress Bar Background */}
+                                <div 
+                                  className={`absolute left-0 top-0 bottom-0 transition-all duration-500 ease-out z-0 ${hasVoted ? "bg-[#5BA582]/15" : "bg-gray-100"}`} 
+                                  style={{ width: `${percent}%` }}
+                                />
+                                
+                                {/* Content */}
+                                <div className="relative z-10 p-2 flex justify-between items-center">
+                                  <span className={`text-[13px] font-semibold truncate pr-2 ${hasVoted ? "text-[#5BA582]" : "text-gray-600"}`}>
+                                    {opt.text}
+                                  </span>
+                                  <div className="flex items-center space-x-1.5 flex-shrink-0">
+                                    {opt.votes.length > 0 && (
+                                      <div className="flex -space-x-1">
+                                        {opt.votes.slice(0, 3).map((voter, vi) => (
+                                          <div key={vi} className="w-4 h-4 rounded-full bg-gray-300 border border-white flex items-center justify-center text-[8px] font-bold text-gray-600 overflow-hidden" title={voter}>
+                                            {voter.charAt(0).toUpperCase()}
+                                          </div>
+                                        ))}
+                                      </div>
+                                    )}
+                                    <span className="text-[11px] font-bold text-gray-500 w-6 text-right">{percent}%</span>
+                                  </div>
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                        <div className="text-[10px] text-gray-400 mt-2 text-right w-full">
+                          {msg.pollData.options.reduce((sum, o) => sum + o.votes.length, 0)} glasov
+                        </div>
+                      </div>
+                    ) : (
+                      /* Standard Text Message */
+                      <div
+                        className={`px-4 py-2.5 text-sm md:text-[15px] leading-relaxed break-words shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-gray-100/50 ${
+                          isMe
+                            ? "bg-[#5BA582] text-white font-medium rounded-2xl rounded-br-sm"
+                            : "bg-white text-gray-700 rounded-2xl rounded-bl-sm"
+                        }`}
+                      >
+                        {msg.text}
+                      </div>
+                    )}
+
                     <div className="flex items-center space-x-1 mt-1 mx-1">
                       <span className="text-[10px] text-gray-400 font-medium whitespace-nowrap">
                         {timeLabel}
@@ -339,17 +501,17 @@ export default function Home() {
         {/* Collapsible Quick Actions Panel */}
         <div 
           className={`overflow-hidden transition-all duration-300 ease-in-out bg-[#FAFAFA] border-b border-gray-100 ${
-            isQuickActionsOpen ? "h-[110px] opacity-100" : "h-0 opacity-0"
-          }`}
+            isQuickActionsOpen ? (quickActionTab === "poll" ? "h-[220px]" : "h-[110px]") : "h-0"
+          } ${isQuickActionsOpen ? "opacity-100" : "opacity-0"}`}
         >
           <div className="p-3">
             {/* Quick Actions Tabs */}
-            <div className="flex w-full max-w-4xl mx-auto mb-2 px-1">
-              <div className="flex bg-gray-200/50 rounded-lg p-0.5 space-x-1">
+            <div className="flex w-full max-w-4xl mx-auto mb-2 px-1 overflow-x-auto scrollbar-hide">
+              <div className="flex bg-gray-200/50 rounded-lg p-0.5 space-x-1 min-w-max">
                 <button
                   type="button"
                   onClick={() => setQuickActionTab("emoji")}
-                  className={`text-[11px] px-4 py-1.5 rounded-md font-semibold transition-all ${
+                  className={`text-[11px] px-3 md:px-4 py-1.5 rounded-md font-semibold transition-all ${
                     quickActionTab === "emoji" ? "bg-white text-[#5BA582] shadow-sm transform scale-100" : "text-gray-500 hover:text-[#5BA582] hover:bg-white/50"
                   }`}
                 >
@@ -358,18 +520,36 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={() => setQuickActionTab("text")}
-                  className={`text-[11px] px-4 py-1.5 rounded-md font-semibold transition-all ${
+                  className={`text-[11px] px-3 md:px-4 py-1.5 rounded-md font-semibold transition-all ${
                     quickActionTab === "text" ? "bg-white text-[#5BA582] shadow-sm transform scale-100" : "text-gray-500 hover:text-[#5BA582] hover:bg-white/50"
                   }`}
                 >
                   Predpripravljeno
                 </button>
+                <button
+                  type="button"
+                  onClick={() => setQuickActionTab("poll")}
+                  className={`text-[11px] px-3 md:px-4 py-1.5 rounded-md font-semibold transition-all ${
+                    quickActionTab === "poll" ? "bg-white text-[#5BA582] shadow-sm transform scale-100" : "text-gray-500 hover:text-[#5BA582] hover:bg-white/50"
+                  }`}
+                >
+                  Anketa
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setQuickActionTab("location")}
+                  className={`text-[11px] px-3 md:px-4 py-1.5 rounded-md font-semibold transition-all ${
+                    quickActionTab === "location" ? "bg-white text-[#5BA582] shadow-sm transform scale-100" : "text-gray-500 hover:text-[#5BA582] hover:bg-white/50"
+                  }`}
+                >
+                  Lokacija
+                </button>
               </div>
             </div>
 
             {/* Quick Actions Content */}
-            <div className="flex items-center space-x-2 w-full max-w-4xl mx-auto px-1 overflow-x-auto pb-1 scrollbar-hide h-[60px]">
-              {quickActionTab === "emoji" ? (
+            <div className={`flex w-full max-w-4xl mx-auto px-1 overflow-x-auto scrollbar-hide ${quickActionTab === "poll" ? "h-[160px]" : "h-[60px]"}`}>
+              {quickActionTab === "emoji" && (
                 <div className="flex items-center space-x-2 my-auto">
                   <button
                     type="button"
@@ -417,7 +597,9 @@ export default function Home() {
                     ⏱️
                   </button>
                 </div>
-              ) : (
+              )}
+              
+              {quickActionTab === "text" && (
                 <div className="flex items-center space-x-2 my-auto h-full pb-2">
                   <button
                     type="button"
@@ -446,6 +628,65 @@ export default function Home() {
                     className="text-xs font-medium bg-white border border-gray-200 text-gray-700 px-4 py-2.5 rounded-full whitespace-nowrap hover:bg-[#5BA582] hover:text-white hover:border-[#5BA582] transition-colors shadow-sm active:scale-95 h-fit"
                   >
                     Spet zamujaš
+                  </button>
+                </div>
+              )}
+
+              {quickActionTab === "poll" && (
+                <form className="flex flex-col w-full space-y-2 h-full overflow-y-auto pr-2 pb-2" onSubmit={handleSendPoll}>
+                  <input
+                    type="text"
+                    placeholder="Vprašanje ankete..."
+                    value={pollQuestion}
+                    onChange={(e) => setPollQuestion(e.target.value)}
+                    className="w-full text-sm py-2 px-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5BA582]/50 bg-white"
+                  />
+                  <div className="grid grid-cols-2 gap-2">
+                    {pollOptions.map((opt, i) => (
+                      <div key={i} className="flex space-x-1">
+                        <input
+                          type="text"
+                          placeholder={`Opcija ${i + 1}`}
+                          value={opt}
+                          onChange={(e) => {
+                            const newOpts = [...pollOptions];
+                            newOpts[i] = e.target.value;
+                            setPollOptions(newOpts);
+                          }}
+                          className="w-full text-xs py-1.5 px-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5BA582]/50 bg-white"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex justify-between items-center mt-1">
+                    <button
+                      type="button"
+                      onClick={() => setPollOptions([...pollOptions, ""])}
+                      disabled={pollOptions.length >= 4}
+                      className="text-xs text-[#5BA582] font-semibold hover:underline disabled:opacity-50"
+                    >
+                      + Dodaj opcijo
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={!pollQuestion.trim() || pollOptions.filter(o => o.trim()).length < 2}
+                      className="bg-[#5BA582] text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm hover:bg-[#4d8c6f] disabled:opacity-50"
+                    >
+                      Objavi Anketo
+                    </button>
+                  </div>
+                </form>
+              )}
+
+              {quickActionTab === "location" && (
+                <div className="flex items-center justify-center w-full h-full">
+                  <button
+                    type="button"
+                    onClick={handleSendLocation}
+                    className="flex flex-col items-center justify-center w-full max-w-sm border-2 border-dashed border-[#5BA582]/40 rounded-xl py-3 hover:bg-[#5BA582]/5 transition-colors group cursor-pointer"
+                  >
+                    <span className="text-xl group-hover:scale-110 transition-transform mb-1">📍</span>
+                    <span className="text-[11px] font-bold text-[#5BA582]">Deli trenutno lokacijo</span>
                   </button>
                 </div>
               )}
