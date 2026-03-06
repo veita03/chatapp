@@ -14,11 +14,10 @@ export default function Home() {
   const messages = useQuery(api.messages.get);
   const sendMessage = useMutation(api.messages.send);
   const votePoll = useMutation(api.messages.votePoll);
-
-  // Current authenticated user profile
-  const currentUser = useQuery(api.users.current);
+  // Current authenticated user profile - only run query if we know user is authenticated
+  const currentUser = useQuery(api.users.current, isAuthenticated ? {} : "skip");
   const [newMessageText, setNewMessageText] = useState("");
-  const author = currentUser?.name ?? "Skrivnostnež";
+  const author = currentUser?.name ?? "";
   const authorImage = currentUser?.image ?? "";
   
   const [quickActionTab, setQuickActionTab] = useState<"emoji" | "text" | "poll" | "location">("emoji");
