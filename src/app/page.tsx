@@ -450,9 +450,9 @@ function LandingPage() {
               </div>
               
               <div className="w-full md:w-7/12 relative mt-16 md:mt-0 right-0 flex justify-end">
-                <div className="relative w-[130%] md:w-[150%] max-w-[800px] h-[300px] md:h-[400px] -mr-16 md:-mr-32">
+                <div className="relative w-full md:w-[120%] max-w-[800px] h-[300px] md:h-[400px] -mr-4 md:-mr-16">
                    {/* Fallback mockup positioning matching original site layout */}
-                   <img src="https://www.sport2go.app/image/demo/screens.png" alt="Sport2Go screens" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[45%] md:-translate-y-[55%] w-full h-auto object-contain z-10 scale-[1.3] md:scale-[1.4] origin-left" />
+                   <img src="/demo/screens.png" alt="Sport2Go screens" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[45%] md:-translate-y-[50%] w-full h-auto object-contain z-10 origin-left" />
                 </div>
               </div>
             </div>
