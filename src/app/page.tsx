@@ -379,8 +379,8 @@ function LandingPage() {
                   <img 
                     src="https://www.sport2go.app/image/demo/intro3.png" 
                     alt="Sports Illustration" 
-                    className="w-[110%] md:w-[120%] max-w-[900px] object-contain drop-shadow-2xl relative translate-x-0 md:translate-x-[5%] animate-flyin" 
-                    style={{ top: "0px" }}
+                    className="w-[110%] md:w-[120%] max-w-[900px] object-contain drop-shadow-2xl relative translate-x-0 md:translate-x-[5%] animate-flyin -mt-6 md:mt-0" 
+                    style={{ top: "-30px" }}
                   />
                 </div>
              </div>
