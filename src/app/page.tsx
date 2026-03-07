@@ -460,9 +460,9 @@ function LandingPage() {
        </section>
 
        {/* Bottom Badges */}
-       <section className="bg-[#fffbf2] py-12 border-b border-[#efc463]/20">
+       <section className="bg-[#fffbf2] border-b border-[#efc463]/20">
          <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-center items-stretch divide-y md:divide-y-0 md:divide-x divide-[#efc463]/30">
-            <div className="flex flex-col items-center py-6 md:py-0 px-12 min-w-[280px]">
+            <div className="flex flex-col items-center py-12 md:py-12 px-12 min-w-[280px]">
                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-16 h-16 text-[#efc463] mb-4">
                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.712 4.33a9.027 9.027 0 0 1 1.652 1.306c.51.51.944 1.064 1.306 1.652M9.252 2.982a9.022 9.022 0 0 1 2.748-.482v.002a9.022 9.022 0 0 1 2.748.482M4.33 7.288a9.027 9.027 0 0 1 1.306-1.652c.51-.51 1.064-.944 1.652-1.306M2.5 12a9.022 9.022 0 0 1 .482-2.748h.002A9.022 9.022 0 0 1 2.982 12m18.036 4.712a9.027 9.027 0 0 1-1.652 1.306c-.51.51-.944 1.064-1.306 1.652M14.748 21.018a9.022 9.022 0 0 1-2.748.482v-.002a9.022 9.022 0 0 1-2.748-.482M19.67 16.712a9.027 9.027 0 0 1-1.306 1.652c-.51.51-1.064.944-1.652 1.306M21.5 12c0 .93-.162 1.825-.482 2.748h-.002A9.022 9.022 0 0 1 21.018 12M12 12v6m0-12v2m-6 4h2m10 0h-2m-4.596 4.596 1.414-1.414m-5.656-5.656L7.404 9.404m12.728 0-1.414 1.414m-5.656-5.656 1.414 1.414" />
                </svg>
@@ -470,7 +470,7 @@ function LandingPage() {
                  <span className="font-bold">{t.footerSupport.split(' ')[0]}</span> <span className="font-medium">{t.footerSupport.split(' ').slice(1).join(' ')}</span>
                </span>
             </div>
-            <div className="flex flex-col items-center py-6 md:py-0 px-12 min-w-[280px]">
+            <div className="flex flex-col items-center py-12 md:py-12 px-12 min-w-[280px]">
                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-16 h-16 text-[#efc463] mb-4">
                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
                </svg>
@@ -478,7 +478,7 @@ function LandingPage() {
                  <span className="font-medium">{t.footerSecurity1}</span> <span className="font-bold">{t.footerSecurity2}</span>
                </span>
             </div>
-            <div className="flex flex-col items-center py-6 md:py-0 px-12 min-w-[280px]">
+            <div className="flex flex-col items-center py-12 md:py-12 px-12 min-w-[280px]">
                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-16 h-16 text-[#efc463] mb-4">
                  <path strokeLinecap="round" strokeLinejoin="round" d="M11.412 15.655 9.75 21.75l3.745-4.012M9.257 13.5H3.75l2.659-2.849m2.048-2.194L14.25 2.25 12 10.5h8.25l-4.707 5.043M8.457 8.457 3 3m5.457 5.457 7.086 7.086m0 0L21 21" />
                </svg>
