@@ -388,7 +388,7 @@ function LandingPage() {
        </section>
 
        {/* Features Section */}
-       <section className="bg-white py-16 md:py-24 relative z-30 flex-1">
+       <section className="bg-white pt-10 pb-16 md:pt-10 md:pb-24 relative z-30 flex-1">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16 lg:gap-24 text-center">
                
