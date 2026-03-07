@@ -1,4 +1,4 @@
-export type Language = 'sl' | 'en' | 'es' | 'it' | 'fr' | 'hr' | 'sr' | 'de' | 'tr' | 'ar' | 'mx' | 'at' | 'us';
+export type Language = 'sl' | 'en' | 'es' | 'it' | 'fr' | 'hr' | 'sr' | 'de' | 'tr' | 'ar' | 'mx' | 'at' | 'us' | 'nl';
 
 export const translations = {
   sl: {

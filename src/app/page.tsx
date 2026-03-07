@@ -288,6 +288,7 @@ function LandingPage() {
     { key: 'fr', label: 'Français' },
     { key: 'hr', label: 'Hrvatski' },
     { key: 'it', label: 'Italiano' },
+    { key: 'nl', label: 'Nederlands' },
     { key: 'sl', label: 'Slovenščina' },
     { key: 'sr', label: 'Srpski' },
     { key: 'tr', label: 'Türkçe' },
