@@ -388,46 +388,64 @@ function LandingPage() {
        </section>
 
        {/* Features Section */}
-       <section className="bg-white pt-10 pb-16 md:pt-10 md:pb-24 relative z-30 flex-1">
+       <section className="bg-[#fffbf2] pt-16 pb-20 md:pt-20 md:pb-28 relative z-30 flex-1">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16 lg:gap-24 text-center">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 lg:gap-16 text-center">
                
                {/* Feature 1 */}
                <div className="flex flex-col items-center">
-                  <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-white shadow-[0_4px_30px_rgb(0,0,0,0.08)] border border-gray-50 flex items-center justify-center mb-6">
-                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-16 h-16 text-gray-700">
+                  <div className="w-36 h-36 md:w-48 md:h-48 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center mb-8">
+                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-[72px] h-[72px] text-[#2c4740]">
                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
                      </svg>
                   </div>
-                  <h3 className="text-xl md:text-[22px] font-bold text-gray-800 mb-4" style={{fontFamily: 'var(--font-montserrat)'}}>{t.feature1Title}</h3>
-                  <p className="text-gray-500 text-[15px] font-light max-w-xs mx-auto mb-6" style={{fontFamily: 'var(--font-cabin)'}}>{t.feature1Desc}</p>
-                  <button className="bg-[#eeaf53] hover:bg-[#e4a142] text-white font-bold text-xs px-8 py-2.5 rounded-sm uppercase tracking-wider" style={{fontFamily: 'var(--font-cabin)'}}>{t.moreBtn}</button>
+                  <div className="flex-1 flex flex-col justify-between w-full">
+                     <div>
+                       <h3 className="text-2xl md:text-[28px] font-bold text-[#353b41] mb-4" style={{fontFamily: 'var(--font-montserrat)'}}>{t.feature1Title}</h3>
+                       <p className="text-gray-500 text-[16px] md:text-[17px] font-light md:px-4 leading-relaxed mb-8" style={{fontFamily: 'var(--font-cabin)'}}>{t.feature1Desc}</p>
+                     </div>
+                     <div>
+                       <button className="bg-[#ecc06b] hover:bg-[#dcae58] text-white font-bold text-sm px-10 py-2.5 rounded-sm uppercase tracking-widest transition-colors shadow-sm" style={{fontFamily: 'var(--font-cabin)'}}>{t.moreBtn}</button>
+                     </div>
+                  </div>
                </div>
                
                {/* Feature 2 */}
                <div className="flex flex-col items-center">
-                  <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-white shadow-[0_4px_30px_rgb(0,0,0,0.08)] border border-gray-50 flex items-center justify-center mb-6">
-                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-16 h-16 text-gray-700">
+                  <div className="w-36 h-36 md:w-48 md:h-48 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center mb-8">
+                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-[72px] h-[72px] text-[#2c4740]">
                        <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
                      </svg>
                   </div>
-                  <h3 className="text-xl md:text-[22px] font-bold text-gray-800 mb-4" style={{fontFamily: 'var(--font-montserrat)'}}>{t.feature2Title}</h3>
-                  <p className="text-gray-500 text-[15px] font-light max-w-xs mx-auto mb-6" style={{fontFamily: 'var(--font-cabin)'}}>{t.feature2Desc}</p>
-                  <button className="bg-[#eeaf53] hover:bg-[#e4a142] text-white font-bold text-xs px-8 py-2.5 rounded-sm uppercase tracking-wider" style={{fontFamily: 'var(--font-cabin)'}}>{t.moreBtn}</button>
+                  <div className="flex-1 flex flex-col justify-between w-full">
+                     <div>
+                       <h3 className="text-2xl md:text-[28px] font-bold text-[#353b41] mb-4" style={{fontFamily: 'var(--font-montserrat)'}}>{t.feature2Title}</h3>
+                       <p className="text-gray-500 text-[16px] md:text-[17px] font-light md:px-4 leading-relaxed mb-8" style={{fontFamily: 'var(--font-cabin)'}}>{t.feature2Desc}</p>
+                     </div>
+                     <div>
+                       <button className="bg-[#ecc06b] hover:bg-[#dcae58] text-white font-bold text-sm px-10 py-2.5 rounded-sm uppercase tracking-widest transition-colors shadow-sm" style={{fontFamily: 'var(--font-cabin)'}}>{t.moreBtn}</button>
+                     </div>
+                  </div>
                </div>
 
                {/* Feature 3 */}
                <div className="flex flex-col items-center">
-                  <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-white shadow-[0_4px_30px_rgb(0,0,0,0.08)] border border-gray-50 flex items-center justify-center mb-6">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-16 h-16 text-gray-700">
+                  <div className="w-36 h-36 md:w-48 md:h-48 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center mb-8">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-[72px] h-[72px] text-[#2c4740]">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 7.5A2.25 2.25 0 0 1 7.5 5.25h9a2.25 2.25 0 0 1 2.25 2.25v9a2.25 2.25 0 0 1-2.25 2.25h-9a2.25 2.25 0 0 1-2.25-2.25v-9Z" />
                         <path strokeLinecap="round" strokeLinejoin="round" d="M18.75 10.5h1.5a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-1.5M7.5 5.25c0-1.516.425-2.923 1.15-4.103a.375.375 0 0 1 .634-.01 5.952 5.952 0 0 0 1.258 1.637c.451.41.97.77 1.58.985a6.685 6.685 0 0 0 2.756.284 3.75 3.75 0 0 1 1.144.17c.504.168.895.503 1.15.938" />
                         <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 8.25v8.25M12 8.25v8.25M15.75 8.25v8.25" />
                      </svg>
                   </div>
-                  <h3 className="text-xl md:text-[22px] font-bold text-gray-800 mb-4" style={{fontFamily: 'var(--font-montserrat)'}}>{t.feature3Title}</h3>
-                  <p className="text-gray-500 text-[15px] font-light max-w-xs mx-auto mb-6" style={{fontFamily: 'var(--font-cabin)'}}>{t.feature3Desc}</p>
-                  <button className="bg-[#eeaf53] hover:bg-[#e4a142] text-white font-bold text-xs px-8 py-2.5 rounded-sm uppercase tracking-wider" style={{fontFamily: 'var(--font-cabin)'}}>{t.moreBtn}</button>
+                  <div className="flex-1 flex flex-col justify-between w-full">
+                     <div>
+                       <h3 className="text-2xl md:text-[28px] font-bold text-[#353b41] mb-4" style={{fontFamily: 'var(--font-montserrat)'}}>{t.feature3Title}</h3>
+                       <p className="text-gray-500 text-[16px] md:text-[17px] font-light md:px-4 leading-relaxed mb-8" style={{fontFamily: 'var(--font-cabin)'}}>{t.feature3Desc}</p>
+                     </div>
+                     <div>
+                       <button className="bg-[#ecc06b] hover:bg-[#dcae58] text-white font-bold text-sm px-10 py-2.5 rounded-sm uppercase tracking-widest transition-colors shadow-sm" style={{fontFamily: 'var(--font-cabin)'}}>{t.moreBtn}</button>
+                     </div>
+                  </div>
                </div>
             </div>
           </div>
