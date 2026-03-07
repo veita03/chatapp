@@ -437,7 +437,7 @@ function LandingPage() {
        <section className="bg-gradient-to-br from-[#eeaf53] to-[#e4a142] pt-16 pb-16 md:pt-24 md:pb-20 relative">
           <div className="max-w-6xl mx-auto px-4 md:px-8">
             <div className="bg-white rounded-[24px] overflow-visible shadow-2xl flex flex-col md:flex-row items-center relative pr-4 lg:pr-12 pl-8 lg:pl-16 py-12 lg:py-16">
-              <div className="w-full md:w-5/12 z-10 space-y-5 pb-8 md:pb-0">
+              <div className="w-full md:w-5/12 z-10 space-y-5 pb-4 md:pb-0">
                 <h2 className="text-3xl md:text-[34px] font-bold text-[#353b41]" style={{fontFamily: 'var(--font-montserrat)'}}>{t.howToStart}</h2>
                 <p className="text-gray-500 text-base leading-relaxed max-w-sm font-light" style={{fontFamily: 'var(--font-cabin)'}}>
                   {t.howToStartDesc}
@@ -449,7 +449,7 @@ function LandingPage() {
                 </div>
               </div>
               
-              <div className="w-full md:w-7/12 relative mt-16 md:mt-0 right-0 flex justify-end">
+              <div className="w-full md:w-7/12 relative mt-4 md:mt-0 right-0 flex justify-end">
                 <div className="relative w-full md:w-[120%] max-w-[800px] h-[300px] md:h-[400px] -mr-4 md:-mr-16">
                    {/* Fallback mockup positioning matching original site layout */}
                    <img src="/demo/screens.png" alt="Sport2Go screens" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[45%] md:-translate-y-[50%] w-full h-auto object-contain z-10 origin-left" />
