@@ -316,7 +316,7 @@ function LandingPage() {
                   onClick={() => setIsLangOpen(!isLangOpen)}
                   className="flex items-center justify-center w-8 h-8 rounded-full bg-white/20 border border-white/40 cursor-pointer overflow-visible hover:bg-white/30 transition-colors"
                 >
-                  <img src={`/flags/${flags[currentLang]}.png`} alt={currentLang} className="w-5 h-5 object-cover rounded-full"/>
+                  <img src={`/flags/${currentLang}.png`} alt={currentLang} className="w-5 h-5 object-cover rounded-full"/>
                 </button>
                
                 {isLangOpen && (
@@ -330,7 +330,7 @@ function LandingPage() {
                           className={`w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center justify-between border-b border-gray-50 last:border-0 ${currentLang === lang.key ? 'bg-orange-50/50' : ''}`}
                         >
                           <div className="flex items-center space-x-2">
-                            <img src={`/flags/${flags[lang.key]}.png`} alt={lang.label} className="w-5 h-5 object-cover rounded-full shadow-sm"/>
+                            <img src={`/flags/${lang.key}.png`} alt={lang.label} className="w-5 h-5 object-cover rounded-full shadow-sm"/>
                             <span style={{fontFamily: 'var(--font-cabin)'}} className={currentLang === lang.key ? 'font-bold' : ''}>{lang.label}</span>
                           </div>
                           {currentLang === lang.key && (
