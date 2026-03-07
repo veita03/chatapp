@@ -297,7 +297,7 @@ function LandingPage() {
   return (
     <div className="min-h-[100dvh] bg-white font-sans flex flex-col overflow-x-hidden">
        {/* Header */}
-       <header className="absolute top-0 left-0 right-0 z-20 flex flex-col md:flex-row items-center justify-between px-4 md:px-8 lg:px-12 py-3 md:py-0" style={{minHeight: '60px', background: 'linear-gradient(90deg, #eeaf53 0%, #edca78 50%, #ecdf9b 100%)'}}>
+       <header className="absolute top-0 left-0 right-0 z-50 flex flex-col md:flex-row items-center justify-between px-4 md:px-8 lg:px-12 py-3 md:py-0" style={{minHeight: '60px', background: 'linear-gradient(90deg, #eeaf53 0%, #edca78 50%, #ecdf9b 100%)'}}>
           {/* Logo */}
           <div className="flex items-center space-x-2 mb-2 md:mb-0">
             <img src="https://www.sport2go.app/image/logo.svg" alt="SPORT2GO Logo" className="h-6 md:h-8 w-auto brightness-0 invert"/>
@@ -350,7 +350,7 @@ function LandingPage() {
 
        {/* Hero Section */}
        <section id="slider-wrapper" className="relative w-full overflow-hidden bg-white">
-          <div id="slider" className="relative w-full min-h-[500px] md:min-h-0 md:h-auto pt-[80px] md:pt-[110px] md:pb-[50px] flex flex-col">
+          <div id="slider" className="relative w-full min-h-[500px] md:min-h-0 md:h-auto pt-[80px] md:pt-[110px] md:pb-[90px] flex flex-col">
              
              {/* Background Overlay */}
              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[3000px] h-full bg-[#efc463] z-0" style={{ borderRadius: '50% / 0 0 100% 100%' }}></div>
@@ -380,7 +380,7 @@ function LandingPage() {
                   <img 
                     src="https://www.sport2go.app/image/demo/intro3.png" 
                     alt="Sports Illustration" 
-                    className="w-[110%] md:w-[110%] lg:w-[120%] max-w-[900px] object-contain drop-shadow-2xl relative translate-x-0 md:translate-x-[5%] animate-flyin -mt-6 md:mt-0" 
+                    className="w-[110%] md:w-[110%] lg:w-[120%] max-w-[900px] object-contain drop-shadow-2xl relative translate-x-0 md:translate-x-[5%] animate-flyin -mt-6 md:-mt-10" 
                   />
                 </div>
              </div>
