@@ -299,17 +299,17 @@ function LandingPage() {
        {/* Header */}
        <header className="absolute top-0 left-0 right-0 z-50 flex flex-col md:flex-row items-center justify-between px-4 md:px-8 lg:px-12 py-3 md:py-0" style={{minHeight: '60px', background: 'linear-gradient(90deg, #eeaf53 0%, #edca78 50%, #ecdf9b 100%)'}}>
           {/* Logo */}
-          <div className="flex items-center space-x-2 mb-2 md:mb-0">
+          <a href="#" className="flex items-center space-x-2 mb-2 md:mb-0 hover:opacity-90 transition-opacity">
             <img src="https://www.sport2go.app/image/logo.svg" alt="SPORT2GO Logo" className="h-6 md:h-8 w-auto brightness-0 invert"/>
             <span className="text-xl md:text-2xl text-white tracking-wide leading-none drop-shadow-sm flex items-baseline select-none" style={{fontFamily: 'var(--font-montserrat)'}}>
               <span className="pr-0.5" style={{fontWeight: 400}}>SPORT</span>
               <span className="opacity-90" style={{fontWeight: 600}}>2GO</span>
             </span>
-          </div>
+          </a>
           {/* Right nav */}
           <div className="flex items-center space-x-2 md:space-x-3">
-             <button onClick={() => setAuthModal("login")} className="text-white hover:text-white/80 font-medium text-sm md:text-[15px] transition-colors uppercase tracking-wide" style={{fontFamily: 'var(--font-cabin)'}}>{t.login}</button>
-             <button onClick={() => setAuthModal("register")} className="bg-[#31574d] hover:bg-[#25423a] text-white text-sm md:text-[15px] px-5 py-1.5 rounded-sm transition-all uppercase tracking-wide" style={{fontFamily: 'var(--font-cabin)'}}>{t.register}</button>
+             <button onClick={() => setAuthModal("login")} className="text-white hover:text-white/80 font-medium text-sm md:text-[15px] transition-colors uppercase tracking-wide cursor-pointer" style={{fontFamily: 'var(--font-cabin)'}}>{t.login}</button>
+             <button onClick={() => setAuthModal("register")} className="bg-[#31574d] hover:bg-[#25423a] text-white text-sm md:text-[15px] px-5 py-1.5 rounded-sm transition-all uppercase tracking-wide cursor-pointer" style={{fontFamily: 'var(--font-cabin)'}}>{t.register}</button>
              
              {/* Language Dropdown Area */}
              <div className="relative ml-1">
