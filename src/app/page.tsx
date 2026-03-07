@@ -349,7 +349,7 @@ function LandingPage() {
 
        {/* Hero Section */}
        <section id="slider-wrapper" className="relative w-full overflow-hidden bg-white">
-          <div id="slider" className="relative w-full min-h-[600px] md:h-[420px] lg:h-[460px] pt-[80px] md:pt-[30px] flex flex-col">
+          <div id="slider" className="relative w-full min-h-[600px] md:h-[420px] lg:h-[460px] pt-[80px] md:pt-[10px] flex flex-col">
              
              {/* Background Overlay */}
              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[3000px] h-[500px] md:h-full bg-[#efc463] z-0" style={{ borderRadius: '50% / 0 0 100% 100%' }}></div>
@@ -379,8 +379,7 @@ function LandingPage() {
                   <img 
                     src="https://www.sport2go.app/image/demo/intro3.png" 
                     alt="Sports Illustration" 
-                    className="w-[110%] md:w-[120%] max-w-[900px] object-contain drop-shadow-2xl relative translate-x-0 md:translate-x-[5%] animate-flyin -mt-6 md:mt-0" 
-                    style={{ top: "-30px" }}
+                    className="w-[110%] md:w-[120%] max-w-[900px] object-contain drop-shadow-2xl relative translate-x-0 md:translate-x-[5%] animate-flyin -mt-6 md:mt-0 top-[-30px] md:top-[-80px]" 
                   />
                 </div>
              </div>
