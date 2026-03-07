@@ -350,13 +350,13 @@ function LandingPage() {
 
        {/* Hero Section */}
        <section id="slider-wrapper" className="relative w-full overflow-hidden bg-white">
-          <div id="slider" className="relative w-full min-h-[500px] md:min-h-0 md:h-auto pt-[80px] md:pt-[120px] md:pb-[60px] flex flex-col">
+          <div id="slider" className="relative w-full min-h-[500px] md:min-h-0 md:h-auto pt-[80px] md:pt-[90px] lg:pt-[110px] md:pb-[50px] flex flex-col">
              
              {/* Background Overlay */}
              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[3000px] h-full bg-[#efc463] z-0" style={{ borderRadius: '50% / 0 0 100% 100%' }}></div>
 
              {/* Container */}
-             <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col md:flex-row items-center md:items-center justify-between">
+             <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col md:flex-row items-center justify-between">
                 
                 {/* Text Content */}
                 <div className="w-full md:w-[45%] text-center md:text-left flex flex-col items-center md:items-start space-y-4 lg:space-y-5 z-20 mb-8 md:mb-0 mt-8 md:mt-0">
@@ -376,11 +376,11 @@ function LandingPage() {
                 </div>
 
                 {/* Illustration */}
-                <div className="w-full sm:w-[80%] md:w-[60%] lg:w-[55%] flex justify-center md:justify-end z-10 pointer-events-none relative">
+                <div className="w-full sm:w-[80%] md:w-[50%] lg:w-[45%] flex justify-center md:justify-end z-10 pointer-events-none relative">
                   <img 
                     src="https://www.sport2go.app/image/demo/intro3.png" 
                     alt="Sports Illustration" 
-                    className="w-[110%] md:w-[120%] max-w-[900px] object-contain drop-shadow-2xl relative translate-x-0 md:translate-x-[5%] animate-flyin -mt-6 md:mt-0 top-[-30px] md:top-0" 
+                    className="w-[110%] md:w-full object-contain drop-shadow-2xl relative translate-x-0 animate-flyin -mt-6 md:mt-0 md:max-h-[300px] lg:max-h-[360px]" 
                   />
                 </div>
              </div>
