@@ -350,7 +350,7 @@ function LandingPage() {
 
        {/* Hero Section */}
        <section id="slider-wrapper" className="relative w-full overflow-hidden bg-white">
-          <div id="slider" className="relative w-full min-h-[600px] md:h-[420px] lg:h-[460px] pt-[80px] md:pt-[10px] flex flex-col">
+          <div id="slider" className="relative w-full min-h-[600px] md:h-[350px] lg:h-[380px] pt-[80px] md:pt-0 flex flex-col">
              
              {/* Background Overlay */}
              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[3000px] h-[500px] md:h-full bg-[#efc463] z-0" style={{ borderRadius: '50% / 0 0 100% 100%' }}></div>
