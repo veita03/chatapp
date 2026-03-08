@@ -45,7 +45,7 @@ export default function TeamsPage() {
   return (
     <div className="min-h-screen bg-[#F4F6F8] font-sans flex flex-col relative pb-20">
       <Header />
-      <div className="h-[60px]" />
+      <div className="h-[100px] md:h-[60px]" />
 
       {/* Banner */}
       <div className="w-full" style={{background: '#f4c361'}}>

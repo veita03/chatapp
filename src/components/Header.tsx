@@ -76,7 +76,7 @@ export default function Header({ onLoginClick, onRegisterClick }: HeaderProps) {
   );
 
   return (
-    <header className="absolute top-0 left-0 right-0 z-50 flex flex-row items-center justify-between px-4 md:px-8 lg:px-12 py-3 md:py-0" style={{minHeight: '60px', background: 'linear-gradient(90deg, #eeaf53 0%, #edca78 50%, #ecdf9b 100%)'}}>
+    <header className="absolute top-0 left-0 right-0 z-50 flex flex-col md:flex-row items-center justify-between px-4 md:px-8 lg:px-12 py-3 md:py-0 gap-3 md:gap-0" style={{minHeight: '60px', background: 'linear-gradient(90deg, #eeaf53 0%, #edca78 50%, #ecdf9b 100%)'}}>
       {/* Logo */}
       <a href="/" className="flex items-center space-x-2 hover:opacity-90 transition-opacity">
         <img src="https://www.sport2go.app/image/logo.svg" alt="SPORT2GO Logo" className="h-7 md:h-10 w-auto brightness-0 invert"/>

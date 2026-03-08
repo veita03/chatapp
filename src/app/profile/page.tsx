@@ -176,7 +176,7 @@ export default function ProfilePage() {
       <Header />
 
       {/* spacer to ignore absolute header */}
-      <div className="h-[60px]" />
+      <div className="h-[110px] md:h-[60px]" />
 
       {/* Title block */}
       <div className="w-full" style={{background: '#f4c361'}}>

@@ -266,7 +266,7 @@ export default function ChatPage() {
       {/* Sport2GO Header (Sticky) */}
       <Header />
 
-      <div className="h-[60px] md:h-0 shrink-0" />
+      <div className="h-[100px] md:h-0 shrink-0" />
 
       {/* Main App Container */}
       <div className="flex flex-1 overflow-hidden relative pt-2 md:pt-16">
