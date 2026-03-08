@@ -16,7 +16,7 @@ const SPORTS = [
 export default function TeamsPage() {
   const router = useRouter();
   const currentLang = Cookies.get("NEXT_LOCALE") || "sl";
-  const t = translations[currentLang as Language] || translations.sl;
+  const t = (translations[currentLang as Language] || translations.sl) as typeof translations.sl;
   const teams = useQuery(api.teams.getUserTeams);
   const deleteTeam = useMutation(api.teams.deleteTeam);
 
@@ -31,7 +31,7 @@ export default function TeamsPage() {
       await deleteTeam({ teamId: teamToDelete as any });
       setTeamToDelete(null);
     } catch (err: any) {
-      alert(err.message || "Napaka pri brisanju ekipe.");
+      alert(err.message || t.errorDeletingTeam);
     } finally {
       setIsDeleting(false);
     }
@@ -54,7 +54,7 @@ export default function TeamsPage() {
              <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
            </svg>
            <h1 className="text-2xl md:text-[28px] font-bold text-white tracking-wide" style={{fontFamily: 'var(--font-montserrat)'}}>
-              Ekipe
+              {t.teamsBanner}
            </h1>
         </div>
       </div>
@@ -64,7 +64,7 @@ export default function TeamsPage() {
            
            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6">
               <h2 className="ui-page-title flex items-center space-x-2">
-                 <span>Seznam ekip</span>
+                 <span>{t.teamList}</span>
                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-[#dba032]">
                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clipRule="evenodd" />
                  </svg>
@@ -74,7 +74,7 @@ export default function TeamsPage() {
                 className="mt-4 sm:mt-0 flex items-center justify-center space-x-1.5 bg-[#6db592] hover:bg-[#5b9e7e] text-white px-5 py-2.5 rounded-lg font-bold transition-colors shadow-sm text-sm"
               >
                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" /></svg>
-                 <span>Nova ekipa</span>
+                 <span>{t.newTeam}</span>
               </button>
            </div>
            
@@ -87,7 +87,7 @@ export default function TeamsPage() {
                type="text"
                value={filterQuery}
                onChange={(e) => setFilterQuery(e.target.value)}
-               placeholder="Iskanje po imenu ekipe ali športu..."
+               placeholder={t.searchTeamPlaceholder}
                className="w-full h-full bg-transparent pl-8 pr-4 text-sm outline-none text-gray-700"
              />
            </div>
@@ -95,16 +95,16 @@ export default function TeamsPage() {
            {teams === undefined ? (
              <div className="flex justify-center p-8"><div className="w-6 h-6 border-2 border-[#eeb054] border-t-white rounded-full animate-spin"></div></div>
            ) : !teams ? (
-             <div className="text-center py-12 text-gray-400 bg-gray-50 rounded-xl">Prosimo, prijavite se za ogled ekip.</div>
+             <div className="text-center py-12 text-gray-400 bg-gray-50 rounded-xl">{t.loginToViewTeams}</div>
            ) : teams.length === 0 ? (
              <div className="text-center py-12 text-gray-400 bg-gray-50 rounded-xl border border-dashed border-gray-200">
-               Še niste član nobene ekipe. Ustvarite jo!
+               {t.noTeamsYet}
              </div>
            ) : (
              <div className="space-y-4">
                {filteredTeams && filteredTeams.length === 0 ? (
                  <div className="text-center py-12 text-gray-500 bg-gray-50 rounded-xl border border-dashed border-gray-200">
-                   Nobena ekipa se ne ujema z iskanjem.
+                   {t.noTeamsMatch}
                  </div>
                ) : (
                  filteredTeams?.map((team, idx) => (
@@ -125,33 +125,33 @@ export default function TeamsPage() {
                        <div className="flex flex-wrap items-center mt-2 space-x-2">
                           <span className="inline-flex items-center text-xs font-bold text-[#eeb054] bg-[#fdfaf1] px-2.5 py-1 rounded-md border border-[#f3ebcd]">
                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5 mr-1"><path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" /></svg>
-                             {team.memberCount} članov
+                             {team.memberCount} {t.membersCount}
                           </span>
                           <span className="inline-flex items-center text-xs font-bold text-[#eeb054] bg-[#fdfaf1] px-2.5 py-1 rounded-md border border-[#f3ebcd]">
                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5 mr-1"><path fillRule="evenodd" d="M14.5 4V3.25a.75.75 0 0 0-1.5 0V4h-6V3.25a.75.75 0 0 0-1.5 0V4H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.5zM4 6h12v2H4V6zm0 3.5h12V16H4V9.5z" clipRule="evenodd" /></svg>
-                             {team.seasonCount} sezona{team.seasonCount !== 1 && "e"}
+                             {team.seasonCount} {team.seasonCount === 1 ? t.seasonCountSingle : t.seasonCountPlural}
                           </span>
                           {team.userRole === "admin" && (
                             <span className="inline-flex items-center text-xs font-bold text-white bg-gray-600 px-2.5 py-1 rounded-md shadow-sm">
-                               Super Administrator
+                               {t.superAdmin}
                             </span>
                           )}
                        </div>
                      </div>
                      <div className="px-5 pb-5 sm:pb-0 sm:py-5 flex items-center space-x-3 sm:border-l border-gray-100 ml-5 sm:ml-0 bg-gray-50/50 sm:bg-transparent -mt-2 sm:mt-0 rounded-b-xl sm:rounded-none">
                         <button className="px-4 py-2 border border-[#f3ebcd] text-[#dba032] font-bold text-sm bg-white rounded-lg hover:bg-[#fdfaf1] transition-colors">
-                          Ogled sezon &rsaquo;
+                          {t.viewSeasons}
                         </button>
                         <button 
                           onClick={() => router.push(`/teams/${team._id}/edit`)}
-                          title="Uredi ekipo"
+                          title={t.editTeamTooltip}
                           className="p-2 border border-gray-200 text-gray-500 hover:text-gray-700 bg-white rounded-lg hover:bg-gray-50 transition-colors"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4"><path d="M2.695 14.763l-1.262 3.152a.5.5 0 00.65.65l3.151-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" /></svg>
                         </button>
                         <button 
                           onClick={() => setTeamToDelete(team._id)}
-                          title="Izbriši ekipo"
+                          title={t.deleteTeamTooltip}
                           className="p-2 border border-red-100 text-red-400 hover:text-red-500 bg-red-50 hover:bg-red-100 rounded-lg transition-colors"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4"><path fillRule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z" clipRule="evenodd" /></svg>
@@ -174,9 +174,9 @@ export default function TeamsPage() {
                <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-white shadow-[0_0_0_4px_rgba(239,68,68,0.1)]">
                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8"><path fillRule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z" clipRule="evenodd" /></svg>
                </div>
-               <h3 className="text-xl font-bold text-gray-800 mb-2 tracking-wide" style={{fontFamily: 'var(--font-montserrat)'}}>Izbriši ekipo?</h3>
+               <h3 className="text-xl font-bold text-gray-800 mb-2 tracking-wide" style={{fontFamily: 'var(--font-montserrat)'}}>{t.deleteTeamConfirmTitle}</h3>
                <p className="text-gray-500 text-sm">
-                 Ste prepričani, da želite odstraniti to ekipo? Vsi podatki, sezone in pogovori ekipe bodo trajno izbrisani.
+                 {t.deleteTeamConfirmDesc}
                </p>
              </div>
              <div className="bg-gray-50 p-4 flex items-center space-x-3">
@@ -185,7 +185,7 @@ export default function TeamsPage() {
                   disabled={isDeleting}
                   className="flex-1 px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-700 font-bold text-xs sm:text-sm hover:bg-gray-50 disabled:opacity-50 transition-colors shadow-sm"
                 >
-                  Prekliči
+                  {t.cancelBtn}
                 </button>
                 <button 
                   onClick={handleDelete}
@@ -193,7 +193,7 @@ export default function TeamsPage() {
                   className="flex-1 px-4 py-2.5 bg-red-500 text-white rounded-lg font-bold text-xs sm:text-sm hover:bg-red-600 shadow-sm flex items-center justify-center space-x-2 disabled:opacity-50 transition-colors"
                 >
                   {isDeleting ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : null}
-                  <span>Da, izbriši</span>
+                  <span>{t.yesDelete}</span>
                 </button>
              </div>
            </div>

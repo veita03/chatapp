@@ -34,7 +34,7 @@ const InfoTooltip = ({ text }: { text: string }) => (
 export default function CreateTeamPage() {
   const router = useRouter();
   const currentLang = Cookies.get("NEXT_LOCALE") || "sl";
-  const t = translations[currentLang as Language] || translations.sl;
+  const t = (translations[currentLang as Language] || translations.sl) as typeof translations.sl;
   
   const createTeam = useMutation(api.teams.createTeam);
 
@@ -100,7 +100,7 @@ export default function CreateTeamPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.seasonName || !formData.sport) {
-      alert("Izpolnite vsa obvezna polja.");
+      alert(t.fillRequired);
       return;
     }
 
@@ -115,7 +115,7 @@ export default function CreateTeamPage() {
       router.push(`/teams`); // Redirect back to teams dashboard after creation
     } catch (error) {
        console.error(error);
-       alert("Napaka pri ustvarjanju ekipe.");
+       alert(t.errorCreatingTeam);
     } finally {
       setIsSubmitting(false);
     }
@@ -135,7 +135,7 @@ export default function CreateTeamPage() {
              </svg>
            </button>
            <h1 className="text-2xl md:text-[28px] font-bold text-white tracking-wide" style={{fontFamily: 'var(--font-montserrat)'}}>
-              Ustvari Ekipo
+              {t.createTeamBanner}
            </h1>
         </div>
       </div>
@@ -143,7 +143,7 @@ export default function CreateTeamPage() {
       <div className="max-w-5xl mx-auto w-full px-4 sm:px-8 mt-8 pb-12">
         <div className="ui-card p-6 md:p-10 flex flex-col">
           <div className="flex items-center space-x-3 mb-8 pb-4 border-b border-gray-100">
-             <h2 className="text-[22px] font-bold text-[#353b41]" style={{fontFamily: 'var(--font-montserrat)'}}>Dodaj novo ekipo in sezono</h2>
+             <h2 className="text-[22px] font-bold text-[#353b41]" style={{fontFamily: 'var(--font-montserrat)'}}>{t.addNewTeamAndSeason}</h2>
           </div>
 
           <form onSubmit={handleSubmit} className="flex-1 flex flex-col">
@@ -155,38 +155,38 @@ export default function CreateTeamPage() {
                  
                  <div className="flex flex-col">
                     <div className="flex justify-between items-center mb-1.5">
-                       <label className="ui-label m-0">Ime ekipe <span className="text-[#d29729]">*</span></label>
-                       <InfoTooltip text="Ime ekipe lahko kadarkoli spremeniš/dopolniš" />
+                       <label className="ui-label m-0">{t.teamName} <span className="text-[#d29729]">*</span></label>
+                       <InfoTooltip text={t.teamNameTooltip} />
                     </div>
                     <input
                       type="text"
                       required
                       value={formData.name}
                       onChange={e => setFormData({...formData, name: e.target.value})}
-                      placeholder="npr. Nogometna ekipa"
+                      placeholder={t.teamNamePlaceholder}
                       className="ui-input bg-white text-sm py-2.5 px-3"
                     />
                  </div>
 
                  <div className="flex flex-col">
                     <div className="flex justify-between items-center mb-1.5">
-                       <label className="ui-label m-0">Ime sezone <span className="text-[#d29729]">*</span></label>
-                       <InfoTooltip text="Ime sezone se uporablja za ločevanje statistike in zgodovinskega pregleda (npr. 'Jesen 2025' ali 'Liga I. faza', torkov termin). Trajanje in ime sezone lahko kadarkoli prilagodite." />
+                       <label className="ui-label m-0">{t.seasonName} <span className="text-[#d29729]">*</span></label>
+                       <InfoTooltip text={t.seasonNameTooltip} />
                     </div>
                     <input
                       type="text"
                       required
                       value={formData.seasonName}
                       onChange={e => setFormData({...formData, seasonName: e.target.value})}
-                      placeholder="npr. 2025/2026 / Poletna liga 2026 / Torkov termin"
+                      placeholder={t.seasonNamePlaceholder}
                       className="ui-input bg-white text-sm py-2.5 px-3"
                     />
                  </div>
 
                  <div className="flex flex-col">
                     <div className="flex justify-between items-center mb-2.5">
-                       <label className="ui-label m-0">Izberi šport iz seznama <span className="text-[#d29729]">*</span></label>
-                       <InfoTooltip text="Izbereš lahko samo en šport, ker sta točkovanje in statistika prilagojena dotičnemu športu." />
+                       <label className="ui-label m-0">{t.selectSport} <span className="text-[#d29729]">*</span></label>
+                       <InfoTooltip text={t.selectSportTooltip} />
                     </div>
                     <div className="ui-input bg-white py-4 px-3 flex flex-wrap justify-center gap-2.5">
                        {SPORTS.map((sport, idx) => (
@@ -211,8 +211,8 @@ export default function CreateTeamPage() {
               {/* Right Column Image */}
               <div className="flex flex-col">
                  <div className="flex justify-between items-center mb-1.5">
-                    <label className="ui-label m-0">Slika ekipe</label>
-                    <InfoTooltip text="Po želji lahko dodaš tudi fotografijo ekipe, pri čemer je zaželeno razmerje 4:3. Fotografijo je seveda mogoče dodati tudi kasneje." />
+                    <label className="ui-label m-0">{t.teamImage}</label>
+                    <InfoTooltip text={t.teamImageTooltip} />
                  </div>
                  
                  <label className={`block w-full flex-1 min-h-[220px] bg-white border-2 border-dashed rounded-xl overflow-hidden cursor-pointer hover:bg-gray-50 transition-colors flex flex-col items-center justify-center relative group ${formData.image ? 'border-[#eeb054]/30' : 'border-[#f3ebcd] hover:border-[#eeb054]/50'}`}>
@@ -221,7 +221,7 @@ export default function CreateTeamPage() {
                         <img src={formData.image} alt="Preview" className="w-full h-full object-cover absolute inset-0" />
                         <div className="absolute inset-0 bg-white/60 backdrop-blur-[2px] flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-[#dba032] text-sm font-bold">
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-8 h-8 mb-2"><path d="M2.695 14.763l-1.262 3.152a.5.5 0 00.65.65l3.151-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" /></svg>
-                          Spremeni sliko
+                          {t.changeImage}
                         </div>
                       </>
                     ) : (
@@ -229,7 +229,7 @@ export default function CreateTeamPage() {
                         <svg className="w-12 h-12 text-[#eeb054]/80 mb-3" viewBox="0 0 24 24" fill="currentColor">
                           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
                         </svg>
-                        <p className="text-gray-500 text-sm font-medium">Spusti sliko sem ali klikni za izbor</p>
+                        <p className="text-gray-500 text-sm font-medium">{t.dropImageHere}</p>
                       </div>
                     )}
                     <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
@@ -240,11 +240,11 @@ export default function CreateTeamPage() {
 
             {/* Description Area */}
             <div className="flex flex-col mb-10">
-               <label className="ui-label mb-1.5">Opis ekipe</label>
+               <label className="ui-label mb-1.5">{t.teamDesc}</label>
                <textarea
                  value={formData.desc}
                  onChange={e => setFormData({...formData, desc: e.target.value})}
-                 placeholder="npr. Dvakrat tedensko termin malega nogometa"
+                 placeholder={t.teamDescPlaceholder}
                  className="ui-input bg-white min-h-[100px] resize-y text-sm py-3 px-3 w-full"
                />
             </div>
@@ -252,15 +252,15 @@ export default function CreateTeamPage() {
             {/* Invite Section */}
             <div className="flex flex-col pt-6 border-t border-gray-100 mb-8">
                <div className="flex justify-between items-center mb-4">
-                  <label className="ui-label block m-0">Dodaj igralce v ekipo in sezono (opcijsko)</label>
-                  <InfoTooltip text="Člane lahko dodaš takoj po ustvaritvi ekipe preko unikatne povezave, elektronske pošte ali pa jih vneseš ročno (za člane brez digitalnega dostopa)." />
+                  <label className="ui-label block m-0">{t.addPlayersOptional}</label>
+                  <InfoTooltip text={t.addPlayersTooltip} />
                </div>
                
                <div className="bg-[#fcfaf5] border border-[#f3ebcd] rounded-xl p-6 sm:p-8 text-center relative overflow-hidden flex flex-col items-center">
                   
                   <h4 className="text-[#eeb054] font-bold text-[15px] mb-2 flex items-center justify-center">
-                    Povabi v aplikaciji
-                    <InfoTooltip text="To je povezava do sezone. Kopiraj jo in jo pošlji preko želenega kanala." />
+                    {t.inviteInApp}
+                    <InfoTooltip text={t.inviteLinkTooltip} />
                   </h4>
                   
                   {/* Social Share Buttons */}
@@ -296,38 +296,38 @@ export default function CreateTeamPage() {
                   <div className="w-full border-t border-gray-100/60 my-4"></div>
 
                   <h4 className="text-gray-500 font-bold text-sm mb-3">
-                    ali kopiraj povezavo
+                    {t.orCopyLink}
                   </h4>
                   <div className="flex items-center w-full max-w-[340px] border border-gray-200 bg-white rounded-lg overflow-hidden shadow-sm">
                     <div className="flex-1 text-gray-500 text-[14px] truncate px-4 py-2.5 bg-gray-50/50">
                       https://www.sport2go.app/sezona/{joinCode || "......"}
                     </div>
-                    <button type="button" onClick={() => { navigator.clipboard.writeText(`https://www.sport2go.app/sezona/${joinCode}`); alert("Povezava kopirana!"); }} className="bg-[#6db592] hover:bg-[#5b9e7e] text-white px-5 py-2.5 font-bold text-sm transition-colors flex items-center gap-1.5 focus:outline-none h-full border-l border-[#6db592]">
+                    <button type="button" onClick={() => { navigator.clipboard.writeText(`https://www.sport2go.app/sezona/${joinCode}`); alert(t.linkCopiedMsg || "Povezava kopirana!"); }} className="bg-[#6db592] hover:bg-[#5b9e7e] text-white px-5 py-2.5 font-bold text-sm transition-colors flex items-center gap-1.5 focus:outline-none h-full border-l border-[#6db592]">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" /></svg>
-                      Kopiraj
+                      {t.copyBtn}
                     </button>
                   </div>
 
                   <div className="w-full mt-6 pt-6 border-t border-gray-100 flex flex-col items-center">
                     <h4 className="text-[#eeb054] font-bold text-[15px] mb-4 flex items-center justify-center">
-                       Ali pošlji povabilo preko elektronske pošte:
-                       <InfoTooltip text="Vnesi e-pošto za povabilo ali ime/priimek za ročni vnos brez povabila." />
+                       {t.orSendEmailInvite}
+                       <InfoTooltip text={t.sendEmailInviteTooltip} />
                     </h4>
                     
                     <div className="w-full space-y-3">
                       {players.map((p, i) => (
                         <div key={i} className="flex flex-col">
                            <div className="flex flex-col sm:flex-row gap-2">
-                             <input type="text" placeholder="Ime" value={p.firstName} onChange={e => updatePlayer(i, 'firstName', e.target.value)} className="ui-input flex-1 bg-white focus:ring-[#eeb054]/50" />
-                             <input type="text" placeholder="Priimek" value={p.lastName} onChange={e => updatePlayer(i, 'lastName', e.target.value)} className="ui-input flex-1 bg-white focus:ring-[#eeb054]/50" />
-                             <input type="email" placeholder="E-pošta" value={p.email} onChange={e => updatePlayer(i, 'email', e.target.value)} className="ui-input flex-1 bg-white focus:ring-[#eeb054]/50" />
+                             <input type="text" placeholder={t.firstNamePlaceholder} value={p.firstName} onChange={e => updatePlayer(i, 'firstName', e.target.value)} className="ui-input flex-1 bg-white focus:ring-[#eeb054]/50" />
+                             <input type="text" placeholder={t.lastNamePlaceholder} value={p.lastName} onChange={e => updatePlayer(i, 'lastName', e.target.value)} className="ui-input flex-1 bg-white focus:ring-[#eeb054]/50" />
+                             <input type="email" placeholder={t.emailPlaceholder} value={p.email} onChange={e => updatePlayer(i, 'email', e.target.value)} className="ui-input flex-1 bg-white focus:ring-[#eeb054]/50" />
                              <button type="button" onClick={() => removePlayerRow(i)} className="px-3 py-2 bg-red-50 text-red-400 hover:bg-red-100 font-medium text-sm rounded-lg transition-colors border border-red-100 shrink-0 select-none">
-                               ✕ Odstrani
+                               {t.removeBtn}
                              </button>
                            </div>
                            {(p.firstName || p.lastName) && !p.email && (
                               <div className="text-left text-xs text-[#6db592] mt-1.5 pl-1 font-medium bg-[#6db592]/10 py-1 px-2.5 rounded-md self-start inline-block border border-[#6db592]/20">
-                                Način: Ročni vnos (brez povabila — e-pošta ni zahtevana).
+                                {t.manualEntryMode}
                               </div>
                            )}
                         </div>
@@ -336,7 +336,7 @@ export default function CreateTeamPage() {
                     
                     <button type="button" onClick={addPlayerRow} className="mt-5 bg-[#eeb054] hover:bg-[#dba032] text-white font-bold text-sm px-5 py-2.5 rounded-lg shadow-sm transition-colors flex items-center space-x-1.5">
                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4"><path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" /></svg>
-                       <span>Dodaj novega igralca</span>
+                       <span>{t.addNewPlayerBtn}</span>
                     </button>
                   </div>
 
@@ -350,7 +350,7 @@ export default function CreateTeamPage() {
                  onClick={() => router.push('/teams')}
                  className="px-6 py-2.5 bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 rounded-lg text-sm font-bold transition-all shadow-sm"
                >
-                 Prekliči
+                 {t.cancelBtn}
                </button>
                <button 
                  onClick={handleSubmit}
@@ -362,7 +362,7 @@ export default function CreateTeamPage() {
                  ) : (
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4"><path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" /></svg>
                  )}
-                 <span>Ustvari ekipo</span>
+                 <span>{t.createTeamBtn}</span>
                </button>
             </div>
           </form>

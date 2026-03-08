@@ -36,7 +36,7 @@ export default function EditTeamPage() {
   const router = useRouter();
   const params = useParams();
   const currentLang = Cookies.get("NEXT_LOCALE") || "sl";
-  const t = translations[currentLang as Language] || translations.sl;
+  const t = (translations[currentLang as Language] || translations.sl) as typeof translations.sl;
   
   const teamId = params.id as Id<"teams">;
   const team = useQuery(api.teams.getTeam, { teamId });
@@ -85,7 +85,7 @@ export default function EditTeamPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.sport) {
-      alert("Izpolnite vsa obvezna polja.");
+      alert(t.fillRequired);
       return;
     }
 
@@ -98,7 +98,7 @@ export default function EditTeamPage() {
       router.push(`/teams`); 
     } catch (error: any) {
        console.error(error);
-       alert(error.message || "Napaka pri urejanju ekipe.");
+       alert(error.message || t.errorEditingTeam);
     } finally {
       setIsSubmitting(false);
     }
@@ -122,8 +122,8 @@ export default function EditTeamPage() {
           <Header />
           <div className="h-[100px] md:h-[60px]" />
           <div className="text-center py-20">
-             <h2 className="text-2xl font-bold text-gray-800">Ekipa ne obstaja ali nimate pravic.</h2>
-             <button onClick={() => router.push('/teams')} className="mt-4 text-[#3b879c] underline font-bold">Nazaj na ekipe</button>
+             <h2 className="text-2xl font-bold text-gray-800">{t.teamDoesNotExist}</h2>
+             <button onClick={() => router.push('/teams')} className="mt-4 text-[#3b879c] underline font-bold">{t.backToTeams}</button>
           </div>
         </div>
      );
@@ -143,7 +143,7 @@ export default function EditTeamPage() {
              </svg>
            </button>
            <h1 className="text-2xl md:text-[28px] font-bold text-white tracking-wide" style={{fontFamily: 'var(--font-montserrat)'}}>
-              Uredi Ekipo
+              {t.editTeamBanner}
            </h1>
         </div>
       </div>
@@ -151,7 +151,7 @@ export default function EditTeamPage() {
       <div className="max-w-5xl mx-auto w-full px-4 sm:px-8 mt-8 pb-12">
         <div className="ui-card p-6 md:p-10 flex flex-col">
           <div className="flex items-center space-x-3 mb-8 pb-4 border-b border-gray-100">
-             <h2 className="text-[22px] font-bold text-[#353b41]" style={{fontFamily: 'var(--font-montserrat)'}}>Uredi podatke ekipe</h2>
+             <h2 className="text-[22px] font-bold text-[#353b41]" style={{fontFamily: 'var(--font-montserrat)'}}>{t.editTeamData}</h2>
           </div>
 
           <form onSubmit={handleSubmit} className="flex-1 flex flex-col">
@@ -163,21 +163,21 @@ export default function EditTeamPage() {
                  
                  <div className="flex flex-col">
                     <div className="flex justify-between items-center mb-1.5">
-                       <label className="ui-label m-0">Ime ekipe <span className="text-[#d29729]">*</span></label>
+                       <label className="ui-label m-0">{t.teamName} <span className="text-[#d29729]">*</span></label>
                     </div>
                     <input
                       type="text"
                       required
                       value={formData.name}
                       onChange={e => setFormData({...formData, name: e.target.value})}
-                      placeholder="npr. Nogometna ekipa"
+                      placeholder={t.teamNamePlaceholder}
                       className="ui-input bg-white text-sm py-2.5 px-3"
                     />
                  </div>
 
                  <div className="flex flex-col">
                     <div className="flex justify-between items-center mb-2.5">
-                       <label className="ui-label m-0">Izberi šport iz seznama <span className="text-[#d29729]">*</span></label>
+                       <label className="ui-label m-0">{t.selectSport} <span className="text-[#d29729]">*</span></label>
                     </div>
                     <div className="ui-input bg-white py-4 px-3 flex flex-wrap justify-center gap-2.5">
                        {SPORTS.map((sport, idx) => (
@@ -202,8 +202,8 @@ export default function EditTeamPage() {
               {/* Right Column Image */}
               <div className="flex flex-col">
                  <div className="flex justify-between items-center mb-1.5">
-                    <label className="ui-label m-0">Slika ekipe</label>
-                    <InfoTooltip text="Po želji lahko dodaš tudi fotografijo ekipe, pri čemer je zaželeno razmerje 4:3. Fotografijo je seveda mogoče dodati tudi kasneje." />
+                    <label className="ui-label m-0">{t.teamImage}</label>
+                    <InfoTooltip text={t.teamImageTooltip} />
                  </div>
                  
                  <label className={`block w-full flex-1 min-h-[220px] bg-white border-2 border-dashed rounded-xl overflow-hidden cursor-pointer hover:bg-gray-50 transition-colors flex flex-col items-center justify-center relative group ${formData.image ? 'border-[#eeb054]/30' : 'border-[#f3ebcd] hover:border-[#eeb054]/50'}`}>
@@ -212,7 +212,7 @@ export default function EditTeamPage() {
                         <img src={formData.image} alt="Preview" className="w-full h-full object-cover absolute inset-0" />
                         <div className="absolute inset-0 bg-white/60 backdrop-blur-[2px] flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-[#dba032] text-sm font-bold">
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-8 h-8 mb-2"><path d="M2.695 14.763l-1.262 3.152a.5.5 0 00.65.65l3.151-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" /></svg>
-                          Spremeni sliko
+                          {t.changeImage}
                         </div>
                       </>
                     ) : (
@@ -220,7 +220,7 @@ export default function EditTeamPage() {
                         <svg className="w-12 h-12 text-[#eeb054]/80 mb-3" viewBox="0 0 24 24" fill="currentColor">
                           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
                         </svg>
-                        <p className="text-gray-500 text-sm font-medium">Spusti sliko sem ali klikni za izbor</p>
+                        <p className="text-gray-500 text-sm font-medium">{t.dropImageHere}</p>
                       </div>
                     )}
                     <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
@@ -231,11 +231,11 @@ export default function EditTeamPage() {
 
             {/* Description Area */}
             <div className="flex flex-col mb-10">
-               <label className="ui-label mb-1.5">Opis ekipe</label>
+               <label className="ui-label mb-1.5">{t.teamDesc}</label>
                <textarea
                  value={formData.desc}
                  onChange={e => setFormData({...formData, desc: e.target.value})}
-                 placeholder="npr. Dvakrat tedensko termin malega nogometa"
+                 placeholder={t.teamDescPlaceholder}
                  className="ui-input bg-white min-h-[100px] resize-y text-sm py-3 px-3 w-full"
                />
             </div>
@@ -247,7 +247,7 @@ export default function EditTeamPage() {
                  onClick={() => router.push('/teams')}
                  className="px-6 py-2.5 bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 rounded-lg text-sm font-bold transition-all shadow-sm"
                >
-                 Prekliči
+                 {t.cancelBtn}
                </button>
                <button 
                  onClick={handleSubmit}
@@ -259,7 +259,7 @@ export default function EditTeamPage() {
                  ) : (
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4"><path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" /></svg>
                  )}
-                 <span>Shrani spremembe</span>
+                 <span>{t.saveChangesBtn}</span>
                </button>
             </div>
           </form>
