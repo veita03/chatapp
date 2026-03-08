@@ -1,110 +1,9 @@
-"use client";
+import sys
 
-import { useMutation } from "convex/react";
-import { api } from "../../../../convex/_generated/api";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Header from "@/components/Header";
-import ImageCropper from "@/components/ImageCropper";
-import { translations, Language } from "@/app/i18n";
-import Cookies from "js-cookie";
+with open('src/app/teams/create/page.tsx', 'r') as f:
+    lines = f.readlines()
 
-const SPORTS = [
-  { name: "Badminton", icon: "🏸" },
-  { name: "Košarka", icon: "🏀" },
-  { name: "Namizni tenis", icon: "🏓" },
-  { name: "Nogomet", icon: "⚽" },
-  { name: "Odbojka", icon: "🏐" },
-  { name: "Padel", icon: "🎾" },
-  { name: "Tenis", icon: "🎾" }
-];
-
-const InfoTooltip = ({ text }: { text: string }) => (
-  <div className="group relative inline-flex items-center ml-1.5 cursor-help">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-[#008f91] opacity-70 hover:opacity-100 transition-opacity">
-      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clipRule="evenodd" />
-    </svg>
-    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block w-64 bg-slate-800 text-white text-xs font-normal rounded-lg p-2.5 shadow-xl z-50 text-center pointer-events-none">
-      {text}
-      <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800" />
-    </div>
-  </div>
-);
-
-export default function CreateTeamPage() {
-  const router = useRouter();
-  const currentLang = Cookies.get("NEXT_LOCALE") || "sl";
-  const t = translations[currentLang as Language] || translations.sl;
-  
-  const createTeam = useMutation(api.teams.createTeam);
-
-  const [formData, setFormData] = useState({
-    name: "",
-    seasonName: "",
-    sport: "",
-    desc: "",
-    image: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [tempImageSrc, setTempImageSrc] = useState<string | null>(null);
-
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      if (event.target?.result) {
-         setTempImageSrc(event.target.result as string);
-      }
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleCropComplete = (croppedImage: string) => {
-    setFormData(prev => ({ ...prev, image: croppedImage }));
-    setTempImageSrc(null);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.name || !formData.seasonName || !formData.sport) {
-      alert("Izpolnite vsa obvezna polja.");
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      const newTeamId = await createTeam(formData);
-      router.push(`/teams`); // Redirect back to teams dashboard after creation
-    } catch (error) {
-       console.error(error);
-       alert("Napaka pri ustvarjanju ekipe.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-[#F4F6F8] font-sans flex flex-col relative pb-20">
-      <Header />
-      <div className="h-[100px] md:h-[60px]" />
-
-      {/* Banner */}
-      <div className="w-full" style={{background: '#f4c361'}}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 py-5 flex items-center space-x-3">
-           <button onClick={() => router.push('/teams')} className="text-white hover:bg-white/20 p-2 rounded-full transition-colors mr-2">
-             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
-               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
-             </svg>
-           </button>
-           <h1 className="text-2xl md:text-[28px] font-bold text-white tracking-wide" style={{fontFamily: 'var(--font-montserrat)'}}>
-              Ustvari Ekipo
-           </h1>
-        </div>
-      </div>
-
-      <div className="max-w-5xl mx-auto w-full px-4 sm:px-8 mt-8 pb-12">
+new_content = """      <div className="max-w-5xl mx-auto w-full px-4 sm:px-8 mt-8 pb-12">
         <div className="ui-card p-6 md:p-10 flex flex-col">
           <div className="flex items-center space-x-3 mb-8 pb-4 border-b border-gray-100">
              <h2 className="text-[22px] font-bold text-[#353b41]" style={{fontFamily: 'var(--font-montserrat)'}}>Dodaj novo ekipo in sezono</h2>
@@ -261,16 +160,11 @@ export default function CreateTeamPage() {
           </form>
         </div>
       </div>
-      {/* Image Cropper Overlay */}
-      {tempImageSrc && (
-        <ImageCropper 
-          imageSrc={tempImageSrc} 
-          onCropComplete={handleCropComplete} 
-          onCancel={() => setTempImageSrc(null)} 
-          aspectRatio={4/3}
-        />
-      )}
+"""
 
-    </div>
-  );
-}
+# Replace lines 107 to 274 inclusive (0-indexed: 106:274)
+lines = lines[:106] + [new_content] + lines[274:]
+
+with open('src/app/teams/create/page.tsx', 'w') as f:
+    f.writelines(lines)
+
