@@ -1,0 +1,46 @@
+const nl = {
+    navTeams: "Teams", navChat: "Chat", navProfile: "Profiel", navLogout: "Uitloggen", profileTitle: "Jouw Profiel", profileDesc: "Vul uw gegevens in om uzelf op de beste manier aan de wereld voor te stellen.", firstName: "Voornaam", lastName: "Achternaam", profileEmail: "E-mailadres", phone: "Telefoonnummer", dob: "Geboortedatum", gender: "Geslacht", genderMale: "Mannelijk", genderFemale: "Vrouwelijk", saveBtn: "Instellingen opslaan", savingBtn: "Opslaan...", phoneInvalid: "Telefoonnummer is niet geldig.", fillRequired: "Vul alle vereiste velden in.", profileNotice: "Vul je profiel in om door te gaan.", loggedAs: "Ingelogd als", send: "Versturen",
+    
+    personalData: "Persoonlijke Gebied", emailAlreadyEntered: "E-mail (al ingevoerd)", day: "Dag", month: "Maand", year: "Jaar", save: "Oplsaan", chooseProfilePic: "Kies een profielfoto", registration: "Registratie", cancel: "Annuleren", confirm: "Bevestigen", enterName: "Voer voornaam in", enterSurname: "Voer achternaam in",
+    login: 'INLOGGEN',
+    register: 'REGISTREREN',
+    email: 'E-mail',
+    password: 'Wachtwoord',
+    confirmPassword: 'Wachtwoord bevestigen',
+    rememberMe: 'Onthoud mij',
+    loginBtn: 'Inloggen',
+    registerBtn: 'Account aanmaken',
+    or: 'OF',
+    continueGoogle: 'Doorgaan met Google',
+    passwordMismatch: 'Wachtwoorden komen niet overeen!',
+    passwordLength: 'Wachtwoord moet minimaal 8 tekens lang zijn.',
+    heroTitle1: 'Minder stress,',
+    heroTitle2: 'meer tijd om te spelen',
+    heroSubtitle: 'Sport2go is een webplatform waarmee je eenvoudig komende sportsessies en groepsactiviteiten kunt plannen',
+    joinBtn: 'NU DEELNEMEN',
+    feature1Title: 'Beheer je team',
+    feature1Desc: 'Maak komende sportevenementen aan, nodig spelers uit en bevestig sportactiviteiten.',
+    feature2Title: 'Sluit je aan bij andere teams',
+    feature2Desc: 'Als je verschillende sporten beoefent, maak dan verschillende teams aan of sluit je aan bij andere.',
+    feature3Title: 'Plezier',
+    feature3Desc: 'Bepaal de speler van de maand en stel uitdagingen in voor toekomstige sessies.',
+    moreBtn: 'MEHR',
+    howToStart: 'Hoe te beginnen?',
+    howToStartDesc: 'Je kunt vrienden of gebruikers uitnodigen via e-mail of ze een link sturen om snel je groep aan te maken en de app te gaan gebruiken.',
+    benefitsBtn: 'VOORDELEN VAN GEBRUIK',
+    footerSupport: 'Gratis ondersteuning',
+    footerSecurity1: 'Wij respecteren ',
+    footerSecurity2: 'beveiliging en privacy',
+    footerUptime1: '99,99% website ',
+    footerUptime2: 'uptime',
+    footerLinks: {
+      solutions: 'Oplossingen',
+      contact: 'Contact',
+      gdpr: 'Gegevensbescherming en AVG',
+      terms: 'Algemene Voorwaarden'
+    },
+    comingSoon: 'Binnenkort op:',
+    rights: 'Sport2Go © Alle rechten voorbehouden.'
+  };
+
+export default nl;

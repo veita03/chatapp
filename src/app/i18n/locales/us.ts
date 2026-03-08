@@ -1,0 +1,46 @@
+const us = {
+    navTeams: "Teams", navChat: "Chat", navProfile: "Profile", navLogout: "Logout", profileTitle: "Your Profile", profileDesc: "Fill in your details to introduce yourself to the community.", firstName: "First Name", lastName: "Last Name", profileEmail: "Email Address", phone: "Phone Number", dob: "Date of Birth", gender: "Gender", genderMale: "Male", genderFemale: "Female", saveBtn: "Save Settings", savingBtn: "Saving...", phoneInvalid: "Phone number is not valid.", fillRequired: "Please fill in all required fields.", profileNotice: "Please fill in your profile.", loggedAs: "Logged in as", send: "Send",
+    
+    personalData: "Personal Details", emailAlreadyEntered: "Email (already entered)", day: "Day", month: "Month", year: "Year", save: "Save", chooseProfilePic: "Choose a profile picture", registration: "Registration", cancel: "Cancel", confirm: "Confirm", enterName: "Enter first name", enterSurname: "Enter last name",
+    login: 'LOGIN',
+    register: 'REGISTER',
+    email: 'Email',
+    password: 'Password',
+    confirmPassword: 'Confirm Password',
+    rememberMe: 'Remember me',
+    loginBtn: 'Sign In',
+    registerBtn: 'Create Account',
+    or: 'OR',
+    continueGoogle: 'Continue with Google',
+    passwordMismatch: 'Passwords do not match!',
+    passwordLength: 'Password must be at least 8 characters.',
+    heroTitle1: 'Less stress,',
+    heroTitle2: 'more time to play',
+    heroSubtitle: 'Sport2go is a web platform that allows you to easily plan upcoming sports sessions and group sports activities',
+    joinBtn: 'JOIN NOW',
+    feature1Title: 'Manage your team',
+    feature1Desc: 'Create upcoming sports events, invite players and confirm sports activities.',
+    feature2Title: 'Join other teams',
+    feature2Desc: 'If you play different sports, create different teams or join others.',
+    feature3Title: 'Fun',
+    feature3Desc: 'Determine the player of the month and set challenges for future sessions.',
+    moreBtn: 'MORE',
+    howToStart: 'How to start?',
+    howToStartDesc: 'You can invite friends or users via email or send them a link, and quickly create your group and start using the app.',
+    benefitsBtn: 'BENEFITS OF USE',
+    footerSupport: 'Free support',
+    footerSecurity1: 'We respect ',
+    footerSecurity2: 'security and privacy',
+    footerUptime1: '99.99% website ',
+    footerUptime2: 'uptime',
+    footerLinks: {
+      solutions: 'Solutions',
+      contact: 'Contact',
+      gdpr: 'Data Protection and GDPR',
+      terms: 'General Terms and Conditions'
+    },
+    comingSoon: 'Coming soon:',
+    rights: 'Sport2Go © All rights reserved.'
+  };
+
+export default us;

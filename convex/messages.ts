@@ -2,15 +2,28 @@ import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 
 export const get = query({
-  args: {},
-  handler: async (ctx) => {
+  args: {
+    teamId: v.optional(v.id("teams")),
+  },
+  handler: async (ctx, args) => {
     // Fetch most recent 50 messages
-    return await ctx.db.query("messages").order("desc").take(50);
+    let q = ctx.db.query("messages").order("desc");
+    
+    // If we're inside a team dashboard, only get team messages.
+    // If we don't pass a teamId, we fetch only the global "general" messages.
+    const results = await q.take(50);
+    
+    if (args.teamId) {
+      return results.filter(m => m.teamId === args.teamId);
+    } else {
+      return results.filter(m => !m.teamId);
+    }
   },
 });
 
 export const send = mutation({
   args: {
+    teamId: v.optional(v.id("teams")),
     author: v.string(),
     authorImage: v.optional(v.string()),
     text: v.string(),
@@ -40,6 +53,7 @@ export const send = mutation({
       text: args.text,
       author: args.author,
       ...(args.authorImage && { authorImage: args.authorImage }),
+      ...(args.teamId && { teamId: args.teamId }),
       ...(args.type && { type: args.type }),
       ...(args.pollData && { pollData: args.pollData }),
       ...(args.locationData && { locationData: args.locationData }),

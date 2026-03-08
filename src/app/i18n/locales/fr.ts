@@ -1,0 +1,46 @@
+const fr = {
+    navTeams: "Équipes", navChat: "Chat", navProfile: "Profil", navLogout: "Déconnexion", profileTitle: "Votre Profil", profileDesc: "Remplissez vos coordonnées pour vous présenter au monde de la meilleure façon.", firstName: "Prénom", lastName: "Nom de famille", profileEmail: "Adresse e-mail", phone: "Numéro de téléphone", dob: "Date de naissance", gender: "Genre", genderMale: "Homme", genderFemale: "Femme", saveBtn: "Enregistrer les paramètres", savingBtn: "Enregistrement...", phoneInvalid: "Le numéro de téléphone n'est pas valide.", fillRequired: "Veuillez remplir tous les champs obligatoires.", profileNotice: "Veuillez remplir votre profil.", loggedAs: "Connecté en tant que", send: "Envoyer",
+    
+    personalData: "Données Personnelles", emailAlreadyEntered: "Email (déjà saisi)", day: "Jour", month: "Mois", year: "Année", save: "Enregistrer", chooseProfilePic: "Choisissez une photo de profil", registration: "Inscription", cancel: "Annuler", confirm: "Confirmer", enterName: "Entrez le prénom", enterSurname: "Entrez le nom",
+    login: 'CONNEXION',
+    register: 'S\'INSCRIRE',
+    email: 'E-mail',
+    password: 'Mot de passe',
+    confirmPassword: 'Confirmer le mot de passe',
+    rememberMe: 'Se souvenir de moi',
+    loginBtn: 'Se connecter',
+    registerBtn: 'Créer un compte',
+    or: 'OU',
+    continueGoogle: 'Continuer avec Google',
+    passwordMismatch: 'Les mots de passe ne correspondent pas !',
+    passwordLength: 'Le mot de passe doit contenir au moins 8 caractères.',
+    heroTitle1: 'Moins de stress,',
+    heroTitle2: 'plus de temps pour jouer',
+    heroSubtitle: 'Sport2go est une plateforme web qui vous permet de planifier facilement vos prochaines séances sportives et activités sportives collectives',
+    joinBtn: 'REJOINDRE MAINTENANT',
+    feature1Title: 'Gérez votre équipe',
+    feature1Desc: 'Créez des événements sportifs à venir, invitez des joueurs et confirmez les activités sportives.',
+    feature2Title: 'Rejoignez d\'autres équipes',
+    feature2Desc: 'Si vous pratiquez différents sports, créez différentes équipes ou rejoignez-en d\'autres.',
+    feature3Title: 'Divertissement',
+    feature3Desc: 'Déterminez le joueur du mois et lancez des défis pour les sessions futures.',
+    moreBtn: 'PLUS',
+    howToStart: 'Comment commencer ?',
+    howToStartDesc: 'Vous pouvez inviter des amis ou des utilisateurs par e-mail ou leur envoyer un lien, créant ainsi rapidement votre groupe et commençant à utiliser l\'application.',
+    benefitsBtn: 'AVANTAGES D\'UTILISATION',
+    footerSupport: 'Assistance gratuite',
+    footerSecurity1: 'Nous respectons la ',
+    footerSecurity2: 'sécurité et la confidentialité',
+    footerUptime1: 'Disponibilité du site ',
+    footerUptime2: '99,99 %',
+    footerLinks: {
+      solutions: 'Solutions',
+      contact: 'Contact',
+      gdpr: 'Protection des données et RGPD',
+      terms: 'Conditions Générales de Vente'
+    },
+    comingSoon: 'Bientôt sur :',
+    rights: 'Sport2Go © Tous droits réservés.'
+  };
+
+export default fr;

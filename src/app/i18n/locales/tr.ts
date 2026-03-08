@@ -1,0 +1,46 @@
+const tr = {
+    navTeams: "Takımlar", navChat: "Sohbet", navProfile: "Profil", navLogout: "Çıkış", profileTitle: "Profiliniz", profileDesc: "Kendinizi dünyaya en iyi şekilde tanıtmak için bilgilerinizi doldurun.", firstName: "Ad", lastName: "Soyad", profileEmail: "E-posta", phone: "Telefon Numarası", dob: "Doğum Tarihi", gender: "Cinsiyet", genderMale: "Erkek", genderFemale: "Kadın", saveBtn: "Ayarları Kaydet", savingBtn: "Kaydediliyor...", phoneInvalid: "Telefon numarası geçersiz.", fillRequired: "Lütfen tüm zorunlu alanları doldurun.", profileNotice: "Lütfen profilinizi doldurun.", loggedAs: "Oturum açıldı", send: "Gönder",
+    
+    personalData: "Kişisel Veriler", emailAlreadyEntered: "E-posta (zaten girilmiş)", day: "Gün", month: "Ay", year: "Yıl", save: "Kaydet", chooseProfilePic: "Profil fotoğrafı seçin", registration: "Kayıt", cancel: "İptal", confirm: "Onayla", enterName: "Adı girin", enterSurname: "Soyadı girin",
+    login: 'GİRİŞ',
+    register: 'KAYIT OL',
+    email: 'E-posta',
+    password: 'Şifre',
+    confirmPassword: 'Şifreyi Onayla',
+    rememberMe: 'Beni hatırla',
+    loginBtn: 'Giriş Yap',
+    registerBtn: 'Hesap Oluştur',
+    or: 'VEYA',
+    continueGoogle: 'Google ile devam et',
+    passwordMismatch: 'Şifreler uyuşmuyor!',
+    passwordLength: 'Şifre en az 8 karakter olmalıdır.',
+    heroTitle1: 'Daha az stres,',
+    heroTitle2: 'oynamak için daha fazla zaman',
+    heroSubtitle: 'Sport2go, yaklaşan spor seanslarını ve grup spor aktivitelerini kolayca planlamanıza olanak tanıyan bir web platformudur',
+    joinBtn: 'ŞİMDİ KATIL',
+    feature1Title: 'Ekibinizi yönetin',
+    feature1Desc: 'Yaklaşan spor etkinlikleri oluşturun, oyuncuları davet edin ve spor aktivitelerini onaylayın.',
+    feature2Title: 'Diğer ekiplere katılın',
+    feature2Desc: 'Farklı sporlar yapıyorsanız farklı ekipler oluşturun veya başkalarına katılın.',
+    feature3Title: 'Eğlence',
+    feature3Desc: 'Ayın oyuncusunu belirleyin ve gelecek seanslar için zorluklar belirleyin.',
+    moreBtn: 'DAHA FAZLA',
+    howToStart: 'Nasıl başlanır?',
+    howToStartDesc: 'Arkadaşlarınızı veya kullanıcıları e-posta yoluyla davet edebilir veya onlara bir bağlantı gönderebilir, grubunuzu hızlıca oluşturup uygulamayı kullanmaya başlayabilirsiniz.',
+    benefitsBtn: 'KULLANIM AVANTAJLARI',
+    footerSupport: 'Ücretsiz destek',
+    footerSecurity1: 'Güvenlik ve gizliliğe ',
+    footerSecurity2: 'saygı duyuyoruz',
+    footerUptime1: '%99.99 web sitesi ',
+    footerUptime2: 'çalışma süresi',
+    footerLinks: {
+      solutions: 'Çözümler',
+      contact: 'İletişim',
+      gdpr: 'Veri Koruma ve KVKK',
+      terms: 'Genel Şartlar ve Koşullar'
+    },
+    comingSoon: 'Yakında:',
+    rights: 'Sport2Go © Tüm hakları saklıdır.'
+  };
+
+export default tr;

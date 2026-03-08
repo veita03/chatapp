@@ -39,3 +39,39 @@ body {
 .animate-flyin {
   animation: slideInRightRotate 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
+
+@layer components {
+  .ui-card {
+    @apply bg-white rounded-xl shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] border border-gray-100/50;
+  }
+  
+  .ui-form-box {
+    @apply bg-[#fcfae8] rounded-2xl p-6 md:p-8;
+  }
+  
+  .ui-page-title {
+    @apply text-xl font-bold text-gray-700 tracking-wide;
+    font-family: var(--font-montserrat);
+  }
+  
+  .ui-section-title {
+    @apply text-[#dba032] font-semibold text-sm uppercase tracking-wider;
+    font-family: var(--font-cabin);
+  }
+  
+  .ui-label {
+    @apply text-[#d29729] font-bold text-sm;
+  }
+  
+  .ui-input {
+    @apply w-full bg-white text-gray-800 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#eeb054]/50 border border-gray-200 transition-all text-sm;
+  }
+  
+  .btn-primary {
+    @apply px-6 py-2.5 rounded-lg bg-[#eeb054] hover:bg-[#dba032] text-white font-bold transition-colors shadow-sm;
+  }
+  
+  .btn-secondary {
+    @apply px-6 py-2.5 rounded-lg border border-gray-200 text-gray-600 font-bold hover:bg-gray-50 transition-colors;
+  }
+}

@@ -1,0 +1,46 @@
+const sl = {
+    navTeams: "Ekipe", navChat: "Chat", navProfile: "Profil", navLogout: "Odjava", profileTitle: "Vaš profil", profileDesc: "Izpolnite svoje podatke, da se svetu predstavite na najboljši način.", firstName: "Ime", lastName: "Priimek", profileEmail: "E-poštni naslov", phone: "Telefonska številka", dob: "Datum rojstva", gender: "Spol", genderMale: "Moški", genderFemale: "Ženski", saveBtn: "Shrani nastavitve", savingBtn: "Shranjujem...", phoneInvalid: "Telefonska številka ni veljavna.", fillRequired: "Prosimo, izpolnite vsa obvezna polja.", profileNotice: "Prosimo, izpolnite svoj profil.", loggedAs: "Prijavljen(a)", send: "Pošlji",
+    
+    personalData: "Osebni podatki", emailAlreadyEntered: "Email (že vpisan)", day: "Dan", month: "Mesec", year: "Leto", save: "Shrani", chooseProfilePic: "Izberi prikazno sliko", registration: "Registracija", cancel: "Prekliči", confirm: "Potrdi", enterName: "Vnesite ime", enterSurname: "Vnesite priimek",
+    login: 'PRIJAVA',
+    register: 'REGISTRACIJA',
+    email: 'E-pošta',
+    password: 'Geslo',
+    confirmPassword: 'Potrdi geslo',
+    rememberMe: 'Zapomni si me',
+    loginBtn: 'Prijava v sistem',
+    registerBtn: 'Ustvari račun',
+    or: 'ALI',
+    continueGoogle: 'Nadaljuj z Google',
+    passwordMismatch: 'Gesli se ne ujemata!',
+    passwordLength: 'Geslo mora imeti vsaj 8 znakov.',
+    heroTitle1: 'Manj stresa,',
+    heroTitle2: 'več časa za igro',
+    heroSubtitle: 'Sport2go je spletna platforma s katero lahko preprosto načrtujete prihajajoče športne termine oziroma skupinske športne aktivnosti',
+    joinBtn: 'PRIDRUŽI SE',
+    feature1Title: 'Upravljaj ekipo',
+    feature1Desc: 'Ustvari prihajajoče športne dogodke, povabi igralce in potrdi športno aktivnost.',
+    feature2Title: 'Pridruži se drugim ekipam',
+    feature2Desc: 'V kolikor igraš različne športe ustvari različne ekipe ali se pridruži drugim.',
+    feature3Title: 'Zabava',
+    feature3Desc: 'Določitev igralca meseca in možnost postavljanja izzivov za prihodnje termine.',
+    moreBtn: 'VEČ',
+    howToStart: 'Kako začeti?',
+    howToStartDesc: 'Prijatelje oziroma uporabnike lahko povabite preko elektronske pošte ali jim pošljete povezavo, in tako izjemno hitro ustvarite svojo skupino in pričnete z uporabo aplikacije.',
+    benefitsBtn: 'PREDNOSTI UPORABE',
+    footerSupport: 'Brezplačna podpora',
+    footerSecurity1: 'Spoštujemo ',
+    footerSecurity2: 'varnost in zasebnost',
+    footerUptime1: '99.99% dosegljivost ',
+    footerUptime2: 'strani',
+    footerLinks: {
+      solutions: 'Rešitve',
+      contact: 'Kontakt',
+      gdpr: 'Varovanje podatkov in GDPR',
+      terms: 'Splošni pogoji poslovanja'
+    },
+    comingSoon: 'Kmalu na:',
+    rights: 'Sport2Go © Vse pravice pridržane.'
+  };
+
+export default sl;
