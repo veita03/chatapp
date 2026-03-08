@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -48,15 +48,20 @@ export default function CreateTeamPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [tempImageSrc, setTempImageSrc] = useState<string | null>(null);
 
+  const currentUser = useQuery(api.users.current);
+  const generateNextJoinCode = useMutation(api.users.generateNextJoinCode);
   const [joinCode, setJoinCode] = useState("");
+
   useEffect(() => {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let result = '';
-    for (let i = 0; i < 6; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    if (currentUser !== undefined) {
+      if (currentUser?.nextSeasonJoinCode) {
+        setJoinCode(currentUser.nextSeasonJoinCode);
+      } else if (currentUser && !joinCode) {
+        // Guarantee we fetch/generate exactly one string for the session
+        generateNextJoinCode().then((code) => setJoinCode(code));
+      }
     }
-    setJoinCode(result);
-  }, []);
+  }, [currentUser, generateNextJoinCode, joinCode]);
 
   const [players, setPlayers] = useState([{ firstName: "", lastName: "", email: "" }]);
   
@@ -254,17 +259,53 @@ export default function CreateTeamPage() {
                <div className="bg-[#fcfaf5] border border-[#f3ebcd] rounded-xl p-6 sm:p-8 text-center relative overflow-hidden flex flex-col items-center">
                   
                   <h4 className="text-[#eeb054] font-bold text-[15px] mb-2 flex items-center justify-center">
-                    Povabi člane preko unikatne povezave
+                    Povabi v aplikaciji
                     <InfoTooltip text="To je povezava do sezone. Kopiraj jo in jo pošlji preko želenega kanala." />
                   </h4>
-                  <div className="flex items-center space-x-2 border opacity-90 border-[#eeb054]/50 bg-white rounded-lg p-1.5 px-3 max-w-[280px] w-full mx-auto select-none mt-2">
-                    <div className="flex-1 font-bold text-[#eeb054] tracking-widest text-lg md:text-xl truncate select-text">{joinCode || "......"}</div>
-                    <button type="button" onClick={() => { navigator.clipboard.writeText(`https://www.sport2go.app/sezona/${joinCode}`); alert("Povezava kopirana!"); }} className="bg-[#6db592] hover:bg-[#5b9e7e] text-white p-2.5 rounded-md cursor-pointer transition-colors" title="Kopiraj povezavo">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path d="M7 3.5A1.5 1.5 0 018.5 2h3.879a1.5 1.5 0 011.06.44l3.122 3.12A1.5 1.5 0 0117 6.622V12.5a1.5 1.5 0 01-1.5 1.5h-1v-3.379a3 3 0 00-.879-2.121L10.5 5.379A3 3 0 008.379 4.5H7v-1z" /><path d="M4.5 6A1.5 1.5 0 003 7.5v9A1.5 1.5 0 004.5 18h7a1.5 1.5 0 001.5-1.5v-5.879a1.5 1.5 0 00-.44-1.06L9.44 6.439A1.5 1.5 0 008.378 6H4.5z" /></svg>
+                  
+                  {/* Social Share Buttons */}
+                  <div className="flex items-center justify-center gap-3 md:gap-4 my-5">
+                    {/* SMS */}
+                    <button type="button" onClick={() => window.open(`sms:?body=Pridruži se moji ekipi na Sport2Go! Povezava: https://www.sport2go.app/sezona/${joinCode}`)} className="w-12 h-12 rounded-full bg-[#eeb054] hover:bg-[#dba032] flex items-center justify-center text-white transition-colors shadow-sm">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" /></svg>
+                    </button>
+                    {/* Messenger */}
+                    <button type="button" onClick={() => window.open(`fb-messenger://share/?link=https://www.sport2go.app/sezona/${joinCode}`)} className="w-12 h-12 rounded-full bg-[#eeb054] hover:bg-[#dba032] flex items-center justify-center text-white transition-colors shadow-sm">
+                       <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path d="M12 2C6.477 2 2 6.145 2 11.26c0 2.91 1.488 5.498 3.795 7.182V22l3.456-1.895c.877.24 1.801.375 2.749.375 5.523 0 10-4.145 10-9.26S17.523 2 12 2zm1.18 12.03-3.085-3.296-6.023 3.296 6.64-7.034 3.195 3.181 5.912-3.181-6.639 7.034z"/></svg>
+                    </button>
+                    {/* WhatsApp */}
+                    <button type="button" onClick={() => window.open(`https://wa.me/?text=Pridruži se moji ekipi na Sport2Go! Povezava: https://www.sport2go.app/sezona/${joinCode}`)} className="w-12 h-12 rounded-full bg-[#eeb054] hover:bg-[#dba032] flex items-center justify-center text-white transition-colors shadow-sm">
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path d="M12.031 2.052c-5.516 0-9.996 4.48-9.996 9.996 0 1.763.459 3.484 1.332 5.006L2.305 21l4.053-1.063c1.472.793 3.141 1.211 4.881 1.211l.004-.001c5.511 0 9.992-4.48 9.992-9.994 0-2.67-1.039-5.181-2.927-7.07-1.888-1.889-4.398-2.928-7.068-2.928...zM12.031 18.252l-.004.001c-1.492 0-2.955-.401-4.238-1.161l-.304-.18-3.148.825.84-3.069-.198-.314c-.836-1.328-1.278-2.861-1.278-4.43 0-4.609 3.753-8.36 8.365-8.36 2.233 0 4.331.869 5.91 2.449 1.578 1.58 2.447 3.679 2.447 5.912 0 4.609-3.753 8.36-8.365 8.36..."/></svg>
+                    </button>
+                    {/* Native Share / General */}
+                    <button type="button" onClick={() => {
+                        if (navigator.share) {
+                          navigator.share({
+                            title: 'Sport2Go',
+                            text: 'Pridruži se moji ekipi!',
+                            url: `https://www.sport2go.app/sezona/${joinCode}`
+                          });
+                        } else {
+                          window.open(`mailto:?subject=Vabilo v ekipo na Sport2Go&body=Pridruži se moji ekipi na Sport2Go! Povezava: https://www.sport2go.app/sezona/${joinCode}`);
+                        }
+                    }} className="w-12 h-12 rounded-full bg-[#eeb054] hover:bg-[#dba032] flex items-center justify-center text-white transition-colors shadow-sm" title="Deli preko drugih aplikacij">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" /></svg>
                     </button>
                   </div>
-                  <div className="text-xs text-gray-400 mt-2 cursor-pointer hover:text-gray-500" onClick={() => { navigator.clipboard.writeText(`https://www.sport2go.app/sezona/${joinCode}`); alert("Povezava kopirana!"); }}>
-                     Klikni in kopiraj povezavo
+
+                  <div className="w-full border-t border-gray-100/60 my-4"></div>
+
+                  <h4 className="text-gray-500 font-bold text-sm mb-3">
+                    ali kopiraj povezavo
+                  </h4>
+                  <div className="flex items-center w-full max-w-[340px] border border-gray-200 bg-white rounded-lg overflow-hidden shadow-sm">
+                    <div className="flex-1 text-gray-500 text-[14px] truncate px-4 py-2.5 bg-gray-50/50">
+                      https://www.sport2go.app/sezona/{joinCode || "......"}
+                    </div>
+                    <button type="button" onClick={() => { navigator.clipboard.writeText(`https://www.sport2go.app/sezona/${joinCode}`); alert("Povezava kopirana!"); }} className="bg-[#6db592] hover:bg-[#5b9e7e] text-white px-5 py-2.5 font-bold text-sm transition-colors flex items-center gap-1.5 focus:outline-none h-full border-l border-[#6db592]">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" /></svg>
+                      Kopiraj
+                    </button>
                   </div>
 
                   <div className="w-full mt-6 pt-6 border-t border-gray-100 flex flex-col items-center">

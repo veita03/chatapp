@@ -18,6 +18,7 @@ export default defineSchema({
     dateOfBirth: v.optional(v.string()),
     gender: v.optional(v.string()), // 'male', 'female', etc.
     isProfileComplete: v.optional(v.boolean()),
+    nextSeasonJoinCode: v.optional(v.string()), // Used to statically persist the join code during team creation
   }).index("email", ["email"]).index("phone", ["phone"]),
   messages: defineTable({
     teamId: v.optional(v.id("teams")), // Added for per-team scoping

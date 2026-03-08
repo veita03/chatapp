@@ -120,6 +120,11 @@ export const createTeam = mutation({
       }
     }
 
+    // 5. Clear the user's pre-generated join code so they get a fresh one next time
+    await ctx.db.patch(userId, {
+      nextSeasonJoinCode: undefined,
+    });
+
     return teamId;
   },
 });
