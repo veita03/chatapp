@@ -13,8 +13,8 @@ function generateJoinCode() {
 }
 
 // Ensure the code is unique in the given table
-async function getUniqueJoinCode(ctx: any, tableName: "teams" | "seasons" | "events") {
-  let code = generateJoinCode();
+async function getUniqueJoinCode(ctx: any, tableName: "teams" | "seasons" | "events", requestedCode?: string) {
+  let code = requestedCode || generateJoinCode();
   let isUnique = false;
   while (!isUnique) {
     const existing = await ctx.db
@@ -24,7 +24,7 @@ async function getUniqueJoinCode(ctx: any, tableName: "teams" | "seasons" | "eve
     if (!existing) {
       isUnique = true;
     } else {
-      code = generateJoinCode();
+      code = generateJoinCode(); // if requested is taken, fallback to random
     }
   }
   return code;
@@ -37,6 +37,12 @@ export const createTeam = mutation({
     desc: v.optional(v.string()),
     image: v.optional(v.string()),
     seasonName: v.string(), // "pri obrazcu za kreiranje ekipe ... kreiral ekipo in prvo sezono"
+    seasonJoinCode: v.optional(v.string()),
+    newPlayers: v.optional(v.array(v.object({
+      firstName: v.string(),
+      lastName: v.string(),
+      email: v.string()
+    }))),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
@@ -56,7 +62,7 @@ export const createTeam = mutation({
     });
 
     // 2. Create Initial Season
-    const seasonJoinCode = await getUniqueJoinCode(ctx, "seasons");
+    const seasonJoinCode = await getUniqueJoinCode(ctx, "seasons", args.seasonJoinCode);
     const seasonId = await ctx.db.insert("seasons", {
       teamId,
       name: args.seasonName,
@@ -72,6 +78,47 @@ export const createTeam = mutation({
       role: "admin",
       status: "active",
     });
+
+    // 4. Add offline/invited players
+    if (args.newPlayers && args.newPlayers.length > 0) {
+      for (const player of args.newPlayers) {
+        let actualUserId = null;
+        
+        // If email is provided, check if user already exists
+        if (player.email) {
+          const existingUser = await ctx.db
+            .query("users")
+            .withIndex("email", (q: any) => q.eq("email", player.email))
+            .first();
+          if (existingUser) {
+            actualUserId = existingUser._id;
+          }
+        }
+
+        // If no user found, create an anonymous/offline user
+        if (!actualUserId) {
+          const fullName = [player.firstName, player.lastName].filter(Boolean).join(" ");
+          actualUserId = await ctx.db.insert("users", {
+            firstName: player.firstName,
+            lastName: player.lastName,
+            name: fullName,
+            email: player.email || undefined,
+            isAnonymous: true,
+          });
+        }
+
+        // Add membership to team and season
+        if (actualUserId) {
+          await ctx.db.insert("memberships", {
+            userId: actualUserId,
+            teamId,
+            seasonId,
+            role: "player",
+            status: "active",
+          });
+        }
+      }
+    }
 
     return teamId;
   },

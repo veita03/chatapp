@@ -2,7 +2,7 @@
 
 import { useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import ImageCropper from "@/components/ImageCropper";
@@ -48,6 +48,32 @@ export default function CreateTeamPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [tempImageSrc, setTempImageSrc] = useState<string | null>(null);
 
+  const [joinCode, setJoinCode] = useState("");
+  useEffect(() => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let result = '';
+    for (let i = 0; i < 6; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    setJoinCode(result);
+  }, []);
+
+  const [players, setPlayers] = useState([{ firstName: "", lastName: "", email: "" }]);
+  
+  const addPlayerRow = () => {
+    setPlayers([...players, { firstName: "", lastName: "", email: "" }]);
+  };
+  
+  const removePlayerRow = (index: number) => {
+    setPlayers(players.filter((_, i) => i !== index));
+  };
+  
+  const updatePlayer = (index: number, field: string, value: string) => {
+    const newPlayers = [...players];
+    newPlayers[index] = { ...newPlayers[index], [field]: value };
+    setPlayers(newPlayers);
+  };
+
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -75,7 +101,12 @@ export default function CreateTeamPage() {
 
     setIsSubmitting(true);
     try {
-      const newTeamId = await createTeam(formData);
+      const validPlayers = players.filter(p => p.firstName || p.lastName || p.email);
+      const newTeamId = await createTeam({
+        ...formData,
+        seasonJoinCode: joinCode,
+        newPlayers: validPlayers
+      });
       router.push(`/teams`); // Redirect back to teams dashboard after creation
     } catch (error) {
        console.error(error);
@@ -92,7 +123,7 @@ export default function CreateTeamPage() {
 
       {/* Banner */}
       <div className="w-full" style={{background: '#f4c361'}}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 py-5 flex items-center space-x-3">
+        <div className="max-w-5xl mx-auto px-4 sm:px-8 py-5 flex items-center space-x-3">
            <button onClick={() => router.push('/teams')} className="text-white hover:bg-white/20 p-2 rounded-full transition-colors mr-2">
              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
@@ -164,7 +195,7 @@ export default function CreateTeamPage() {
                                : 'border-[#f3ebcd] text-gray-500 hover:border-[#eeb054]/50 hover:text-gray-700 hover:bg-gray-50 bg-white'
                            }`}
                          >
-                           {sport.name}
+                           <span className="mr-1.5">{sport.icon}</span>{sport.name}
                          </button>
                        ))}
                     </div>
@@ -213,26 +244,61 @@ export default function CreateTeamPage() {
                />
             </div>
 
-            {/* Invite Placeholder */}
+            {/* Invite Section */}
             <div className="flex flex-col pt-6 border-t border-gray-100 mb-8">
                <div className="flex justify-between items-center mb-4">
                   <label className="ui-label block m-0">Dodaj igralce v ekipo in sezono (opcijsko)</label>
                   <InfoTooltip text="Člane lahko dodaš takoj po ustvaritvi ekipe preko unikatne povezave, elektronske pošte ali pa jih vneseš ročno (za člane brez digitalnega dostopa)." />
                </div>
                
-               <div className="bg-[#fcfaf5] border border-[#f3ebcd] rounded-xl p-8 text-center relative overflow-hidden">
-                  <div className="relative z-10 flex flex-col items-center justify-center">
-                    <h4 className="text-[#eeb054] font-bold text-[15px] mb-2">Povabi člane preko unikatne povezave</h4>
-                    <p className="text-gray-500 text-sm max-w-sm mx-auto mb-4">
-                      Ko boste shranili novo ekipo, boste preusmerjeni na nadzorno ploščo, kjer boste povezavo lahko kopirali.
-                    </p>
-                    <div className="flex items-center space-x-2 border opacity-60 border-[#eeb054]/30 bg-white rounded-lg p-2 px-3 max-w-[260px] mx-auto select-none">
-                      <div className="flex-1 font-bold text-[#eeb054] tracking-widest text-lg">POVEZAVA</div>
-                      <div className="bg-[#6db592] text-white p-2.5 rounded-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path d="M7 3.5A1.5 1.5 0 018.5 2h3.879a1.5 1.5 0 011.06.44l3.122 3.12A1.5 1.5 0 0117 6.622V12.5a1.5 1.5 0 01-1.5 1.5h-1v-3.379a3 3 0 00-.879-2.121L10.5 5.379A3 3 0 008.379 4.5H7v-1z" /><path d="M4.5 6A1.5 1.5 0 003 7.5v9A1.5 1.5 0 004.5 18h7a1.5 1.5 0 001.5-1.5v-5.879a1.5 1.5 0 00-.44-1.06L9.44 6.439A1.5 1.5 0 008.378 6H4.5z" /></svg>
-                      </div>
-                    </div>
+               <div className="bg-[#fcfaf5] border border-[#f3ebcd] rounded-xl p-6 sm:p-8 text-center relative overflow-hidden flex flex-col items-center">
+                  
+                  <h4 className="text-[#eeb054] font-bold text-[15px] mb-2 flex items-center justify-center">
+                    Povabi člane preko unikatne povezave
+                    <InfoTooltip text="To je povezava do sezone. Kopiraj jo in jo pošlji preko želenega kanala." />
+                  </h4>
+                  <div className="flex items-center space-x-2 border opacity-90 border-[#eeb054]/50 bg-white rounded-lg p-1.5 px-3 max-w-[280px] w-full mx-auto select-none mt-2">
+                    <div className="flex-1 font-bold text-[#eeb054] tracking-widest text-lg md:text-xl truncate select-text">{joinCode || "......"}</div>
+                    <button type="button" onClick={() => { navigator.clipboard.writeText(`https://www.sport2go.app/sezona/${joinCode}`); alert("Povezava kopirana!"); }} className="bg-[#6db592] hover:bg-[#5b9e7e] text-white p-2.5 rounded-md cursor-pointer transition-colors" title="Kopiraj povezavo">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path d="M7 3.5A1.5 1.5 0 018.5 2h3.879a1.5 1.5 0 011.06.44l3.122 3.12A1.5 1.5 0 0117 6.622V12.5a1.5 1.5 0 01-1.5 1.5h-1v-3.379a3 3 0 00-.879-2.121L10.5 5.379A3 3 0 008.379 4.5H7v-1z" /><path d="M4.5 6A1.5 1.5 0 003 7.5v9A1.5 1.5 0 004.5 18h7a1.5 1.5 0 001.5-1.5v-5.879a1.5 1.5 0 00-.44-1.06L9.44 6.439A1.5 1.5 0 008.378 6H4.5z" /></svg>
+                    </button>
                   </div>
+                  <div className="text-xs text-gray-400 mt-2 cursor-pointer hover:text-gray-500" onClick={() => { navigator.clipboard.writeText(`https://www.sport2go.app/sezona/${joinCode}`); alert("Povezava kopirana!"); }}>
+                     Klikni in kopiraj povezavo
+                  </div>
+
+                  <div className="w-full mt-6 pt-6 border-t border-gray-100 flex flex-col items-center">
+                    <h4 className="text-[#eeb054] font-bold text-[15px] mb-4 flex items-center justify-center">
+                       Ali pošlji povabilo preko elektronske pošte:
+                       <InfoTooltip text="Vnesi e-pošto za povabilo ali ime/priimek za ročni vnos brez povabila." />
+                    </h4>
+                    
+                    <div className="w-full space-y-3">
+                      {players.map((p, i) => (
+                        <div key={i} className="flex flex-col">
+                           <div className="flex flex-col sm:flex-row gap-2">
+                             <input type="text" placeholder="Ime" value={p.firstName} onChange={e => updatePlayer(i, 'firstName', e.target.value)} className="ui-input flex-1 bg-white focus:ring-[#eeb054]/50" />
+                             <input type="text" placeholder="Priimek" value={p.lastName} onChange={e => updatePlayer(i, 'lastName', e.target.value)} className="ui-input flex-1 bg-white focus:ring-[#eeb054]/50" />
+                             <input type="email" placeholder="E-pošta" value={p.email} onChange={e => updatePlayer(i, 'email', e.target.value)} className="ui-input flex-1 bg-white focus:ring-[#eeb054]/50" />
+                             <button type="button" onClick={() => removePlayerRow(i)} className="px-3 py-2 bg-red-50 text-red-400 hover:bg-red-100 font-medium text-sm rounded-lg transition-colors border border-red-100 shrink-0 select-none">
+                               ✕ Odstrani
+                             </button>
+                           </div>
+                           {(p.firstName || p.lastName) && !p.email && (
+                              <div className="text-left text-xs text-[#6db592] mt-1.5 pl-1 font-medium bg-[#6db592]/10 py-1 px-2.5 rounded-md self-start inline-block border border-[#6db592]/20">
+                                Način: Ročni vnos (brez povabila — e-pošta ni zahtevana).
+                              </div>
+                           )}
+                        </div>
+                      ))}
+                    </div>
+                    
+                    <button type="button" onClick={addPlayerRow} className="mt-5 bg-[#eeb054] hover:bg-[#dba032] text-white font-bold text-sm px-5 py-2.5 rounded-lg shadow-sm transition-colors flex items-center space-x-1.5">
+                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4"><path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" /></svg>
+                       <span>Dodaj novega igralca</span>
+                    </button>
+                  </div>
+
                </div>
             </div>
 
