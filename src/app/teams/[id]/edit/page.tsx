@@ -50,6 +50,7 @@ export default function EditTeamPage() {
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<{name?: string, sport?: string}>({});
   const [tempImageSrc, setTempImageSrc] = useState<string | null>(null);
 
   // Sync formData with loaded team data
@@ -84,10 +85,18 @@ export default function EditTeamPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.sport) {
-      alert(t.fillRequired);
+    
+    // Validate
+    const newErrors: any = {};
+    if (!formData.name.trim()) newErrors.name = t.fillRequired;
+    if (!formData.sport) newErrors.sport = t.fillRequired;
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
+    setErrors({});
 
     setIsSubmitting(true);
     try {
@@ -167,24 +176,24 @@ export default function EditTeamPage() {
                     </div>
                     <input
                       type="text"
-                      required
                       value={formData.name}
-                      onChange={e => setFormData({...formData, name: e.target.value})}
+                      onChange={e => { setFormData({...formData, name: e.target.value}); setErrors({...errors, name: undefined}); }}
                       placeholder={t.teamNamePlaceholder}
-                      className="ui-input bg-white text-sm py-2.5 px-3"
+                      className={`ui-input bg-white text-sm py-2.5 px-3 ${errors.name ? 'border-red-400 focus:ring-red-400 focus:border-red-400' : ''}`}
                     />
+                    {errors.name && <p className="text-red-500 text-xs mt-1.5 font-medium flex items-center"><svg className="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>{errors.name}</p>}
                  </div>
 
                  <div className="flex flex-col">
                     <div className="flex justify-between items-center mb-2.5">
                        <label className="ui-label m-0">{t.selectSport} <span className="text-[#d29729]">*</span></label>
                     </div>
-                    <div className="ui-input bg-white py-4 px-3 flex flex-wrap justify-center gap-2.5">
+                    <div className={`ui-input bg-white py-4 px-3 flex flex-wrap justify-center gap-2.5 ${errors.sport ? 'border-red-400' : ''}`}>
                        {SPORTS.map((sport, idx) => (
                          <button
                            key={sport.name}
                            type="button"
-                           onClick={() => setFormData({...formData, sport: sport.name})}
+                           onClick={() => { setFormData({...formData, sport: sport.name}); setErrors({...errors, sport: undefined}); }}
                            className={`px-4 py-1.5 rounded-md border transition-all text-[13px] font-medium max-w-[140px] truncate ${
                              formData.sport === sport.name 
                                ? 'border-[#eeb054] text-[#dba032] shadow-[0_0_0_1px_rgba(238,176,84,0.3)] bg-[#fdfaf1]' 
@@ -195,6 +204,7 @@ export default function EditTeamPage() {
                          </button>
                        ))}
                     </div>
+                    {errors.sport && <p className="text-red-500 text-xs mt-1.5 font-medium flex items-center"><svg className="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>{errors.sport}</p>}
                  </div>
 
               </div>

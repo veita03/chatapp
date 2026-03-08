@@ -46,6 +46,8 @@ export default function CreateTeamPage() {
     image: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<{name?: string, seasonName?: string, sport?: string}>({});
+  const [baseUrl, setBaseUrl] = useState("https://www.sport2go.app");
   const [tempImageSrc, setTempImageSrc] = useState<string | null>(null);
 
   const currentUser = useQuery(api.users.current);
@@ -99,10 +101,19 @@ export default function CreateTeamPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.seasonName || !formData.sport) {
-      alert(t.fillRequired);
+    
+    // Validate
+    const newErrors: any = {};
+    if (!formData.name.trim()) newErrors.name = t.fillRequired;
+    if (!formData.seasonName.trim()) newErrors.seasonName = t.fillRequired;
+    if (!formData.sport) newErrors.sport = t.fillRequired;
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
+    setErrors({});
 
     setIsSubmitting(true);
     try {
@@ -160,12 +171,12 @@ export default function CreateTeamPage() {
                     </div>
                     <input
                       type="text"
-                      required
                       value={formData.name}
-                      onChange={e => setFormData({...formData, name: e.target.value})}
+                      onChange={e => { setFormData({...formData, name: e.target.value}); setErrors({...errors, name: undefined}); }}
                       placeholder={t.teamNamePlaceholder}
-                      className="ui-input bg-white text-sm py-2.5 px-3"
+                      className={`ui-input bg-white text-sm py-2.5 px-3 ${errors.name ? 'border-red-400 focus:ring-red-400 focus:border-red-400' : ''}`}
                     />
+                    {errors.name && <p className="text-red-500 text-xs mt-1.5 font-medium flex items-center"><svg className="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>{errors.name}</p>}
                  </div>
 
                  <div className="flex flex-col">
@@ -175,12 +186,12 @@ export default function CreateTeamPage() {
                     </div>
                     <input
                       type="text"
-                      required
                       value={formData.seasonName}
-                      onChange={e => setFormData({...formData, seasonName: e.target.value})}
+                      onChange={e => { setFormData({...formData, seasonName: e.target.value}); setErrors({...errors, seasonName: undefined}); }}
                       placeholder={t.seasonNamePlaceholder}
-                      className="ui-input bg-white text-sm py-2.5 px-3"
+                      className={`ui-input bg-white text-sm py-2.5 px-3 ${errors.seasonName ? 'border-red-400 focus:ring-red-400 focus:border-red-400' : ''}`}
                     />
+                    {errors.seasonName && <p className="text-red-500 text-xs mt-1.5 font-medium flex items-center"><svg className="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>{errors.seasonName}</p>}
                  </div>
 
                  <div className="flex flex-col">
@@ -188,12 +199,12 @@ export default function CreateTeamPage() {
                        <label className="ui-label m-0">{t.selectSport} <span className="text-[#d29729]">*</span></label>
                        <InfoTooltip text={t.selectSportTooltip} />
                     </div>
-                    <div className="ui-input bg-white py-4 px-3 flex flex-wrap justify-center gap-2.5">
+                    <div className={`ui-input bg-white py-4 px-3 flex flex-wrap justify-center gap-2.5 ${errors.sport ? 'border-red-400' : ''}`}>
                        {SPORTS.map((sport, idx) => (
                          <button
                            key={sport.name}
                            type="button"
-                           onClick={() => setFormData({...formData, sport: sport.name})}
+                           onClick={() => { setFormData({...formData, sport: sport.name}); setErrors({...errors, sport: undefined}); }}
                            className={`px-4 py-2 rounded-md border transition-all text-sm font-medium ${
                              formData.sport === sport.name 
                                ? 'border-[#eeb054] text-[#dba032] shadow-[0_0_0_1px_rgba(238,176,84,0.3)] bg-[#fdfaf1]' 
@@ -204,6 +215,7 @@ export default function CreateTeamPage() {
                          </button>
                        ))}
                     </div>
+                    {errors.sport && <p className="text-red-500 text-xs mt-1.5 font-medium flex items-center"><svg className="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>{errors.sport}</p>}
                  </div>
 
               </div>
@@ -283,10 +295,10 @@ export default function CreateTeamPage() {
                           navigator.share({
                             title: 'Sport2Go',
                             text: 'Pridruži se moji ekipi!',
-                            url: `https://www.sport2go.app/sezona/${joinCode}`
+                            url: `${baseUrl}/season/${joinCode}`
                           });
                         } else {
-                          window.open(`mailto:?subject=Vabilo v ekipo na Sport2Go&body=Pridruži se moji ekipi na Sport2Go! Povezava: https://www.sport2go.app/sezona/${joinCode}`);
+                          window.open(`mailto:?subject=Vabilo v ekipo na Sport2Go&body=Pridruži se moji ekipi na Sport2Go! Povezava: ${baseUrl}/season/${joinCode}`);
                         }
                     }} className="w-12 h-12 rounded-full bg-[#eeb054] hover:bg-[#dba032] flex items-center justify-center text-white transition-colors shadow-sm" title="Deli preko drugih aplikacij">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" /></svg>
@@ -298,11 +310,11 @@ export default function CreateTeamPage() {
                   <h4 className="text-gray-500 font-bold text-sm mb-3">
                     {t.orCopyLink}
                   </h4>
-                  <div className="flex items-center w-full max-w-[340px] border border-gray-200 bg-white rounded-lg overflow-hidden shadow-sm">
+                  <div className="flex items-center w-full max-w-[400px] border border-gray-200 bg-white rounded-lg overflow-hidden shadow-sm">
                     <div className="flex-1 text-gray-500 text-[14px] truncate px-4 py-2.5 bg-gray-50/50">
-                      https://www.sport2go.app/sezona/{joinCode || "......"}
+                       {baseUrl}/season/{joinCode}
                     </div>
-                    <button type="button" onClick={() => { navigator.clipboard.writeText(`https://www.sport2go.app/sezona/${joinCode}`); alert(t.linkCopiedMsg || "Povezava kopirana!"); }} className="bg-[#6db592] hover:bg-[#5b9e7e] text-white px-5 py-2.5 font-bold text-sm transition-colors flex items-center gap-1.5 focus:outline-none h-full border-l border-[#6db592]">
+                    <button type="button" onClick={() => { navigator.clipboard.writeText(`${baseUrl}/season/${joinCode}`); alert(t.linkCopiedMsg || "Povezava kopirana!"); }} className="bg-[#6db592] hover:bg-[#5b9e7e] text-white px-5 py-2.5 font-bold text-sm transition-colors flex items-center gap-1.5 focus:outline-none h-full border-l border-[#6db592]">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" /></svg>
                       {t.copyBtn}
                     </button>
