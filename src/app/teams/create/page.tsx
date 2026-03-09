@@ -55,15 +55,33 @@ export default function CreateTeamPage() {
   const [joinCode, setJoinCode] = useState("");
 
   useEffect(() => {
-    if (currentUser !== undefined) {
-      if (currentUser?.nextSeasonJoinCode) {
-        setJoinCode(currentUser.nextSeasonJoinCode);
-      } else if (currentUser && !joinCode) {
-        // Guarantee we fetch/generate exactly one string for the session
-        generateNextJoinCode().then((code) => setJoinCode(code));
+    setBaseUrl(window.location.origin);
+  }, []);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function initCode() {
+      if (currentUser === undefined || currentUser === null) return;
+      
+      if (currentUser.nextSeasonJoinCode) {
+        if (mounted) setJoinCode(currentUser.nextSeasonJoinCode);
+      } else if (!joinCode) {
+        try {
+          const code = await generateNextJoinCode();
+          if (mounted) setJoinCode(code);
+        } catch (e) {
+          console.error("Failed to generate code:", e);
+        }
       }
     }
-  }, [currentUser, generateNextJoinCode, joinCode]);
+
+    initCode();
+
+    return () => {
+      mounted = false;
+    };
+  }, [currentUser, joinCode, generateNextJoinCode]);
 
   const [players, setPlayers] = useState([{ firstName: "", lastName: "", email: "" }]);
   
