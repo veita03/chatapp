@@ -274,6 +274,20 @@ export default function CreateTeamPage() {
                     {t.inviteInApp}
                     <InfoTooltip text={t.inviteLinkTooltip} />
                   </h4>
+
+                  {/* Join Code Box */}
+                  <div className="my-6 w-full flex justify-center cursor-pointer group/code" onClick={() => { navigator.clipboard.writeText(`${baseUrl}/season/${joinCode}`); alert(t.linkCopiedMsg || "Povezava kopirana!"); }} title={t.clickToCopyLink || "Klikni in kopiraj povezavo"}>
+                    <div className="inline-block bg-[#fdfaf1] border-2 border-[#eeb054]/30 rounded-xl px-8 py-4 shadow-sm relative overflow-hidden transition-all group-hover/code:border-[#eeb054] group-hover/code:shadow-md">
+                       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#eeb054] to-[#dba032]" />
+                       <span className="text-xs font-bold text-gray-400 uppercase tracking-widest block mb-1">JOIN CODE / KODA</span>
+                       <span className="text-4xl md:text-5xl font-black text-[#353b41] tracking-[0.2em] font-mono select-none text-center flex justify-center w-full">
+                         {joinCode || "------"}
+                       </span>
+                       <div className="absolute -bottom-8 left-0 w-full text-center pb-1 text-[#dba032] text-[11px] font-bold uppercase tracking-wider opacity-0 group-hover/code:opacity-100 group-hover/code:-translate-y-8 transition-all">
+                          {t.clickToCopyLink || "Kopiraj"}
+                       </div>
+                    </div>
+                  </div>
                   
                   {/* Social Share Buttons */}
                   <div className="flex items-center justify-center gap-3 md:gap-4 my-5">
