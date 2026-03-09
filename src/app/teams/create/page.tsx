@@ -189,7 +189,7 @@ export default function CreateTeamPage() {
 
       {/* Banner */}
       <div className="w-full" style={{background: '#f4c361'}}>
-        <div className="max-w-5xl mx-auto px-4 sm:px-8 py-5 flex items-center space-x-3">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8 py-5 flex items-center space-x-3">
            <button onClick={() => router.push('/teams')} className="text-white hover:bg-white/20 p-2 rounded-full transition-colors mr-2">
              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
@@ -201,7 +201,7 @@ export default function CreateTeamPage() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto w-full px-4 sm:px-8 mt-8 pb-12">
+      <div className="max-w-6xl mx-auto w-full px-4 sm:px-8 mt-8 pb-12">
         <div className="ui-card p-6 md:p-10 flex flex-col">
           <div className="flex items-center space-x-3 mb-8 pb-4 border-b border-gray-100">
              <h2 className="text-[22px] font-bold text-[#353b41]" style={{fontFamily: 'var(--font-montserrat)'}}>{t.addNewTeamAndSeason}</h2>
