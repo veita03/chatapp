@@ -101,6 +101,18 @@ const de = {
     backToTeams: 'Zurück zu Teams',
     errorEditingTeam: 'Fehler beim Bearbeiten des Teams.',
     saveChangesBtn: 'Änderungen speichern',
+    
+    // Sports
+    sports: {
+      badminton: 'Badminton',
+      basketball: 'Basketball',
+      tableTennis: 'Tischtennis',
+      football: 'Fußball',
+      volleyball: 'Volleyball',
+      padel: 'Padel',
+      tennis: 'Tennis'
+    },
+    
     rights: 'Sport2Go © Alle Rechte vorbehalten.'
   };
 

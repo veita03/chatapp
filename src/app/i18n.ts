@@ -1,4 +1,4 @@
-export type Language = 'sl' | 'en' | 'es' | 'it' | 'fr' | 'hr' | 'sr' | 'de' | 'tr' | 'ar' | 'mx' | 'at' | 'us' | 'nl';
+export type Language = 'sl' | 'en' | 'es' | 'it' | 'fr' | 'hr' | 'sr' | 'de' | 'tr' | 'ar' | 'mx' | 'at' | 'us' | 'nl' | 'el';
 
 import sl from './i18n/locales/sl';
 import en from './i18n/locales/en';
@@ -14,6 +14,7 @@ import mx from './i18n/locales/mx';
 import at from './i18n/locales/at';
 import us from './i18n/locales/us';
 import nl from './i18n/locales/nl';
+import el from './i18n/locales/el';
 
 export const translations = {
   sl,
@@ -30,4 +31,5 @@ export const translations = {
   at,
   us,
   nl,
+  el,
 };

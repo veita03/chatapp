@@ -4,6 +4,7 @@ import "./globals.css";
 
 import ConvexClientProvider from "./ConvexClientProvider";
 import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
+import { LanguageProvider } from "@/components/LanguageContext";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -38,9 +39,11 @@ export default function RootLayout({
         <body
           className={`${montserrat.variable} ${cabin.variable} font-sans antialiased`}
         >
-          <ConvexClientProvider>
-            {children}
-          </ConvexClientProvider>
+          <LanguageProvider>
+            <ConvexClientProvider>
+              {children}
+            </ConvexClientProvider>
+          </LanguageProvider>
         </body>
       </html>
     </ConvexAuthNextjsServerProvider>

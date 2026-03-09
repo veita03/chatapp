@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import { translations, Language } from "@/app/i18n";
-import Cookies from "js-cookie";
+import { useLanguage } from "@/components/LanguageContext";
 
 const SPORTS = [
   "Badminton", "Košarka", "Namizni tenis", "Nogomet",
@@ -15,8 +15,8 @@ const SPORTS = [
 
 export default function TeamsPage() {
   const router = useRouter();
-  const currentLang = Cookies.get("NEXT_LOCALE") || "sl";
-  const t = (translations[currentLang as Language] || translations.sl) as typeof translations.sl;
+  const { language: currentLang } = useLanguage();
+  const t = (translations[currentLang as Language] || translations.sl) as any;
   const teams = useQuery(api.teams.getUserTeams);
   const deleteTeam = useMutation(api.teams.deleteTeam);
 
@@ -41,6 +41,19 @@ export default function TeamsPage() {
     team.name.toLowerCase().includes(filterQuery.toLowerCase()) || 
     team.sport.toLowerCase().includes(filterQuery.toLowerCase())
   );
+
+  // Helper for proper Slovenian grammatical pluralization of "members"
+  const getMembersSlovenian = (count: number) => {
+    if (count === 1) return `${count} član`;
+    if (count === 2) return `${count} člana`;
+    if (count === 3 || count === 4) return `${count} člani`;
+    return `${count} članov`; // Covers 0, 5, 6, 7...
+  };
+
+  const getMembersText = (count: number) => {
+     if (currentLang === 'sl') return getMembersSlovenian(count);
+     return `${count} ${count === 1 ? 'member' : 'members'}`;
+  };
 
   return (
     <div className="min-h-screen bg-[#F4F6F8] font-sans flex flex-col relative pb-20">
@@ -125,7 +138,7 @@ export default function TeamsPage() {
                        <div className="flex flex-wrap items-center mt-2 space-x-2">
                           <span className="inline-flex items-center text-xs font-bold text-[#eeb054] bg-[#fdfaf1] px-2.5 py-1 rounded-md border border-[#f3ebcd]">
                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5 mr-1"><path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" /></svg>
-                             {team.memberCount} {t.membersCount}
+                             {getMembersText(team.memberCount)}
                           </span>
                           <span className="inline-flex items-center text-xs font-bold text-[#eeb054] bg-[#fdfaf1] px-2.5 py-1 rounded-md border border-[#f3ebcd]">
                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5 mr-1"><path fillRule="evenodd" d="M14.5 4V3.25a.75.75 0 0 0-1.5 0V4h-6V3.25a.75.75 0 0 0-1.5 0V4H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.5zM4 6h12v2H4V6zm0 3.5h12V16H4V9.5z" clipRule="evenodd" /></svg>

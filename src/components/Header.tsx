@@ -8,6 +8,7 @@ import { translations, Language } from "../app/i18n";
 import { useConvexAuth } from "convex/react";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
+import { useLanguage } from "@/components/LanguageContext";
 
 const languageOptions: { key: Language; label: string }[] = [
   { key: 'de', label: 'Deutsch' },
@@ -18,6 +19,7 @@ const languageOptions: { key: Language; label: string }[] = [
   { key: 'ar', label: 'Español (AR)' },
   { key: 'mx', label: 'Español (MX)' },
   { key: 'fr', label: 'Français' },
+  { key: 'el', label: 'Ελληνικά' },
   { key: 'hr', label: 'Hrvatski' },
   { key: 'it', label: 'Italiano' },
   { key: 'nl', label: 'Nederlands' },
@@ -36,26 +38,14 @@ export default function Header({ onLoginClick, onRegisterClick }: HeaderProps) {
   const { signOut } = useAuthActions();
   const router = useRouter();
   const pathname = usePathname();
-
-  const [currentLang, setCurrentLang] = useState<Language>("sl");
-
-  useEffect(() => {
-    const saved = Cookies.get("lang") as Language;
-    if (saved && ["sl", "en", "es", "it", "fr", "hr", "sr", "de", "tr", "ar", "mx", "at", "us", "nl"].includes(saved)) {
-      setCurrentLang(saved);
-    }
-  }, []);
+  const { language: currentLang, setLanguage } = useLanguage();
   
   const [isLangOpen, setIsLangOpen] = useState(false);
   const t = translations[currentLang];
 
   const handleLangChange = (lang: Language) => {
-    setCurrentLang(lang);
-    Cookies.set("lang", lang, { expires: 365 });
+    setLanguage(lang);
     setIsLangOpen(false);
-    // Reload to apply language everywhere if needed, or rely on state. 
-    // Usually state propagates if context is used, but here we might just reload for simplicity
-    window.location.reload(); 
   };
 
   const NavButton = ({ icon, text, onClick, active }: { icon: React.ReactNode, text?: string, onClick: () => void, active?: boolean }) => (

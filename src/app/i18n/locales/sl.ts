@@ -93,6 +93,8 @@ const sl = {
     emailPlaceholder: 'E-pošta',
     removeBtn: '✕ Odstrani',
     manualEntryMode: 'Način: Ročni vnos (brez povabila — e-pošta ni zahtevana).',
+    emailInviteMode: 'Način: Povabilo po e-pošti (uporabnik bo prejel povabilo).',
+    invalidEmail: 'Vnesen e-mail ni veljaven.',
     addNewPlayerBtn: 'Dodaj novega igralca',
     cancelBtn: 'Prekliči',
     createTeamBtn: 'Ustvari ekipo',
@@ -105,6 +107,17 @@ const sl = {
     backToTeams: 'Nazaj na ekipe',
     errorEditingTeam: 'Napaka pri urejanju ekipe.',
     saveChangesBtn: 'Shrani spremembe',
+    
+    // Športi
+    sports: {
+      badminton: 'Badminton',
+      basketball: 'Košarka',
+      tableTennis: 'Namizni tenis',
+      football: 'Nogomet',
+      volleyball: 'Odbojka',
+      padel: 'Padel',
+      tennis: 'Tenis'
+    },
     
     rights: 'Sport2Go © Vse pravice pridržane.'
   };

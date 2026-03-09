@@ -2,22 +2,22 @@
 
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Header from "@/components/Header";
 import ImageCropper from "@/components/ImageCropper";
 import { translations, Language } from "@/app/i18n";
-import Cookies from "js-cookie";
+import { useLanguage } from "@/components/LanguageContext";
 import { Id } from "../../../../../convex/_generated/dataModel";
 
 const SPORTS = [
-  { name: "Badminton", icon: "🏸" },
-  { name: "Košarka", icon: "🏀" },
-  { name: "Namizni tenis", icon: "🏓" },
-  { name: "Nogomet", icon: "⚽" },
-  { name: "Odbojka", icon: "🏐" },
-  { name: "Padel", icon: "🎾" },
-  { name: "Tenis", icon: "🎾" }
+  { id: "badminton", name: "Badminton", icon: "🏸" },
+  { id: "basketball", name: "Košarka", icon: "🏀" },
+  { id: "tableTennis", name: "Namizni tenis", icon: "🏓" },
+  { id: "football", name: "Nogomet", icon: "⚽" },
+  { id: "volleyball", name: "Odbojka", icon: "🏐" },
+  { id: "padel", name: "Padel", icon: "🎾" },
+  { id: "tennis", name: "Tenis", icon: "🎾" }
 ];
 
 const InfoTooltip = ({ text }: { text: string }) => (
@@ -35,8 +35,8 @@ const InfoTooltip = ({ text }: { text: string }) => (
 export default function EditTeamPage() {
   const router = useRouter();
   const params = useParams();
-  const currentLang = Cookies.get("NEXT_LOCALE") || "sl";
-  const t = (translations[currentLang as Language] || translations.sl) as typeof translations.sl;
+  const { language: currentLang } = useLanguage();
+  const t = (translations[currentLang as Language] || translations.sl) as any;
   
   const teamId = params.id as Id<"teams">;
   const team = useQuery(api.teams.getTeam, { teamId });
@@ -51,6 +51,9 @@ export default function EditTeamPage() {
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<{name?: string, sport?: string}>({});
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const sportInputRef = useRef<HTMLDivElement>(null);
   const [tempImageSrc, setTempImageSrc] = useState<string | null>(null);
 
   // Sync formData with loaded team data
@@ -87,13 +90,18 @@ export default function EditTeamPage() {
     e.preventDefault();
     
     // Validate
+    setSubmitError(null);
     const newErrors: any = {};
     if (!formData.name.trim()) newErrors.name = t.fillRequired;
     if (!formData.sport) newErrors.sport = t.fillRequired;
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (newErrors.name && nameInputRef.current) {
+        nameInputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else if (newErrors.sport && sportInputRef.current) {
+        sportInputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
       return;
     }
     setErrors({});
@@ -107,7 +115,8 @@ export default function EditTeamPage() {
       router.push(`/teams`); 
     } catch (error: any) {
        console.error(error);
-       alert(error.message || t.errorEditingTeam);
+       setSubmitError(error.message || t.errorEditingTeam);
+       window.scrollTo({ top: 0, behavior: 'smooth' });
     } finally {
       setIsSubmitting(false);
     }
@@ -175,6 +184,7 @@ export default function EditTeamPage() {
                        <label className="ui-label m-0">{t.teamName} <span className="text-[#d29729]">*</span></label>
                     </div>
                     <input
+                      ref={nameInputRef}
                       type="text"
                       value={formData.name}
                       onChange={e => { setFormData({...formData, name: e.target.value}); setErrors({...errors, name: undefined}); }}
@@ -188,7 +198,7 @@ export default function EditTeamPage() {
                     <div className="flex justify-between items-center mb-2.5">
                        <label className="ui-label m-0">{t.selectSport} <span className="text-[#d29729]">*</span></label>
                     </div>
-                    <div className={`ui-input bg-white py-4 px-3 flex flex-wrap justify-center gap-2.5 ${errors.sport ? 'border-red-400' : ''}`}>
+                    <div ref={sportInputRef} className={`ui-input bg-white py-4 px-3 flex flex-wrap justify-center gap-2.5 ${errors.sport ? 'border-red-400' : ''}`}>
                        {SPORTS.map((sport, idx) => (
                          <button
                            key={sport.name}
@@ -200,7 +210,7 @@ export default function EditTeamPage() {
                                : 'border-[#f3ebcd] text-gray-500 hover:border-[#eeb054]/50 hover:text-gray-700 hover:bg-gray-50'
                            }`}
                          >
-                           <span className="mr-1.5">{sport.icon}</span>{sport.name}
+                           <span className="mr-1.5">{sport.icon}</span>{t.sports ? t.sports[sport.id] : sport.name}
                          </button>
                        ))}
                     </div>
@@ -250,6 +260,16 @@ export default function EditTeamPage() {
                />
             </div>
 
+            {/* Error Message Display */}
+            {submitError && (
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-3 animate-in fade-in">
+                <svg className="w-5 h-5 text-red-500 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clipRule="evenodd"/>
+                </svg>
+                <p className="text-sm font-medium text-red-800">{submitError}</p>
+              </div>
+            )}
+            
             {/* Footer Buttons */}
             <div className="flex justify-end space-x-4 border-t border-gray-100 pt-6">
                <button 

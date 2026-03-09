@@ -93,6 +93,8 @@ const en = {
     emailPlaceholder: 'Email',
     removeBtn: '✕ Remove',
     manualEntryMode: 'Mode: Manual entry (no invitation — email not required).',
+    emailInviteMode: 'Mode: Email invite (user will receive an invitation).',
+    invalidEmail: 'Entered email is not valid.',
     addNewPlayerBtn: 'Add new player',
     cancelBtn: 'Cancel',
     createTeamBtn: 'Create Team',
@@ -105,6 +107,17 @@ const en = {
     backToTeams: 'Back to teams',
     errorEditingTeam: 'Error editing team.',
     saveChangesBtn: 'Save Changes',
+    
+    // Sports
+    sports: {
+      badminton: 'Badminton',
+      basketball: 'Basketball',
+      tableTennis: 'Table Tennis',
+      football: 'Football',
+      volleyball: 'Volleyball',
+      padel: 'Padel',
+      tennis: 'Tennis'
+    },
     
     rights: 'Sport2Go © All rights reserved.'
   };
