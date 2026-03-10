@@ -94,4 +94,18 @@ export default defineSchema({
     .index("by_season", ["seasonId"])
     .index("by_event", ["eventId"])
     .index("by_user_team", ["userId", "teamId"]),
+
+  rides: defineTable({
+    authorId: v.id("users"),
+    departure: v.string(),     // Human readable location
+    departureLat: v.number(),
+    departureLng: v.number(),
+    destination: v.string(),   // Human readable location
+    destinationLat: v.number(),
+    destinationLng: v.number(),
+    departureTime: v.number(), // Timestamp in ms
+    distanceText: v.optional(v.string()), // e.g. "45 km"
+    durationText: v.optional(v.string()), // e.g. "40 min"
+    comment: v.optional(v.string())
+  }).index("by_author", ["authorId"]),
 });

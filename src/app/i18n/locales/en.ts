@@ -1,5 +1,5 @@
 const en = {
-    navTeams: "Teams", navChat: "Chat", navProfile: "Profile", navLogout: "Logout", profileTitle: "Your Profile", profileDesc: "Fill in your details to introduce yourself to the community.", firstName: "First Name", lastName: "Last Name", profileEmail: "Email Address", phone: "Phone Number", dob: "Date of Birth", gender: "Gender", genderMale: "Male", genderFemale: "Female", saveBtn: "Save Settings", savingBtn: "Saving...", phoneInvalid: "Phone number is not valid.", fillRequired: "Please fill in all required fields.", profileNotice: "Please fill in your profile.", loggedAs: "Logged in as", send: "Send",
+    navTeams: "Teams", navRides: "Rides", navChat: "Chat", navProfile: "Profile", navLogout: "Logout", profileTitle: "Your Profile", profileDesc: "Fill in your details to introduce yourself to the community.", firstName: "First Name", lastName: "Last Name", profileEmail: "Email Address", phone: "Phone Number", dob: "Date of Birth", gender: "Gender", genderMale: "Male", genderFemale: "Female", saveBtn: "Save Settings", savingBtn: "Saving...", phoneInvalid: "Phone number is not valid.", fillRequired: "Please fill in all required fields.", profileNotice: "Please fill in your profile.", loggedAs: "Logged in as", send: "Send",
     
     personalData: "Personal Details", emailAlreadyEntered: "Email (already entered)", day: "Day", month: "Month", year: "Year", save: "Save", chooseProfilePic: "Choose a profile picture", registration: "Registration", cancel: "Cancel", confirm: "Confirm", enterName: "Enter first name", enterSurname: "Enter last name",
     login: 'LOGIN',
@@ -119,7 +119,25 @@ const en = {
       tennis: 'Tennis'
     },
     
-    rights: 'Sport2Go © All rights reserved.'
+    rights: 'Sport2Go © All rights reserved.',
+    
+    // Prevozi / Rides
+    ridesTitle: 'Rides',
+    ridesBanner: 'Find or offer a ride to the game.',
+    noRidesYet: 'Currently no rides offered or requested.',
+    addRide: 'Add a Ride',
+    editRide: 'Save Ride Changes',
+    departure: 'Departure (Enter location)',
+    destination: 'Destination (Enter location)',
+    departureTime: 'Time of Departure',
+    distance: 'Distance',
+    duration: 'Estimated Time',
+    rideCommentPlaceholder: 'E.g. picking up at the bus station at 3PM, please be on time...',
+    routePreview: 'Route Preview',
+    deleteRideTooltip: 'Delete this ride',
+    editRideTooltip: 'Edit ride',
+    deleteRideConfirmTitle: 'Delete Ride',
+    deleteRideConfirmDesc: 'Are you sure you want to delete this ride? This action cannot be undone.',
   };
 
 export default en;
