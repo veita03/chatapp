@@ -329,8 +329,11 @@ export default function ChatTeamPage() {
                  const target = document.getElementById(`msg-${pinnedMessage._id}`);
                  if (target) {
                    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                   target.classList.add('ring-2', 'ring-[#dba032]', 'animate-pulse');
-                   setTimeout(() => target.classList.remove('ring-2', 'ring-[#dba032]', 'animate-pulse'), 1500);
+                   target.style.transition = 'opacity 0.3s ease-in-out, transform 0.3s ease';
+                   target.classList.add('opacity-50', 'scale-[0.98]');
+                   setTimeout(() => {
+                      target.classList.remove('opacity-50', 'scale-[0.98]');
+                   }, 300);
                  }
                }}
           >
