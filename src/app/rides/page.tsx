@@ -52,7 +52,7 @@ export default function RidesPage() {
       <div className="h-[100px] md:h-[60px]" />
 
       {/* Banner */}
-      <div className="w-full" style={{background: 'linear-gradient(90deg, #eeaf53 0%, #edca78 50%, #ecdf9b 100%)'}}>
+      <div className="w-full" style={{background: '#f4c361'}}>
         <div className="max-w-6xl mx-auto px-4 sm:px-8 py-5 flex items-center space-x-3">
            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-7 h-7 text-white/90">
              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v1.365m12 0v5.625" />
@@ -97,15 +97,15 @@ export default function RidesPage() {
                     <div key={ride._id} className="flex flex-col sm:flex-row sm:items-center bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-[#eeb054]/50 transition-colors shadow-sm group">
                         
                         {/* Driver Profile Style matches Team Image style */}
-                        <div className="w-full sm:w-40 h-32 sm:h-28 bg-[#fdfaf1] flex flex-col items-center justify-center shrink-0 border-b sm:border-b-0 sm:border-r border-gray-100 p-2">
+                        <div className="w-full sm:w-40 h-24 sm:h-28 bg-[#fdfaf1] flex flex-col items-center justify-center shrink-0 border-b sm:border-b-0 sm:border-r border-gray-100 px-2 py-3">
                            {ride.authorImage ? (
-                              <img src={ride.authorImage} alt="Voznik" className="w-[60px] h-[60px] rounded-full object-cover shadow-sm mb-2 ring-2 ring-white" />
+                              <img src={ride.authorImage} alt="Voznik" className="w-[52px] h-[52px] rounded-full object-cover shadow-sm mb-1.5 ring-2 ring-white" />
                            ) : (
-                              <div className="w-[60px] h-[60px] rounded-full bg-slate-200 flex flex-col items-center justify-center text-slate-400 mb-2 ring-2 ring-white">
-                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clipRule="evenodd" /></svg>
+                              <div className="w-[52px] h-[52px] rounded-full bg-slate-200 flex flex-col items-center justify-center text-slate-400 mb-1.5 ring-2 ring-white">
+                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clipRule="evenodd" /></svg>
                               </div>
                            )}
-                           <span className="text-xs font-bold text-gray-700 text-center w-full px-1 truncate leading-tight dark:text-gray-800">{ride.authorName}</span>
+                           <span className="text-[11px] font-bold text-gray-700 text-center w-full px-1 truncate leading-tight dark:text-gray-800 tracking-tight">{ride.authorName}</span>
                         </div>
                         
                         {/* Details */}

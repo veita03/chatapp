@@ -214,7 +214,7 @@ export default function EditRidePage() {
       <Header />
       <div className="h-[100px] md:h-[60px]" />
 
-       <div className="w-full" style={{background: 'linear-gradient(90deg, #eeaf53 0%, #edca78 50%, #ecdf9b 100%)'}}>
+       <div className="w-full" style={{background: '#f4c361'}}>
          <div className="max-w-6xl mx-auto px-4 sm:px-8 py-5 flex items-center space-x-3">
            <button onClick={() => router.back()} className="text-white hover:bg-white/20 p-2 rounded-lg transition-colors mr-2">
              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
@@ -310,7 +310,7 @@ export default function EditRidePage() {
                  <button
                    type="submit"
                    disabled={isSubmitting || !departureLat || !destinationLat}
-                   className="px-6 py-3 bg-gradient-to-r from-[#eeaf53] to-[#edca78] text-white font-bold rounded-lg hover:from-[#e5a040] hover:to-[#e4bf64] transition-all shadow-md active:scale-95 disabled:opacity-50 flex items-center space-x-2"
+                   className="px-6 py-3 bg-[#5BA582] text-white font-bold rounded-lg hover:bg-[#4b8a6a] transition-all shadow-md active:scale-95 disabled:opacity-50 flex items-center space-x-2"
                  >
                    {isSubmitting ? (
                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -339,7 +339,7 @@ export default function EditRidePage() {
                  </div>
                )}
                
-               <div className="rounded-xl overflow-hidden shadow-inner border border-gray-200 bg-gray-100" style={{height: 400}}>
+               <div className="rounded-xl overflow-hidden shadow-inner border border-gray-200 bg-gray-100" style={{height: '100%'}}>
                  <GoogleMap
                    mapContainerStyle={{ width: '100%', height: '100%' }}
                    center={departureLat && departureLng ? { lat: departureLat, lng: departureLng } : defaultCenter}
