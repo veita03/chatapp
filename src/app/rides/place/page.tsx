@@ -9,7 +9,7 @@ import { translations } from "@/app/i18n";
 import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from "@react-google-maps/api";
-import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from "react-google-places-autocomplete";
+import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 
 const libraries: "places"[] = ["places"];
 
@@ -34,22 +34,22 @@ export default function RidesPlacePage() {
   
   const [selectedRide, setSelectedRide] = useState<any | null>(null);
 
-  // Focus map on selected address
+  // Focus map on selected address using PlacesService instead of Geocoder
   useEffect(() => {
-    if (searchValue && searchValue.label) {
-      geocodeByAddress(searchValue.label)
-        .then(results => getLatLng(results[0]))
-        .then(({ lat, lng }) => {
-          setMapCenter({ lat, lng });
-          setMapZoom(12); // Zoom in on the specific city/place
-        })
-        .catch(error => console.error("Error geocoding:", error));
+    if (searchValue && searchValue.value && searchValue.value.place_id && window.google) {
+      const service = new window.google.maps.places.PlacesService(document.createElement('div'));
+      service.getDetails({ placeId: searchValue.value.place_id }, (place, status) => {
+        if (status === window.google.maps.places.PlacesServiceStatus.OK && place && place.geometry && place.geometry.location) {
+          setMapCenter({ lat: place.geometry.location.lat(), lng: place.geometry.location.lng() });
+          setMapZoom(13); // Zoom in closer
+        }
+      });
     }
   }, [searchValue]);
 
   const mapContainerStyle = {
     width: "100%",
-    height: "calc(100vh - 160px)"
+    height: "100%"
   };
 
   const formatTime = (ts: number) => {
@@ -60,14 +60,14 @@ export default function RidesPlacePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F6F8] font-sans flex flex-col relative pb-0">
+    <div className="min-h-screen bg-[#F4F6F8] font-sans flex flex-col relative pb-0 overflow-hidden">
       <Head>
         <title>{t.searchByLocation || 'Išči po lokaciji'} | Sport2Go</title>
       </Head>
       <Header />
-      <div className="h-[100px] md:h-[60px]" />
+      <div className="h-[100px] md:h-[60px] shrink-0" />
 
-      <div className="w-full flex-grow flex flex-col relative h-[calc(100vh-60px)]">
+      <div className="w-full flex-grow flex flex-col relative h-[calc(100vh-100px)] md:h-[calc(100vh-60px)]">
         {/* Search Header Overlay */}
         <div className="absolute top-4 left-0 right-0 z-10 px-4 md:px-0 flex justify-center pointer-events-none">
            <div className="w-full max-w-2xl bg-white rounded-xl shadow-xl border border-gray-100 p-3 flex flex-col pointer-events-auto">
@@ -142,6 +142,9 @@ export default function RidesPlacePage() {
                 <Marker
                   key={ride._id}
                   position={{ lat: ride.destinationLat, lng: ride.destinationLng }}
+                  onMouseOver={() => {
+                    setSelectedRide(ride);
+                  }}
                   onClick={() => {
                     setSelectedRide(ride);
                     setMapCenter({ lat: ride.destinationLat, lng: ride.destinationLng });
@@ -187,12 +190,21 @@ export default function RidesPlacePage() {
                       <div className="font-bold text-[#5BA582] truncate" title={selectedRide.destination}>Do: {selectedRide.destination.split(',')[0]}</div>
                     </div>
 
-                    <button 
-                      onClick={() => router.push(`/rides/${selectedRide._id}`)}
-                      className="mt-3 w-full bg-[#5BA582] hover:bg-[#4a8a6c] text-white py-1.5 rounded text-xs font-bold transition-colors"
-                    >
-                       Pregled podrobnosti
-                    </button>
+                    <div className="mt-3 flex gap-2">
+                      <button 
+                        onClick={() => router.push(`/rides/${selectedRide._id}`)}
+                        className="flex-1 bg-white border border-[#5BA582] hover:bg-gray-50 text-[#5BA582] py-1.5 rounded text-xs font-bold transition-colors"
+                      >
+                         Podrobnosti
+                      </button>
+                      <button 
+                        onClick={() => router.push(`/rides/${selectedRide._id}`)}
+                        className="flex-1 bg-[#5BA582] hover:bg-[#4a8a6c] text-white py-1.5 rounded text-xs font-bold transition-colors flex items-center justify-center gap-1"
+                      >
+                         Prijava
+                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3"><path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+                      </button>
+                    </div>
                   </div>
                 </InfoWindow>
               )}
