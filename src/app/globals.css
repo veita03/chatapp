@@ -86,3 +86,11 @@ body {
     @apply px-6 py-2.5 rounded-lg border border-gray-200 text-gray-600 font-bold hover:bg-gray-50 transition-colors;
   }
 }
+
+/* Maps InfoWindow Fixes */
+.gm-style-iw button:focus,
+.gm-ui-hover-effect:focus,
+.gm-style-iw-c button:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
