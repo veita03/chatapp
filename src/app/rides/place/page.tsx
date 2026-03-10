@@ -69,47 +69,47 @@ export default function RidesPlacePage() {
 
       <div className="w-full flex-grow flex flex-col relative h-[calc(100vh-100px)] md:h-[calc(100vh-60px)]">
         {/* Search Header Overlay */}
-        <div className="absolute top-4 left-0 right-0 z-10 px-4 md:px-0 flex justify-center pointer-events-none">
-           <div className="w-full max-w-2xl bg-white rounded-xl shadow-xl border border-gray-100 p-3 flex flex-col pointer-events-auto">
-              <div className="flex items-center gap-3 mb-2">
-                 <button 
-                   onClick={() => router.push('/rides')}
-                   className="p-2 bg-gray-50 text-gray-500 rounded-lg hover:bg-gray-100 transition-colors shrink-0"
-                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
-                 </button>
-                 <h1 className="text-lg font-bold text-gray-800" style={{fontFamily: 'var(--font-montserrat)'}}>
-                    {t.searchByLocation || 'Search Rides by Location'}
-                 </h1>
-              </div>
+        <div className="absolute top-0 left-0 right-0 z-10 w-full bg-white border-b border-gray-200 shadow-sm p-3 flex flex-col pointer-events-auto">
+           <div className="flex items-center gap-3 mb-2 max-w-6xl mx-auto w-full px-2">
+              <button 
+                onClick={() => router.push('/rides')}
+                className="p-1 px-2.5 bg-gray-50 text-gray-500 rounded-md border border-gray-200 hover:bg-gray-100 transition-colors shrink-0 flex items-center justify-center"
+              >
+                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
+              </button>
+              <h1 className="text-lg font-bold text-gray-800" style={{fontFamily: 'var(--font-montserrat)'}}>
+                 {t.searchByLocation || 'Search Rides by Location'}
+              </h1>
+           </div>
 
-              {isLoaded ? (
-                 <div className="w-full relative">
-                    <GooglePlacesAutocomplete
-                      apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
-                      selectProps={{
-                        value: searchValue,
-                        onChange: setSearchValue,
-                        placeholder: t.destination || "Vnesite mesto ali lokacijo...",
-                        isClearable: true,
-                        styles: {
-                          control: (provided) => ({
-                            ...provided,
-                            borderRadius: '0.5rem',
-                            border: '1px solid #e2e8f0',
-                            minHeight: '44px',
-                            boxShadow: 'none',
-                            '&:hover': {
-                              borderColor: '#cbd5e1'
-                            }
-                          }),
-                        }
-                      }}
-                    />
-                 </div>
-              ) : (
-                <div className="h-11 bg-gray-100 animate-pulse rounded-lg w-full"></div>
-              )}
+           <div className="max-w-6xl mx-auto w-full px-2">
+             {isLoaded ? (
+                <div className="w-full relative shadow-sm rounded-lg">
+                   <GooglePlacesAutocomplete
+                     apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
+                     selectProps={{
+                       value: searchValue,
+                       onChange: setSearchValue,
+                       placeholder: t.destination || "Vnesite mesto ali lokacijo...",
+                       isClearable: true,
+                       styles: {
+                         control: (provided) => ({
+                           ...provided,
+                           borderRadius: '0.5rem',
+                           border: '1px solid #e2e8f0',
+                           minHeight: '48px',
+                           boxShadow: 'none',
+                           '&:hover': {
+                             borderColor: '#cbd5e1'
+                           }
+                         }),
+                       }
+                     }}
+                   />
+                </div>
+             ) : (
+               <div className="h-12 bg-gray-100 animate-pulse rounded-lg w-full"></div>
+             )}
            </div>
         </div>
 
@@ -170,39 +170,45 @@ export default function RidesPlacePage() {
                     pixelOffset: new window.google.maps.Size(0, -40),
                   }}
                 >
-                  <div className="p-1 max-w-[200px] md:max-w-xs font-sans">
+                  <div className="p-2 max-w-[280px] sm:max-w-sm font-sans w-full min-w-[240px]">
                     <div className="flex items-center gap-2 mb-2">
                        {selectedRide.authorImage ? (
-                         <img src={selectedRide.authorImage} alt="a" className="w-8 h-8 rounded-full border border-gray-200" />
+                         <img src={selectedRide.authorImage} alt="a" className="w-9 h-9 rounded-full border border-gray-200 shadow-sm" />
                        ) : (
-                         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#5BA582] to-[#4a8a6c] flex items-center justify-center text-white font-bold text-xs ring-2 ring-white">
+                         <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#5BA582] to-[#4a8a6c] flex items-center justify-center text-white font-bold text-[13px] ring-2 ring-white shadow-sm">
                             {selectedRide.authorName?.charAt(0).toUpperCase()}
                          </div>
                        )}
                        <div>
-                          <p className="text-sm font-bold text-gray-800 leading-tight">{selectedRide.authorName}</p>
-                          <p className="text-[10px] text-gray-500 font-semibold">{formatTime(selectedRide.departureTime)}</p>
+                          <p className="text-[15px] font-bold text-gray-800 leading-tight">{selectedRide.authorName}</p>
+                          <p className="text-[11px] text-gray-500 font-semibold">{formatTime(selectedRide.departureTime)}</p>
                        </div>
                     </div>
                     
-                    <div className="mt-2 text-xs text-gray-700 bg-gray-50 rounded p-2 border border-gray-100">
-                      <div className="font-bold text-gray-900 truncate" title={selectedRide.departure}>Od: {selectedRide.departure.split(',')[0]}</div>
-                      <div className="font-bold text-[#5BA582] truncate" title={selectedRide.destination}>Do: {selectedRide.destination.split(',')[0]}</div>
+                    <div className="mt-2.5 text-xs text-gray-700 bg-gray-50 rounded-lg p-2.5 border border-gray-100">
+                      <div className="font-bold text-gray-800 truncate mb-1" title={selectedRide.departure}>
+                        <span className="text-slate-400 font-semibold text-[10px] uppercase tracking-wider mr-1">Od:</span> 
+                        {selectedRide.departure.split(',')[0]}
+                      </div>
+                      <div className="font-bold text-[#5BA582] truncate" title={selectedRide.destination}>
+                        <span className="text-[#5BA582]/70 font-semibold text-[10px] uppercase tracking-wider mr-1">Do:</span> 
+                        {selectedRide.destination.split(',')[0]}
+                      </div>
                     </div>
 
                     <div className="mt-3 flex gap-2">
                       <button 
                         onClick={() => router.push(`/rides/${selectedRide._id}`)}
-                        className="flex-1 bg-white border border-[#5BA582] hover:bg-gray-50 text-[#5BA582] py-1.5 rounded text-xs font-bold transition-colors"
+                        className="flex-1 bg-white border border-[#4a8a6c] hover:bg-gray-50 text-[#4a8a6c] py-2 rounded text-[13px] font-bold transition-colors shadow-sm"
                       >
                          Podrobnosti
                       </button>
                       <button 
                         onClick={() => router.push(`/rides/${selectedRide._id}`)}
-                        className="flex-1 bg-[#5BA582] hover:bg-[#4a8a6c] text-white py-1.5 rounded text-xs font-bold transition-colors flex items-center justify-center gap-1"
+                        className="flex-1 bg-[#5BA582] hover:bg-[#4a8a6c] text-white py-2 rounded text-[13px] font-bold transition-colors shadow-sm flex items-center justify-center gap-1.5"
                       >
                          Prijava
-                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3"><path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
                       </button>
                     </div>
                   </div>
