@@ -29,7 +29,7 @@ export default function CreateRidePage() {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
     libraries,
-    language: "sl", // Enforce Slovenian labels
+    language: currentLang,
   });
 
   const [map, setMap] = useState<google.maps.Map | null>(null);

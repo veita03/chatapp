@@ -23,6 +23,7 @@ export default function RideDetailsPage() {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
     libraries,
+    language: language,
   });
 
   const [directionsResponse, setDirectionsResponse] = useState<google.maps.DirectionsResult | null>(null);
