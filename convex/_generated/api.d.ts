@@ -11,6 +11,7 @@
 import type * as auth from "../auth.js";
 import type * as http from "../http.js";
 import type * as messages from "../messages.js";
+import type * as rides from "../rides.js";
 import type * as seed from "../seed.js";
 import type * as teams from "../teams.js";
 import type * as users from "../users.js";
@@ -25,6 +26,7 @@ declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   http: typeof http;
   messages: typeof messages;
+  rides: typeof rides;
   seed: typeof seed;
   teams: typeof teams;
   users: typeof users;

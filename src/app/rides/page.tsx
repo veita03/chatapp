@@ -2,7 +2,8 @@
 
 import Header from "@/components/Header";
 import { useRouter } from "next/navigation";
-import { useLanguage } from "@/app/i18n/LanguageProvider";
+import { useLanguage } from "@/components/LanguageContext";
+import { translations } from "@/app/i18n";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { useState } from "react";
@@ -10,7 +11,8 @@ import Head from "next/head";
 
 export default function RidesPage() {
   const router = useRouter();
-  const { t } = useLanguage();
+  const { language: currentLang } = useLanguage();
+  const t = translations[currentLang];
   const rides = useQuery(api.rides.getRides);
   const deleteRide = useMutation(api.rides.deleteRide);
   

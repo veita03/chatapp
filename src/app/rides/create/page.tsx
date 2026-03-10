@@ -3,9 +3,10 @@
 import { useState, useRef, useCallback } from "react";
 import Header from "@/components/Header";
 import { useRouter } from "next/navigation";
-import { useLanguage } from "@/app/i18n/LanguageProvider";
+import { useLanguage } from "@/components/LanguageContext";
 import { GoogleMap, useJsApiLoader, DirectionsRenderer, Autocomplete } from "@react-google-maps/api";
 import { useMutation } from "convex/react";
+import { translations } from "@/app/i18n";
 import { api } from "../../../../convex/_generated/api";
 import Head from "next/head";
 
@@ -21,7 +22,8 @@ const libraries: ("places" | "geometry")[] = ["places"];
 
 export default function CreateRidePage() {
   const router = useRouter();
-  const { t } = useLanguage();
+  const { language: currentLang } = useLanguage();
+  const t = translations[currentLang];
   const createRide = useMutation(api.rides.createRide);
   
   const { isLoaded } = useJsApiLoader({

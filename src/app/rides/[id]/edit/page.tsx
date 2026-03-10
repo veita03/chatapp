@@ -3,9 +3,10 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import Header from "@/components/Header";
 import { useRouter, useParams } from "next/navigation";
-import { useLanguage } from "@/app/i18n/LanguageProvider";
+import { useLanguage } from "@/components/LanguageContext";
 import { GoogleMap, useJsApiLoader, DirectionsRenderer, Autocomplete } from "@react-google-maps/api";
 import { useMutation, useQuery } from "convex/react";
+import { translations } from "@/app/i18n";
 import { api } from "../../../../../convex/_generated/api";
 import Head from "next/head";
 
@@ -17,7 +18,8 @@ export default function EditRidePage() {
   const { id } = useParams();
   const rideId = typeof id === "string" ? id : id?.[0];
   
-  const { t } = useLanguage();
+  const { language: currentLang } = useLanguage();
+  const t = translations[currentLang];
   const ride = useQuery(api.rides.getRide, rideId ? { id: rideId as any } : "skip");
   const updateRide = useMutation(api.rides.updateRide);
   
