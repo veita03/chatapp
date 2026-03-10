@@ -94,10 +94,10 @@ export default function RidesPage() {
            ) : (
              <div className="space-y-4">
                  {rides.map((ride) => (
-                    <div key={ride._id} className="flex flex-col sm:flex-row sm:items-center bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-[#eeb054]/50 transition-colors shadow-sm group">
+                    <div key={ride._id} className="flex flex-col sm:flex-row bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-[#eeb054]/50 transition-colors shadow-sm group">
                         
                         {/* Driver Profile Style matches Team Image style */}
-                        <div className="w-full sm:w-40 h-24 sm:h-28 bg-[#fdfaf1] flex flex-col items-center justify-center shrink-0 border-b sm:border-b-0 sm:border-r border-gray-100 px-2 py-3">
+                        <div className="w-full sm:w-40 min-h-[96px] bg-[#fdfaf1] flex flex-col items-center justify-center shrink-0 border-b sm:border-b-0 sm:border-r border-gray-100 p-4">
                            {ride.authorImage ? (
                               <img src={ride.authorImage} alt="Voznik" className="w-[52px] h-[52px] rounded-full object-cover shadow-sm mb-1.5 ring-2 ring-white" />
                            ) : (
