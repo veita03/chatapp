@@ -177,8 +177,8 @@ export default function CreateRidePage() {
       <Header />
       <div className="h-[100px] md:h-[60px]" />
 
-       <div className="w-full" style={{background: '#5BA582'}}>
-         <div className="max-w-4xl mx-auto px-4 sm:px-8 py-5 flex items-center space-x-3">
+       <div className="w-full" style={{background: 'linear-gradient(90deg, #eeaf53 0%, #edca78 50%, #ecdf9b 100%)'}}>
+         <div className="max-w-6xl mx-auto px-4 sm:px-8 py-5 flex items-center space-x-3">
            <button onClick={() => router.back()} className="text-white hover:bg-white/20 p-2 rounded-lg transition-colors mr-2">
              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
            </button>
@@ -188,7 +188,7 @@ export default function CreateRidePage() {
          </div>
        </div>
 
-       <div className="max-w-3xl mx-auto w-full px-4 sm:px-8 mt-8 flex flex-col gap-8">
+       <div className="max-w-6xl mx-auto w-full px-4 sm:px-8 mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
           
           <div className="ui-card p-6 md:p-8">
              <form onSubmit={handleSubmit} className="space-y-6">
@@ -272,7 +272,7 @@ export default function CreateRidePage() {
                  <button
                    type="submit"
                    disabled={isSubmitting || !departureLat || !destinationLat}
-                   className="px-6 py-3 bg-[#5BA582] text-white font-bold rounded-lg hover:bg-[#4b8a6a] transition-all shadow-md active:scale-95 disabled:opacity-50 flex items-center space-x-2"
+                   className="px-6 py-3 bg-gradient-to-r from-[#eeaf53] to-[#edca78] text-white font-bold rounded-lg hover:from-[#e5a040] hover:to-[#e4bf64] transition-all shadow-md active:scale-95 disabled:opacity-50 flex items-center space-x-2"
                  >
                    {isSubmitting ? (
                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
