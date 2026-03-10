@@ -54,6 +54,8 @@ export default function EditRidePage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
 
+  const onMapLoad = useCallback((m: google.maps.Map) => setMap(m), []);
+
   const calculateRoute = async (
     originStr: string, destStr: string,
     orgLat: number, orgLng: number,
@@ -342,7 +344,7 @@ export default function EditRidePage() {
                    mapContainerStyle={{ width: '100%', height: '100%' }}
                    center={departureLat && departureLng ? { lat: departureLat, lng: departureLng } : defaultCenter}
                    zoom={12}
-                   onLoad={useCallback((m: google.maps.Map) => setMap(m), [])}
+                   onLoad={onMapLoad}
                    options={{
                      disableDefaultUI: true,
                      zoomControl: true,
