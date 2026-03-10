@@ -189,3 +189,62 @@ export const seedChat = mutation({
     return { success: true, teamId };
   }
 });
+
+export const seedRides = mutation({
+  args: {},
+  handler: async (ctx) => {
+    // Get users
+    const users = await ctx.db.query("users").collect();
+    if (users.length === 0) {
+      throw new Error("No users found");
+    }
+
+    const u1 = users[0]?._id;
+    const u2 = users[1]?._id || u1;
+    const u3 = users[2]?._id || u1;
+
+    // Ride 1: Ljudski vrt to Štuk
+    await ctx.db.insert("rides", {
+      authorId: u1,
+      departure: "Mladinska ulica 29, 2000 Maribor", // Ljudski vrt
+      departureLat: 46.5625,
+      departureLng: 15.6394,
+      destination: "Gosposvetska cesta 83, 2000 Maribor", // Štuk
+      destinationLat: 46.5620,
+      destinationLng: 15.6263,
+      departureTime: Date.now() + 1000 * 60 * 60 * 24 * 2, // 2 days from now
+      distanceText: "1,5 km",
+      durationText: "4 min",
+      comment: "Grem na štuk na eno pijačo prej."
+    });
+
+    // Ride 2: Europark to UŠC Leon Štukelj
+    await ctx.db.insert("rides", {
+      authorId: u2,
+      departure: "Pobreška cesta 18, 2000 Maribor", // Europark
+      departureLat: 46.5564,
+      departureLng: 15.6517,
+      destination: "Koroška cesta 130, 2000 Maribor", // UŠC Leon Štukelj
+      destinationLat: 46.5604,
+      destinationLng: 15.6223,
+      departureTime: Date.now() + 1000 * 60 * 60 * 24 * 3, // 3 days from now
+      distanceText: "2,8 km",
+      durationText: "8 min",
+      comment: "Pobiram pred glavnim vhodom v Europark."
+    });
+
+    // Ride 3: UKC Maribor to NK Maribor Tabor
+    await ctx.db.insert("rides", {
+      authorId: u3,
+      departure: "Ljubljanska ulica 5, 2000 Maribor", // UKC Maribor
+      departureLat: 46.5522,
+      departureLng: 15.6421,
+      destination: "Engelsova ulica 6, 2000 Maribor", // NK Maribor Tabor
+      destinationLat: 46.5458,
+      destinationLng: 15.6345,
+      departureTime: Date.now() + 1000 * 60 * 60 * 12, // 12 hours from now
+      distanceText: "2,1 km",
+      durationText: "6 min",
+    });
+  }
+});

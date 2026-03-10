@@ -109,13 +109,37 @@ export default function RidesPage() {
                         </div>
                         
                         {/* Details */}
-                        <div className="p-5 flex-1 flex flex-col justify-center items-center sm:items-start text-center sm:text-left">
-                           <h3 className="text-base sm:text-lg font-bold text-gray-800 tracking-wide flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                               <span className="text-gray-600 truncate" title={ride.departure}>{ride.departure.split(',').slice(0, 2).join(', ')}</span>
-                               <span className="hidden sm:inline-block"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-gray-400"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg></span>
-                               <span className="sm:hidden text-gray-400 my-1"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 mx-auto transform rotate-90"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg></span>
-                               <span className="text-gray-800 truncate" title={ride.destination}>{ride.destination.split(',').slice(0, 2).join(', ')}</span>
-                           </h3>
+                        <div className="p-5 flex-1 flex flex-col justify-center items-center sm:items-start text-center sm:text-left min-w-0">
+                           <div className="w-full flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 min-w-0 justify-center sm:justify-start">
+                               
+                               {/* Departure */}
+                               <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-1.5 min-w-0 max-w-full justify-center sm:justify-start">
+                                   <span className="text-gray-800 font-bold text-base sm:text-lg truncate block" title={ride.departure}>
+                                       {ride.departure.split(',')[0]}
+                                   </span>
+                                   {ride.departure.split(',')[1] && (
+                                       <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200 truncate shrink-0 max-w-[120px] sm:max-w-[150px]" title={ride.departure.split(',')[1].trim()}>
+                                           {ride.departure.split(',')[1].trim()}
+                                       </span>
+                                   )}
+                               </div>
+
+                               <span className="hidden sm:inline-block shrink-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-gray-400"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg></span>
+                               <span className="sm:hidden text-gray-400 my-1 shrink-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 mx-auto transform rotate-90"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg></span>
+                               
+                               {/* Destination */}
+                               <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-1.5 min-w-0 max-w-full justify-center sm:justify-start">
+                                   <span className="text-gray-800 font-bold text-base sm:text-lg truncate block" title={ride.destination}>
+                                       {ride.destination.split(',')[0]}
+                                   </span>
+                                   {ride.destination.split(',')[1] && (
+                                       <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200 truncate shrink-0 max-w-[120px] sm:max-w-[150px]" title={ride.destination.split(',')[1].trim()}>
+                                           {ride.destination.split(',')[1].trim()}
+                                       </span>
+                                   )}
+                               </div>
+
+                           </div>
                            
                            <div className="flex flex-wrap items-center justify-center sm:justify-start mt-3 gap-2">
                                 <span className="inline-flex items-center text-xs font-bold text-gray-600 bg-gray-50 px-2.5 py-1 rounded-md border border-gray-200">
