@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import Head from "next/head";
 import Header from "@/components/Header";
 import { useLanguage } from "@/components/LanguageContext";
+import { translations } from "@/app/i18n";
 import { GoogleMap, useJsApiLoader, DirectionsRenderer } from '@react-google-maps/api';
 
 const libraries: "places"[] = ["places"];
@@ -14,7 +15,8 @@ const libraries: "places"[] = ["places"];
 export default function RideDetailsPage() {
   const { id } = useParams();
   const router = useRouter();
-  const { t } = useLanguage();
+  const { language } = useLanguage();
+  const t = translations[language];
   
   const ride = useQuery(api.rides.getRide, id ? { id: id as any } : "skip");
   
