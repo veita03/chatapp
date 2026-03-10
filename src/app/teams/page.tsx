@@ -133,9 +133,9 @@ export default function TeamsPage() {
                           </div>
                        )}
                      </div>
-                     <div className="p-5 flex-1 flex flex-col justify-center">
+                     <div className="p-5 flex-1 flex flex-col justify-center items-center sm:items-start text-center sm:text-left">
                        <h3 className="text-lg font-bold text-gray-800 tracking-wide" style={{fontFamily: 'var(--font-montserrat)'}}>{team.name}</h3>
-                       <div className="flex flex-wrap items-center mt-2 space-x-2">
+                       <div className="flex flex-wrap items-center justify-center sm:justify-start mt-3 gap-2">
                           <span className="inline-flex items-center text-xs font-bold text-[#eeb054] bg-[#fdfaf1] px-2.5 py-1 rounded-md border border-[#f3ebcd]">
                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5 mr-1"><path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" /></svg>
                              {getMembersText(team.memberCount)}
@@ -145,35 +145,35 @@ export default function TeamsPage() {
                              {team.seasonCount} {team.seasonCount === 1 ? t.seasonCountSingle : t.seasonCountPlural}
                           </span>
                           {team.userRole === "admin" && (
-                            <span className="inline-flex items-center text-xs font-bold text-white bg-gray-600 px-2.5 py-1 rounded-md shadow-sm">
+                            <span className="inline-flex items-center text-xs font-bold text-indigo-500 bg-indigo-50 border border-indigo-100 px-2.5 py-1 rounded-md shadow-sm">
                                {t.superAdmin}
                             </span>
                           )}
                        </div>
                      </div>
-                     <div className="p-4 sm:p-5 flex flex-wrap gap-2.5 items-center justify-start sm:border-l border-gray-100 bg-gray-50/50 sm:bg-transparent rounded-b-xl sm:rounded-none w-full sm:w-auto">
+                     <div className="p-4 sm:p-5 flex flex-wrap gap-2.5 items-center justify-center sm:justify-start sm:border-l border-gray-100 bg-gray-50/50 sm:bg-transparent rounded-b-xl sm:rounded-none w-full sm:w-auto">
                         <button 
                           onClick={() => router.push(`/chat/${team._id}`)}
-                          className="px-4 py-2 border border-[#5BA582]/30 text-[#5BA582] font-bold text-sm bg-white rounded-lg hover:bg-[#5BA582]/10 transition-colors flex items-center justify-center space-x-2 whitespace-nowrap grow sm:grow-0"
+                          title="Klepet"
+                          className="w-10 h-10 border border-[#5BA582]/30 text-[#5BA582] bg-white rounded-lg hover:bg-[#5BA582]/10 transition-colors flex items-center justify-center flex-shrink-0"
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" /></svg>
-                          <span>Klepet</span>
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" /></svg>
                         </button>
-                        <button className="px-4 py-2 border border-[#f3ebcd] text-[#dba032] font-bold text-sm bg-white rounded-lg hover:bg-[#fdfaf1] transition-colors whitespace-nowrap grow sm:grow-0">
+                        <button className="h-10 px-4 border border-[#f3ebcd] text-[#dba032] font-bold text-sm bg-white rounded-lg hover:bg-[#fdfaf1] transition-colors whitespace-nowrap grow sm:grow-0">
                           {t.viewSeasons}
                         </button>
-                        <div className="flex gap-2.5 ml-auto sm:ml-0">
+                        <div className="flex gap-2.5">
                           <button 
                             onClick={() => router.push(`/teams/${team._id}/edit`)}
                             title={t.editTeamTooltip}
-                            className="p-2 border border-gray-200 text-gray-500 hover:text-gray-700 bg-white rounded-lg hover:bg-gray-50 transition-colors flex-shrink-0"
+                            className="w-10 h-10 border border-gray-200 text-gray-500 hover:text-gray-700 bg-white rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center flex-shrink-0"
                           >
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4"><path d="M2.695 14.763l-1.262 3.152a.5.5 0 00.65.65l3.151-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" /></svg>
                           </button>
                           <button 
                             onClick={() => setTeamToDelete(team._id)}
                             title={t.deleteTeamTooltip}
-                            className="p-2 border border-red-100 text-red-400 hover:text-red-500 bg-red-50 hover:bg-red-100 rounded-lg transition-colors flex-shrink-0"
+                            className="w-10 h-10 border border-red-100 text-red-400 hover:text-red-500 bg-red-50 hover:bg-red-100 rounded-lg transition-colors flex items-center justify-center flex-shrink-0"
                           >
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4"><path fillRule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z" clipRule="evenodd" /></svg>
                           </button>
