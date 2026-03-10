@@ -188,7 +188,7 @@ export default function CreateRidePage() {
          </div>
        </div>
 
-       <div className="max-w-4xl mx-auto w-full px-4 sm:px-8 mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
+       <div className="max-w-3xl mx-auto w-full px-4 sm:px-8 mt-8 flex flex-col gap-8">
           
           <div className="ui-card p-6 md:p-8">
              <form onSubmit={handleSubmit} className="space-y-6">
