@@ -27,6 +27,7 @@ export default function ChatTeamPage() {
   const currentUser = useQuery(api.users.current, isAuthenticated ? {} : "skip");
   const currentTeam = useQuery(api.teams.getTeam, { teamId });
   const participantsList = useQuery(api.teams.getTeamParticipants, { teamId });
+  const pinnedMessage = useQuery(api.messages.getPinnedMessage, { teamId });
   const router = useRouter();
 
   const { language: currentLang } = useLanguage();
@@ -296,11 +297,45 @@ export default function ChatTeamPage() {
           </div>
         </div>
         
+        {/* Pinned Message Sticky Bar */}
+        {pinnedMessage && (
+          <div className="absolute top-14 left-0 right-0 bg-white/95 backdrop-blur-md border-b border-gray-200 z-10 w-full shadow-sm cursor-pointer hover:bg-white transition-colors"
+               onClick={() => {
+                 // smooth scroll to the pinned message if it's already rendered
+                 const target = document.getElementById(`msg-${pinnedMessage._id}`);
+                 if (target) {
+                   target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                   target.classList.add('ring-2', 'ring-[#dba032]', 'animate-pulse');
+                   setTimeout(() => target.classList.remove('ring-2', 'ring-[#dba032]', 'animate-pulse'), 1500);
+                 }
+               }}
+          >
+            <div className="max-w-6xl mx-auto w-full px-5 py-2 flex items-center justify-between space-x-3">
+              <div className="flex items-center space-x-3 truncate">
+                <div className="text-[10px] bg-[#dba032]/10 text-[#dba032] font-bold px-2 py-1 rounded inline-flex items-center shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3"><path d="M9.813 5.146a.5.5 0 01.708 0l3.333 3.333a.5.5 0 010 .708L10.5 12.541V16.5a.5.5 0 01-1 0v-3.959L6.146 9.187a.5.5 0 010-.708l3.333-3.333a.5.5 0 01.334-.146z" /></svg>
+                </div>
+                <div className="flex flex-col truncate">
+                   <div className="text-[10px] font-bold text-gray-500 uppercase">{pinnedMessage.author}</div>
+                   <div className="text-xs text-gray-700 truncate font-semibold">
+                      {pinnedMessage.type === 'poll' ? `Anketa: ${pinnedMessage.pollData?.question}` : 
+                       pinnedMessage.type === 'location' ? 'Deli lokacijo' : 
+                       pinnedMessage.text}
+                   </div>
+                </div>
+              </div>
+              <button onClick={(e) => { e.stopPropagation(); togglePin({ messageId: pinnedMessage._id }); }} className="text-gray-400 hover:text-gray-700 shrink-0 p-1">
+                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Messages */}
         <main 
           ref={scrollContainerRef}
           onScroll={handleScroll}
-          className="flex-1 overflow-y-auto space-y-5 relative bg-[#F4F6F8] pt-14 pb-4 flex flex-col"
+          className={`flex-1 overflow-y-auto space-y-5 relative bg-[#F4F6F8] ${pinnedMessage ? 'pt-28' : 'pt-14'} pb-4 flex flex-col`}
         >
           <div className="max-w-6xl mx-auto w-full px-4 md:px-6 flex flex-col space-y-4 pt-4 mt-auto">
           {messagesPaginated?.isDone === false && messages.length > 0 && (
@@ -345,7 +380,7 @@ export default function ChatTeamPage() {
             const reactionEntries = Object.entries(msg.reactions || {});
 
             return (
-              <div key={msg._id} className="flex flex-col space-y-2 relative" onClick={() => activeReactionMessageId === msg._id && setActiveReactionMessageId(null)}>
+              <div key={msg._id} id={`msg-${msg._id}`} className="flex flex-col space-y-2 relative" onClick={() => activeReactionMessageId === msg._id && setActiveReactionMessageId(null)}>
                 {showDateSeparator && (
                   <div className="flex justify-center mt-2 mb-4">
                     <span className="bg-gray-200/60 text-gray-500 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">
@@ -354,15 +389,7 @@ export default function ChatTeamPage() {
                   </div>
                 )}
                 
-                {isPinned && (
-                  <div className="flex justify-center mb-1">
-                     <span className="text-[10px] bg-[#dba032]/10 text-[#dba032] font-bold px-2 py-0.5 rounded flex items-center">
-                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3 mr-1"><path d="M9.813 5.146a.5.5 0 01.708 0l3.333 3.333a.5.5 0 010 .708L10.5 12.541V16.5a.5.5 0 01-1 0v-3.959L6.146 9.187a.5.5 0 010-.708l3.333-3.333a.5.5 0 01.334-.146z" /></svg>
-                       Pripeto sporočilo
-                     </span>
-                  </div>
-                )}
-                
+
                 <div className={`flex ${isMe ? "justify-end" : "justify-start"} items-end space-x-2 animate-in fade-in slide-in-from-bottom-2 duration-300 w-full mb-2`}>
                   {!isMe && (
                     <div className="w-8 h-8 rounded-full bg-gray-200 flex-shrink-0 flex items-center justify-center shadow-sm border border-gray-300 overflow-hidden mb-5">

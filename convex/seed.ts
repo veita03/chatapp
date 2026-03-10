@@ -41,10 +41,10 @@ export const seedChat = mutation({
 
     // 3. Create a Team
     const teamId = await ctx.db.insert("teams", {
-      name: "Torkov Fuzbal - Test",
-      sport: "football",
-      desc: "Zbiramo se ob torkih na ožeti travi.",
-      image: "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?q=80&w=200&auto=format&fit=crop",
+      name: "Košarka Sreda (Test)",
+      sport: "basketball",
+      desc: "Zbiramo se v dvorani na srednješolskem centru.",
+      image: "https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=200&auto=format&fit=crop",
       joinCode: "TST123",
       creatorId: aljosa._id,
     });
@@ -105,10 +105,10 @@ export const seedChat = mutation({
            text: "Anketa o pivu",
            type: "poll",
            pollData: {
-             question: "Kdo prinese pivo po tekmi?",
+             question: "Koga čakamo za ekipo?",
              options: [
                { id: "o1", text: "Jaz (Aljoša)", votes: ["Aljoša", "Marko Novak"] },
-               { id: "o2", text: "Luka se je javil", votes: ["Luka Dončič", "Rok Z."] }
+               { id: "o2", text: "Luka pride kasneje", votes: ["Luka Dončič", "Rok Z."] }
              ]
            },
            reactions: [{ emoji: "👍", users: ["Rok Z."] }],
@@ -119,7 +119,7 @@ export const seedChat = mutation({
            teamId,
            author: u.name || "Neznanec",
            authorImage: u.image,
-           text: `Se vidimo jutri na igrišču! (Sporočilo ${i + 16})`,
+           text: `Jutri ob 18h dvorana. Pridite prej! (Sporočilo ${i + 16})`,
            _creationTime: baseTimeDay2 + (i * 120000), // 2 minutes apart
          });
        }

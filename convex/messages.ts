@@ -168,3 +168,22 @@ export const deleteMessage = mutation({
     await ctx.db.delete(args.messageId);
   },
 });
+
+export const getPinnedMessage = query({
+  args: {
+    teamId: v.optional(v.id("teams")),
+  },
+  handler: async (ctx, args) => {
+    if (!args.teamId) return null;
+    
+    // Fetch all pinned messages for the team and return the latest one
+    const pinnedMessages = await ctx.db
+      .query("messages")
+      .withIndex("by_team", (q) => q.eq("teamId", args.teamId))
+      .filter((q) => q.eq(q.field("isPinned"), true))
+      .order("desc")
+      .first();
+
+    return pinnedMessages;
+  },
+});
