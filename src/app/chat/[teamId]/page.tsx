@@ -4,7 +4,7 @@ import { useQuery, useMutation } from "convex/react";
 import { useConvexAuth } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import Header from "../../../components/Header";
 
 import { useRouter, useParams } from 'next/navigation';
@@ -51,12 +51,35 @@ export default function ChatTeamPage() {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLElement>(null);
+  const prevScrollHeightRef = useRef<number>(0);
+  const prevMessagesLengthRef = useRef<number>(0);
+  
   const [hasUnread, setHasUnread] = useState(false);
   const [lastSeenMessageId, setLastSeenMessageId] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState<number>(0);
 
   // Active message for reactions long-press/click
   const [activeReactionMessageId, setActiveReactionMessageId] = useState<Id<"messages"> | null>(null);
+
+  useLayoutEffect(() => {
+    if (messages) {
+      if (
+        messages.length > prevMessagesLengthRef.current && 
+        prevScrollHeightRef.current > 0
+      ) {
+        const container = scrollContainerRef.current;
+        if (container) {
+          const diff = container.scrollHeight - prevScrollHeightRef.current;
+          // Adjust scroll if we were at the top grabbing history
+          if (container.scrollTop < 10) {
+             container.scrollTop = diff;
+          }
+        }
+      }
+      prevMessagesLengthRef.current = messages.length;
+      prevScrollHeightRef.current = 0; // reset
+    }
+  }, [messages]);
 
   // Modals state
   const [isParticipantsModalOpen, setIsParticipantsModalOpen] = useState(false);
@@ -96,6 +119,7 @@ export default function ChatTeamPage() {
 
     // Load more if we hit top
     if (container.scrollTop === 0 && messagesPaginated?.isDone === false) {
+       prevScrollHeightRef.current = container.scrollHeight;
        setLimit(prev => prev + 30);
     }
 
