@@ -111,10 +111,10 @@ export default function RidesPage() {
                         {/* Details */}
                         <div className="p-5 flex-1 flex flex-col justify-center items-center sm:items-start text-center sm:text-left">
                            <h3 className="text-base sm:text-lg font-bold text-gray-800 tracking-wide flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                               <span className="text-gray-600 truncate break-words" title={ride.departure}>{ride.departure.split(',')[0]}</span>
+                               <span className="text-gray-600 truncate" title={ride.departure}>{ride.departure.split(',').slice(0, 2).join(', ')}</span>
                                <span className="hidden sm:inline-block"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-gray-400"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg></span>
                                <span className="sm:hidden text-gray-400 my-1"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 mx-auto transform rotate-90"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg></span>
-                               <span className="text-gray-800 truncate break-words" title={ride.destination}>{ride.destination.split(',')[0]}</span>
+                               <span className="text-gray-800 truncate" title={ride.destination}>{ride.destination.split(',').slice(0, 2).join(', ')}</span>
                            </h3>
                            
                            <div className="flex flex-wrap items-center justify-center sm:justify-start mt-3 gap-2">
