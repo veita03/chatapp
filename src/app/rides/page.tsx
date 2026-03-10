@@ -94,7 +94,11 @@ export default function RidesPage() {
            ) : (
              <div className="space-y-4">
                  {rides.map((ride) => (
-                    <div key={ride._id} className="flex flex-col sm:flex-row bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-[#eeb054]/50 transition-colors shadow-sm group">
+                    <div 
+                        key={ride._id} 
+                        onClick={() => router.push(`/rides/${ride._id}`)}
+                        className="flex flex-col sm:flex-row bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-[#eeb054]/50 transition-colors shadow-sm group cursor-pointer"
+                    >
                         
                         {/* Driver Profile Style matches Team Image style */}
                         <div className="w-full sm:w-40 min-h-[96px] bg-[#fdfaf1] flex flex-col items-center justify-center shrink-0 border-b sm:border-b-0 sm:border-r border-gray-100 p-4">
@@ -113,27 +117,27 @@ export default function RidesPage() {
                            <div className="w-full flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 min-w-0 justify-center sm:justify-start">
                                
                                {/* Departure */}
-                               <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-1.5 min-w-0 max-w-full justify-center sm:justify-start">
-                                   <span className="text-gray-800 font-bold text-base sm:text-lg truncate block" title={ride.departure}>
+                               <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 min-w-0 max-w-full justify-center sm:justify-start">
+                                   <span className="text-gray-800 font-bold text-sm sm:text-base truncate block" title={ride.departure}>
                                        {ride.departure.split(',')[0]}
                                    </span>
                                    {ride.departure.split(',')[1] && (
-                                       <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200 truncate shrink-0 max-w-[120px] sm:max-w-[150px]" title={ride.departure.split(',')[1].trim()}>
+                                       <span className="text-[10px] sm:text-[11px] font-semibold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200 truncate shrink-0 max-w-[120px] sm:max-w-[150px]" title={ride.departure.split(',')[1].trim()}>
                                            {ride.departure.split(',')[1].trim()}
                                        </span>
                                    )}
                                </div>
 
-                               <span className="hidden sm:inline-block shrink-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-gray-400"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg></span>
-                               <span className="sm:hidden text-gray-400 my-1 shrink-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 mx-auto transform rotate-90"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg></span>
+                               <span className="hidden sm:inline-block shrink-0 px-0.5"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-gray-400"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg></span>
+                               <span className="sm:hidden text-gray-400 my-0.5 shrink-0"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 mx-auto transform rotate-90"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg></span>
                                
                                {/* Destination */}
-                               <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-1.5 min-w-0 max-w-full justify-center sm:justify-start">
-                                   <span className="text-gray-800 font-bold text-base sm:text-lg truncate block" title={ride.destination}>
+                               <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 min-w-0 max-w-full justify-center sm:justify-start">
+                                   <span className="text-gray-800 font-bold text-sm sm:text-base truncate block" title={ride.destination}>
                                        {ride.destination.split(',')[0]}
                                    </span>
                                    {ride.destination.split(',')[1] && (
-                                       <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200 truncate shrink-0 max-w-[120px] sm:max-w-[150px]" title={ride.destination.split(',')[1].trim()}>
+                                       <span className="text-[10px] sm:text-[11px] font-semibold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200 truncate shrink-0 max-w-[120px] sm:max-w-[150px]" title={ride.destination.split(',')[1].trim()}>
                                            {ride.destination.split(',')[1].trim()}
                                        </span>
                                    )}
@@ -150,21 +154,37 @@ export default function RidesPage() {
                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5 mr-1"><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" /></svg>
                                    {ride.distanceText || '? km'}
                                 </span>
-                                <span className="inline-flex items-center text-xs font-bold text-[#eeb054] bg-[#fdfaf1] px-2.5 py-1 rounded-md border border-[#f3ebcd]">
-                                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5 mr-1"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
-                                   {ride.durationText || '? min'}
-                                </span>
+                                 <span className="inline-flex items-center text-xs font-bold text-[#eeb054] bg-[#fdfaf1] px-2.5 py-1 rounded-md border border-[#f3ebcd]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5 mr-1"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                                    {ride.durationText || '? min'}
+                                 </span>
+                                 
+                                 {ride.comment && (
+                                    <div className="relative group/tooltip flex items-center justify-center ml-1">
+                                      <button 
+                                        onClick={(e) => e.stopPropagation()}
+                                        className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-100 text-slate-500 hover:bg-[#eeb054] hover:text-white transition-colors"
+                                      >
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z" /></svg>
+                                      </button>
+                                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2.5 bg-gray-900 text-white text-xs rounded-lg opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all z-10 shadow-lg text-center font-medium">
+                                        "{ride.comment}"
+                                        {/* Little triangle arrow pointing down */}
+                                        <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
+                                      </div>
+                                    </div>
+                                 )}
                            </div>
                            
-                           {ride.comment && (
-                               <p className="mt-3 text-sm text-gray-500 italic truncate w-full max-w-sm sm:max-w-md" title={ride.comment}>"{ride.comment}"</p>
-                           )}
                         </div>
                         
                         {/* Actions aligned like Teams */}
                         <div className="p-4 sm:p-5 flex flex-wrap gap-2.5 items-center justify-center sm:justify-start sm:border-l border-gray-100 bg-gray-50/50 sm:bg-transparent rounded-b-xl sm:rounded-none w-full sm:w-auto">
                            {ride.authorId !== currentUser?._id && (
-                             <button className="h-10 px-4 border border-[#5BA582]/30 text-[#5BA582] font-bold text-sm bg-white rounded-lg hover:bg-[#5BA582]/10 transition-colors whitespace-nowrap md:min-w-[120px]">
+                             <button 
+                               onClick={(e) => e.stopPropagation()}
+                               className="h-10 px-4 border border-[#5BA582]/30 text-[#5BA582] font-bold text-sm bg-white rounded-lg hover:bg-[#5BA582]/10 transition-colors whitespace-nowrap md:min-w-[120px]"
+                             >
                                Pošlji sporočilo
                              </button>
                            )}
@@ -172,14 +192,14 @@ export default function RidesPage() {
                            {ride.authorId === currentUser?._id && (
                               <div className="flex gap-2.5">
                                 <button 
-                                  onClick={() => router.push(`/rides/${ride._id}/edit`)}
+                                  onClick={(e) => { e.stopPropagation(); router.push(`/rides/${ride._id}/edit`); }}
                                   title={t.editRideTooltip}
                                   className="w-10 h-10 border border-gray-200 text-gray-500 hover:text-gray-700 bg-white rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center flex-shrink-0"
                                 >
                                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4"><path d="M2.695 14.763l-1.262 3.152a.5.5 0 00.65.65l3.151-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" /></svg>
                                 </button>
                                 <button 
-                                  onClick={() => setRideToDelete(ride._id)}
+                                  onClick={(e) => { e.stopPropagation(); setRideToDelete(ride._id); }}
                                   title={t.deleteRideTooltip}
                                   className="w-10 h-10 border border-red-100 text-red-400 hover:text-red-500 bg-red-50 hover:bg-red-100 rounded-lg transition-colors flex items-center justify-center flex-shrink-0"
                                 >

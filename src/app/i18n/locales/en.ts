@@ -123,7 +123,7 @@ const en = {
     
     // Prevozi / Rides
     ridesTitle: 'Rides',
-    ridesBanner: 'Find or offer a ride to the game.',
+    ridesBanner: 'Find or offer a ride to the game',
     noRidesYet: 'Currently no rides offered or requested.',
     addRide: 'Add a Ride',
     editRide: 'Save Ride Changes',

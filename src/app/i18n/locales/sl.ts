@@ -123,7 +123,7 @@ const sl = {
     
     // Prevozi / Rides
     ridesTitle: 'Prevozi',
-    ridesBanner: 'Poišči ali ponudi prevoz na tekmo.',
+    ridesBanner: 'Poišči ali ponudi prevoz na tekmo',
     noRidesYet: 'Trenutno ni nobenega iskanega ali ponujenega prevoza.',
     addRide: 'Dodaj prevoz',
     editRide: 'Zapiši spremembe prevoza',
