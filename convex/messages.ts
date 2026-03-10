@@ -1,22 +1,23 @@
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
+import { paginationOptsValidator } from "convex/server";
 
 export const get = query({
   args: {
     teamId: v.optional(v.id("teams")),
+    paginationOpts: paginationOptsValidator,
   },
   handler: async (ctx, args) => {
-    // Fetch most recent 50 messages
-    let q = ctx.db.query("messages").order("desc");
-    
-    // If we're inside a team dashboard, only get team messages.
-    // If we don't pass a teamId, we fetch only the global "general" messages.
-    const results = await q.take(50);
-    
     if (args.teamId) {
-      return results.filter(m => m.teamId === args.teamId);
+      return await ctx.db.query("messages")
+        .withIndex("by_team", q => q.eq("teamId", args.teamId))
+        .order("desc")
+        .paginate(args.paginationOpts);
     } else {
-      return results.filter(m => !m.teamId);
+      return await ctx.db.query("messages")
+        .filter(q => q.eq(q.field("teamId"), undefined))
+        .order("desc")
+        .paginate(args.paginationOpts);
     }
   },
 });
@@ -102,5 +103,54 @@ export const votePoll = mutation({
         options: newOptions,
       },
     });
+  },
+});
+
+export const toggleReaction = mutation({
+  args: {
+    messageId: v.id("messages"),
+    emoji: v.string(),
+    author: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const message = await ctx.db.get(args.messageId);
+    if (!message) throw new Error("Sporočilo ne obstaja.");
+
+    const currentReactions = message.reactions || [];
+    const existingIndex = currentReactions.findIndex(r => r.emoji === args.emoji);
+    let newReactions = [...currentReactions];
+
+    if (existingIndex >= 0) {
+      const users = currentReactions[existingIndex].users;
+      if (users.includes(args.author)) {
+        // Remove user
+        const newUsers = users.filter(u => u !== args.author);
+        if (newUsers.length === 0) {
+          newReactions.splice(existingIndex, 1);
+        } else {
+          newReactions[existingIndex] = { emoji: args.emoji, users: newUsers };
+        }
+      } else {
+        // Add user
+        newReactions[existingIndex] = { emoji: args.emoji, users: [...users, args.author] };
+      }
+    } else {
+      // Add new emoji entry
+      newReactions.push({ emoji: args.emoji, users: [args.author] });
+    }
+
+    await ctx.db.patch(args.messageId, { reactions: newReactions.length > 0 ? newReactions : undefined });
+  },
+});
+
+export const togglePin = mutation({
+  args: {
+    messageId: v.id("messages"),
+  },
+  handler: async (ctx, args) => {
+    const message = await ctx.db.get(args.messageId);
+    if (!message) throw new Error("Sporočilo ne obstaja.");
+
+    await ctx.db.patch(args.messageId, { isPinned: !message.isPinned });
   },
 });

@@ -93,3 +93,12 @@ export const generateNextJoinCode = mutation({
     return code;
   }
 });
+
+export const updatePresence = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) return; // Do nothing if not logged in
+    await ctx.db.patch(userId, { lastSeen: Date.now() });
+  }
+});

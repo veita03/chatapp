@@ -92,8 +92,8 @@ export default function ProfilePage() {
         gender: gender || undefined,
         image: selectedAvatar || undefined,
       });
-      // On success, go to chat
-      router.push("/chat");
+      // On success, go to teams
+      router.push("/teams");
     } catch (err: unknown) {
       console.error(err);
       setError("Prišlo je do napake pri shranjevanju.");
@@ -176,7 +176,7 @@ export default function ProfilePage() {
       <Header />
 
       {/* spacer to ignore absolute header */}
-      <div className="h-[110px] md:h-[60px]" />
+      <div className="h-[100px] md:h-[60px]" />
 
       {/* Title block */}
       <div className="w-full" style={{background: '#f4c361'}}>

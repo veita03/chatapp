@@ -19,6 +19,7 @@ export default defineSchema({
     gender: v.optional(v.string()), // 'male', 'female', etc.
     isProfileComplete: v.optional(v.boolean()),
     nextSeasonJoinCode: v.optional(v.string()), // Used to statically persist the join code during team creation
+    lastSeen: v.optional(v.number()), // For online presence indicator
   }).index("email", ["email"]).index("phone", ["phone"]),
   messages: defineTable({
     teamId: v.optional(v.id("teams")), // Added for per-team scoping
@@ -44,7 +45,16 @@ export default defineSchema({
         lng: v.number(),
       })
     ),
-  }),
+    reactions: v.optional(
+      v.array(
+        v.object({
+          emoji: v.string(),
+          users: v.array(v.string()),
+        })
+      )
+    ),
+    isPinned: v.optional(v.boolean()),
+  }).index("by_team", ["teamId"]),
 
   teams: defineTable({
     name: v.string(),

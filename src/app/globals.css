@@ -25,6 +25,17 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+@layer base {
+  button,
+  [role="button"],
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"],
+  a {
+    cursor: pointer;
+  }
+}
+
 @keyframes slideInRightRotate {
   from {
     opacity: 0;

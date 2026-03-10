@@ -129,6 +129,54 @@ export const createTeam = mutation({
   },
 });
 
+export const getTeamParticipants = query({
+  args: {
+    teamId: v.id("teams"),
+  },
+  handler: async (ctx, args) => {
+    // 1. Get all memberships for the team
+    const memberships = await ctx.db
+      .query("memberships")
+      .withIndex("by_team", (q) => q.eq("teamId", args.teamId))
+      .collect();
+
+    // 2. Extract unique user IDs
+    const uniqueUserIds = Array.from(new Set(memberships.map((m) => m.userId)));
+
+    // 3. Fetch user details
+    const participants = await Promise.all(
+      uniqueUserIds.map(async (uid) => {
+        const user = await ctx.db.get(uid);
+        if (!user) return null;
+        
+        // Find their highest role in the team (if they have admin in any season/team level)
+        const userMemberships = memberships.filter(m => m.userId === uid);
+        const isAdmin = userMemberships.some(m => m.role === "admin");
+        
+        // Get name
+        const name = user.name || user.email?.split("@")[0] || "Uporabnik";
+        
+        return {
+          _id: user._id,
+          name,
+          image: user.image,
+          role: isAdmin ? "admin" : "player",
+          lastSeen: user.lastSeen
+        };
+      })
+    );
+
+    // Filter out nulls and sort (admins first, then alphabetically)
+    return participants
+      .filter((p) => p !== null)
+      .sort((a, b) => {
+        if (a!.role === "admin" && b!.role !== "admin") return -1;
+        if (a!.role !== "admin" && b!.role === "admin") return 1;
+        return a!.name.localeCompare(b!.name);
+      });
+  },
+});
+
 export const getUserTeams = query({
   args: {},
   handler: async (ctx) => {
@@ -170,17 +218,39 @@ export const getUserTeams = query({
         const userMem = members.find(m => m.userId === userId && m.role === "admin");
         const role = userMem ? "admin" : "player";
 
+        // Fetch last message for the inbox preview
+        const lastMessage = await ctx.db
+          .query("messages")
+          .withIndex("by_team", (q) => q.eq("teamId", tId))
+          .order("desc")
+          .first();
+
         return {
           ...team,
           memberCount: uniqueMemberIds.size,
           seasonCount: seasons.length,
           userRole: role,
+          lastMessage: lastMessage ? {
+             text: lastMessage.text,
+             author: lastMessage.author,
+             creationTime: lastMessage._creationTime,
+             type: lastMessage.type,
+          } : null,
         };
       })
     );
 
     // Filter out nulls if team was deleted externally
-    return teamsWithDetails.filter((t) => t !== null);
+    const filteredTeams = teamsWithDetails.filter((t) => t !== null) as NonNullable<typeof teamsWithDetails[0]>[];
+
+    // Sort by latest message descending. If no message, push to the bottom based on creationTime of the team itself.
+    filteredTeams.sort((a, b) => {
+      const timeA = a.lastMessage ? a.lastMessage.creationTime : a._creationTime;
+      const timeB = b.lastMessage ? b.lastMessage.creationTime : b._creationTime;
+      return timeB - timeA; // Descending
+    });
+
+    return filteredTeams;
   },
 });
 
