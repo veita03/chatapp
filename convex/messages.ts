@@ -154,3 +154,17 @@ export const togglePin = mutation({
     await ctx.db.patch(args.messageId, { isPinned: !message.isPinned });
   },
 });
+
+export const deleteMessage = mutation({
+  args: {
+    messageId: v.id("messages"),
+  },
+  handler: async (ctx, args) => {
+    // Check if message exists
+    const message = await ctx.db.get(args.messageId);
+    if (!message) throw new Error("Sporočilo ne obstaja.");
+
+    // Delete message
+    await ctx.db.delete(args.messageId);
+  },
+});

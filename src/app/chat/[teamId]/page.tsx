@@ -21,6 +21,7 @@ export default function ChatTeamPage() {
   const votePoll = useMutation(api.messages.votePoll);
   const toggleReaction = useMutation(api.messages.toggleReaction);
   const togglePin = useMutation(api.messages.togglePin);
+  const deleteMessage = useMutation(api.messages.deleteMessage);
   const updatePresence = useMutation(api.users.updatePresence);
 
   const currentUser = useQuery(api.users.current, isAuthenticated ? {} : "skip");
@@ -249,6 +250,13 @@ export default function ChatTeamPage() {
     setActiveReactionMessageId(null);
   };
 
+  const handleDeleteMessage = async (messageId: Id<"messages">) => {
+    if (window.confirm("Res želite izbrisati to sporočilo?")) {
+      await deleteMessage({ messageId });
+      setActiveReactionMessageId(null);
+    }
+  };
+
   if (isLoading || !isAuthenticated || (currentUser !== undefined && !currentUser?.isProfileComplete) || currentTeam === undefined || messages === undefined) {
     return (
       <div className="flex h-[100dvh] items-center justify-center bg-[#F4F6F8]">
@@ -295,10 +303,19 @@ export default function ChatTeamPage() {
           className="flex-1 overflow-y-auto space-y-5 relative bg-[#F4F6F8] pt-14 pb-4 flex flex-col"
         >
           <div className="max-w-6xl mx-auto w-full px-4 md:px-6 flex flex-col space-y-4 pt-4 mt-auto">
-          {messagesPaginated?.isDone === false && (
+          {messagesPaginated?.isDone === false && messages.length > 0 && (
              <div className="flex justify-center my-2 text-xs text-gray-400 animate-pulse">Nalagam starejša sporočila...</div>
           )}
-          {messages.slice().reverse().map((msg, index, arr) => {
+          {messages.length === 0 && (
+            <div className="flex flex-col items-center justify-center space-y-4 text-center text-gray-400 h-full min-h-[50vh] animate-in fade-in duration-500">
+               <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-2">
+                 <span className="text-5xl">👋</span>
+               </div>
+               <h3 className="font-bold text-gray-700 text-lg">Tukaj je še čisto tiho...</h3>
+               <p className="text-sm max-w-xs">Bodi prvi in pošlji sporočilo, fotografijo ali anketo vaši ekipi!</p>
+            </div>
+          )}
+          {messages.length > 0 && messages.slice().reverse().map((msg, index, arr) => {
             const isMe = msg.author === author;
             const isPinned = msg.isPinned;
             
@@ -374,7 +391,10 @@ export default function ChatTeamPage() {
                           {["👍", "❤️", "😂", "😮", "😢", "😡"].map(emoji => (
                              <button key={emoji} onClick={(e) => { e.stopPropagation(); handleReaction(msg._id, emoji); }} className="text-xl hover:scale-125 transition-transform px-1 cursor-pointer">{emoji}</button>
                           ))}
-                          <button onClick={(e) => { e.stopPropagation(); togglePin({ messageId: msg._id }); setActiveReactionMessageId(null); }} className="text-gray-400 hover:text-gray-600 pl-2 border-l border-gray-100">📌</button>
+                          <button onClick={(e) => { e.stopPropagation(); togglePin({ messageId: msg._id }); setActiveReactionMessageId(null); }} className={`text-gray-400 hover:text-gray-600 px-2 border-l border-gray-100 ${isMe ? '' : 'pr-1'}`}>📌</button>
+                          {isMe && (
+                             <button onClick={(e) => { e.stopPropagation(); handleDeleteMessage(msg._id); }} className="text-red-400 hover:text-red-600 pl-2 border-l border-gray-100">🗑️</button>
+                          )}
                        </div>
                     )}
 
@@ -524,11 +544,11 @@ export default function ChatTeamPage() {
           </div>
 
           <div className="p-2 md:p-4 w-full">
-             <form onSubmit={handleSendMessage} className="flex items-center w-full max-w-6xl mx-auto space-x-2 relative">
+             <form onSubmit={handleSendMessage} className="flex items-center w-full max-w-6xl mx-auto gap-2 relative">
                 <button type="button" onClick={() => setIsQuickActionsOpen(!isQuickActionsOpen)} className={`p-2 rounded-full transition-colors flex-shrink-0 ${isQuickActionsOpen ? "bg-gray-100 text-[#5BA582]" : "text-gray-400 hover:text-[#5BA582]"}`}>
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className={`w-6 h-6 transition-transform ${isQuickActionsOpen ? "rotate-45" : ""}`}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
                 </button>
-                <input type="text" className="flex-1 bg-gray-50 text-gray-800 font-medium rounded-2xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#5BA582]/30 border border-gray-200 text-sm shadow-inner m-0" placeholder={t.send + "..."} value={newMessageText} onChange={e => setNewMessageText(e.target.value)} />
+                <input type="text" className="flex-1 bg-gray-50 text-gray-800 font-medium rounded-2xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#5BA582]/30 border border-gray-200 text-sm shadow-inner" placeholder={t.send + "..."} value={newMessageText} onChange={e => setNewMessageText(e.target.value)} />
                 <button type="submit" disabled={!newMessageText.trim()} className="bg-[#5BA582] text-white rounded-2xl w-10 h-10 transition-all disabled:opacity-40 flex-shrink-0 shadow-md flex items-center justify-center">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 -rotate-45 relative -left-0.5 -top-0.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
                 </button>
