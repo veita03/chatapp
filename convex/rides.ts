@@ -13,7 +13,15 @@ export const getRides = query({
     // Map authors for display
     const ridesWithAuthor = await Promise.all(
       rides.map(async (ride) => {
-        const author = await ctx.db.get(ride.authorId);
+        let author = null;
+        try {
+          if (ride.authorId) {
+            author = await ctx.db.get(ride.authorId);
+          }
+        } catch (e) {
+          console.error("Failed to fetch author for ride:", ride._id, e);
+        }
+        
         return {
           ...ride,
           authorName: author?.name || "Neznanec",

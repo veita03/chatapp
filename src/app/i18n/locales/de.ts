@@ -106,6 +106,7 @@ const de = {
     ridesTitle: 'Rides',
     ridesBanner: 'Find or offer a ride to the game',
     noRidesYet: 'Currently no rides offered or requested.',
+    searchByLocation: 'Search by location',
     addRide: 'Add a Ride',
     editRide: 'Save Ride Changes',
     departure: 'Departure (Enter location)',

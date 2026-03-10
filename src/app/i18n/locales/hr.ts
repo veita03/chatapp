@@ -106,6 +106,7 @@ const hr = {
     ridesTitle: 'Rides',
     ridesBanner: 'Find or offer a ride to the game',
     noRidesYet: 'Currently no rides offered or requested.',
+    searchByLocation: 'Pretraži po lokaciji',
     addRide: 'Add a Ride',
     editRide: 'Save Ride Changes',
     departure: 'Departure (Enter location)',

@@ -125,6 +125,7 @@ const sl = {
     ridesTitle: 'Prevozi',
     ridesBanner: 'Poišči ali ponudi prevoz na tekmo',
     noRidesYet: 'Trenutno ni nobenega iskanega ali ponujenega prevoza.',
+    searchByLocation: 'Išči po lokaciji',
     addRide: 'Dodaj prevoz',
     editRide: 'Zapiši spremembe prevoza',
     departure: 'Odhod (Vnesi lokacijo)',
