@@ -190,8 +190,8 @@ export default function CreateRidePage() {
 
        <div className="max-w-6xl mx-auto w-full px-4 sm:px-8 mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
           
-          <div className="ui-card p-6 md:p-8">
-             <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="ui-card p-6 md:p-8 flex flex-col h-full">
+             <form onSubmit={handleSubmit} className="space-y-6 flex flex-col flex-1">
                <div>
                  <label className="block text-sm font-bold text-gray-700 mb-2">{t.departure}</label>
                  <Autocomplete
@@ -261,7 +261,7 @@ export default function CreateRidePage() {
                  />
                </div>
 
-               <div className="pt-4 border-t border-gray-100 flex items-center justify-end space-x-4">
+               <div className="pt-4 border-t border-gray-100 flex items-center justify-end space-x-4 mt-auto">
                  <button
                    type="button"
                    onClick={() => router.back()}
@@ -285,10 +285,10 @@ export default function CreateRidePage() {
              </form>
           </div>
           
-          <div className="space-y-4">
-             <div className="ui-card p-4">
+          <div className="flex flex-col h-full">
+             <div className="ui-card p-4 flex flex-col flex-1">
                {distanceText && durationText && (
-                 <div className="flex bg-slate-50 border border-slate-100 rounded-xl p-4 justify-between items-center mb-4">
+                 <div className="flex bg-slate-50 border border-slate-100 rounded-xl p-4 justify-between items-center mb-4 shrink-0">
                    <div className="flex flex-col">
                       <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">{t.distance}</span>
                       <span className="text-xl font-black text-[#5BA582]">{distanceText}</span>
@@ -301,7 +301,7 @@ export default function CreateRidePage() {
                  </div>
                )}
                
-               <div className="rounded-xl overflow-hidden shadow-inner border border-gray-200 bg-gray-100" style={{height: 400}}>
+               <div className="rounded-xl overflow-hidden shadow-inner border border-gray-200 bg-gray-100 flex-1 min-h-[400px]">
                  <GoogleMap
                    mapContainerStyle={{ width: '100%', height: '100%' }}
                    center={defaultCenter}
