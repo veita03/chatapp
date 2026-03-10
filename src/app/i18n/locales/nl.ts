@@ -108,6 +108,24 @@ const nl = {
     errorEditingTeam: 'Fout bij bewerken team.',
     saveChangesBtn: 'Wijzigingen opslaan',
     
+    // Prevozi / Rides (Using English fallbacks for non-SI/EN languages)
+    ridesTitle: 'Rides',
+    ridesBanner: 'Find or offer a ride to the game',
+    noRidesYet: 'Currently no rides offered or requested.',
+    addRide: 'Add a Ride',
+    editRide: 'Save Ride Changes',
+    departure: 'Departure (Enter location)',
+    destination: 'Destination (Enter location)',
+    departureTime: 'Time of Departure',
+    distance: 'Distance',
+    duration: 'Estimated Time',
+    rideCommentPlaceholder: 'E.g. picking up at the bus station at 3PM, please be on time...',
+    routePreview: 'Route Preview',
+    deleteRideTooltip: 'Delete this ride',
+    editRideTooltip: 'Edit ride',
+    deleteRideConfirmTitle: 'Delete Ride',
+    deleteRideConfirmDesc: 'Are you sure you want to delete this ride? This action cannot be undone.',
+
     // Sports
     sports: {
       badminton: 'Badminton',

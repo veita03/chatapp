@@ -99,8 +99,27 @@ const fr = {
     editTeamData: 'Modifier les données de l\'équipe',
     teamDoesNotExist: 'L\'équipe n\'existe pas.',
     backToTeams: 'Retour aux équipes',
-    errorEditingTeam: 'Erreur lors de la modification.',
+    errorEditingTeam: 'Erreur lors de la modification de l\'équipe.',
     saveChangesBtn: 'Enregistrer les modifications',
+    
+    // Prevozi / Rides
+    ridesTitle: 'Rides',
+    ridesBanner: 'Find or offer a ride to the game',
+    noRidesYet: 'Currently no rides offered or requested.',
+    addRide: 'Add a Ride',
+    editRide: 'Save Ride Changes',
+    departure: 'Departure (Enter location)',
+    destination: 'Destination (Enter location)',
+    departureTime: 'Time of Departure',
+    distance: 'Distance',
+    duration: 'Estimated Time',
+    rideCommentPlaceholder: 'E.g. picking up at the bus station at 3PM, please be on time...',
+    routePreview: 'Route Preview',
+    deleteRideTooltip: 'Delete this ride',
+    editRideTooltip: 'Edit ride',
+    deleteRideConfirmTitle: 'Delete Ride',
+    deleteRideConfirmDesc: 'Are you sure you want to delete this ride? This action cannot be undone.',
+
     rights: 'Sport2Go © Tous droits réservés.'
   };
 
