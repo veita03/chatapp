@@ -649,7 +649,7 @@ export default function ChatTeamPage() {
                   )}
 
                   <div 
-                     className={`group/msg flex flex-col relative max-w-[calc(100%-3.5rem)] md:max-w-[75%] ${isMe ? "items-end" : "items-start"}`}
+                     className={`group/msg flex flex-col relative max-w-[calc(100%-5rem)] md:max-w-[75%] ${isMe ? "items-end" : "items-start"}`}
                      onContextMenu={(e) => { e.preventDefault(); setActiveReactionMessageId(msg._id); }}
                   >
                     {!isMe && (
