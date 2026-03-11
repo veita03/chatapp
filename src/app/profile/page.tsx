@@ -139,7 +139,7 @@ export default function ProfilePage() {
     }
   }, [currentUser]);
 
-  const needsOtp = currentUser ? (currentUser.email && !currentUser.isAnonymous && !currentUser.emailVerificationTime) : false;
+  const needsOtp = currentUser ? (currentUser.email && !currentUser.isAnonymous && !currentUser.emailVerificationTime && !currentUser.isProfileComplete) : false;
 
   useEffect(() => {
     if (needsOtp && !otpSent) {

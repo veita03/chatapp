@@ -50,9 +50,9 @@ export const updateProfile = mutation({
     const user = await ctx.db.get(userId);
     if (!user) throw new Error("User not found");
 
-    // Check OTP if email is present and not verified
+    // Check OTP if email is present and not verified AND profile is not already complete
     const isEmailLogin = user.email && !user.isAnonymous;
-    const needsVerification = isEmailLogin && !user.emailVerificationTime;
+    const needsVerification = isEmailLogin && !user.emailVerificationTime && !user.isProfileComplete;
 
     if (needsVerification) {
       if (!args.otpCode || args.otpCode !== user.emailVerificationCode) {
