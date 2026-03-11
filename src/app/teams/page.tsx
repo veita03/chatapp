@@ -1,8 +1,8 @@
 "use client";
 
-import { useQuery, useMutation } from "convex/react";
+import { useQuery, useMutation, useConvexAuth } from "convex/react";
 import { api } from "../../../convex/_generated/api";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import { translations, Language } from "@/app/i18n";
@@ -15,6 +15,7 @@ const SPORTS = [
 
 export default function TeamsPage() {
   const router = useRouter();
+  const { isAuthenticated, isLoading: isAuthLoading } = useConvexAuth();
   const { language: currentLang } = useLanguage();
   const t = (translations[currentLang as Language] || translations.sl) as any;
   const teams = useQuery(api.teams.getUserTeams);
@@ -36,11 +37,28 @@ export default function TeamsPage() {
       setIsDeleting(false);
     }
   };
-
   const filteredTeams = teams?.filter(team => 
     team.name.toLowerCase().includes(filterQuery.toLowerCase()) || 
     team.sport.toLowerCase().includes(filterQuery.toLowerCase())
   );
+
+  useEffect(() => {
+    if (!isAuthLoading && !isAuthenticated) {
+      router.push("/");
+    }
+  }, [isAuthLoading, isAuthenticated, router]);
+
+  if (isAuthLoading || !isAuthenticated) {
+    return (
+      <div className="flex h-[100dvh] items-center justify-center bg-[#F4F6F8]">
+        <div className="animate-pulse flex space-x-3 items-center">
+          <div className="w-2.5 h-2.5 rounded-full bg-[#eeb054]/40"></div>
+          <div className="w-2.5 h-2.5 rounded-full bg-[#eeb054]/70"></div>
+          <div className="w-2.5 h-2.5 rounded-full bg-[#eeb054]"></div>
+        </div>
+      </div>
+    );
+  }
 
   // Helper for proper Slovenian grammatical pluralization of "members"
   const getMembersSlovenian = (count: number) => {

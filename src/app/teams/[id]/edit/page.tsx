@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation, useQuery } from "convex/react";
+import { useMutation, useQuery, useConvexAuth } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";
 import { useState, useEffect, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
@@ -35,6 +35,7 @@ const InfoTooltip = ({ text }: { text: string }) => (
 export default function EditTeamPage() {
   const router = useRouter();
   const params = useParams();
+  const { isAuthenticated, isLoading: isAuthLoading } = useConvexAuth();
   const { language: currentLang } = useLanguage();
   const t = (translations[currentLang as Language] || translations.sl) as any;
   
@@ -121,6 +122,24 @@ export default function EditTeamPage() {
       setIsSubmitting(false);
     }
   };
+
+  useEffect(() => {
+    if (!isAuthLoading && !isAuthenticated) {
+      router.push("/");
+    }
+  }, [isAuthLoading, isAuthenticated, router]);
+
+  if (isAuthLoading || !isAuthenticated) {
+    return (
+      <div className="flex h-[100dvh] items-center justify-center bg-[#F4F6F8]">
+        <div className="animate-pulse flex space-x-3 items-center">
+          <div className="w-2.5 h-2.5 rounded-full bg-[#eeb054]/40"></div>
+          <div className="w-2.5 h-2.5 rounded-full bg-[#eeb054]/70"></div>
+          <div className="w-2.5 h-2.5 rounded-full bg-[#eeb054]"></div>
+        </div>
+      </div>
+    );
+  }
 
   if (team === undefined) {
     return (
