@@ -4,7 +4,7 @@ import { useQuery, useMutation } from "convex/react";
 import { useConvexAuth } from "convex/react";
 import Header from "../../components/Header";
 import { api } from "../../../convex/_generated/api";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { translations, Language } from "../i18n";
@@ -141,8 +141,11 @@ export default function ProfilePage() {
 
   const needsOtp = currentUser ? (currentUser.email && !currentUser.isAnonymous && !currentUser.emailVerificationTime && !currentUser.isProfileComplete) : false;
 
+  const otpFiredRef = useRef(false);
+
   useEffect(() => {
-    if (needsOtp && !otpSent) {
+    if (needsOtp && !otpSent && !otpFiredRef.current) {
+      otpFiredRef.current = true;
       setOtpSent(true);
       generateOtp().catch(console.error);
     }
