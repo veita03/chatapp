@@ -136,10 +136,12 @@ export default function Header({ onLoginClick, onRegisterClick }: HeaderProps) {
         {isAuthenticated && (
           <div className="relative">
              <NavButton 
-               onClick={() => {
-                 signOut();
-                 router.push("/");
-               }} 
+               onClick={async () => {
+                 await signOut();
+                 if (pathname !== "/") {
+                   router.push("/");
+                 }
+               }}  
                text={(t as any).navLogout || "Odjava"}
                icon={
                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-[18px] h-[18px] md:w-[20px] md:h-[20px]">
