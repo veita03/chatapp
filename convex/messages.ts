@@ -1,6 +1,7 @@
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 import { paginationOptsValidator } from "convex/server";
+import { getAuthUserId } from "@convex-dev/auth/server";
 
 export const get = query({
   args: {
@@ -8,17 +9,40 @@ export const get = query({
     paginationOpts: paginationOptsValidator,
   },
   handler: async (ctx, args) => {
+    let result;
     if (args.teamId) {
-      return await ctx.db.query("messages")
+      result = await ctx.db.query("messages")
         .withIndex("by_team", q => q.eq("teamId", args.teamId))
         .order("desc")
         .paginate(args.paginationOpts);
     } else {
-      return await ctx.db.query("messages")
+      result = await ctx.db.query("messages")
         .filter(q => q.eq(q.field("teamId"), undefined))
         .order("desc")
         .paginate(args.paginationOpts);
     }
+
+    // Map over messages to join user profile data dynamically
+    const enrichedPage = await Promise.all(
+      result.page.map(async (msg) => {
+        if (msg.authorId) {
+          const user = await ctx.db.get(msg.authorId);
+          if (user) {
+            return {
+              ...msg,
+              author: user.name || user.email?.split("@")[0] || msg.author,
+              authorImage: user.image || msg.authorImage,
+            };
+          }
+        }
+        return msg;
+      })
+    );
+
+    return {
+      ...result,
+      page: enrichedPage,
+    };
   },
 });
 
@@ -49,10 +73,13 @@ export const send = mutation({
     ),
   },
   handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+
     // Insert a new message into the database
     await ctx.db.insert("messages", {
       text: args.text,
       author: args.author,
+      ...(userId && { authorId: userId }),
       ...(args.authorImage && { authorImage: args.authorImage }),
       ...(args.teamId && { teamId: args.teamId }),
       ...(args.type && { type: args.type }),
@@ -117,26 +144,27 @@ export const toggleReaction = mutation({
     if (!message) throw new Error("Sporočilo ne obstaja.");
 
     const currentReactions = message.reactions || [];
-    const existingIndex = currentReactions.findIndex(r => r.emoji === args.emoji);
-    let newReactions = [...currentReactions];
+    let newReactions = [];
 
-    if (existingIndex >= 0) {
-      const users = currentReactions[existingIndex].users;
-      if (users.includes(args.author)) {
-        // Remove user
-        const newUsers = users.filter(u => u !== args.author);
-        if (newUsers.length === 0) {
-          newReactions.splice(existingIndex, 1);
-        } else {
-          newReactions[existingIndex] = { emoji: args.emoji, users: newUsers };
-        }
-      } else {
-        // Add user
-        newReactions[existingIndex] = { emoji: args.emoji, users: [...users, args.author] };
-      }
-    } else {
-      // Add new emoji entry
-      newReactions.push({ emoji: args.emoji, users: [args.author] });
+    // First strip the user from any existing reactions to enforce 1 reaction per user
+    for (const r of currentReactions) {
+       const filteredUsers = r.users.filter(u => u !== args.author);
+       if (filteredUsers.length > 0) {
+          newReactions.push({ emoji: r.emoji, users: filteredUsers });
+       }
+    }
+
+    // Now figure out if we are toggling OFF the exact same emoji, or switching to it
+    const existingOldReaction = currentReactions.find(r => r.emoji === args.emoji && r.users.includes(args.author));
+    
+    // If they were NOT already reacting with THIS emoji, add it
+    if (!existingOldReaction) {
+       const targetIndex = newReactions.findIndex(r => r.emoji === args.emoji);
+       if (targetIndex >= 0) {
+          newReactions[targetIndex].users.push(args.author);
+       } else {
+          newReactions.push({ emoji: args.emoji, users: [args.author] });
+       }
     }
 
     await ctx.db.patch(args.messageId, { reactions: newReactions.length > 0 ? newReactions : undefined });

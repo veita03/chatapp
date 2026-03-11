@@ -155,8 +155,13 @@ export default function TeamsPage() {
                         <button 
                           onClick={() => router.push(`/chat/${team._id}`)}
                           title="Klepet"
-                          className="w-10 h-10 border border-[#5BA582]/30 text-[#5BA582] bg-white rounded-lg hover:bg-[#5BA582]/10 transition-colors flex items-center justify-center flex-shrink-0"
+                          className="relative w-10 h-10 border border-[#5BA582]/30 text-[#5BA582] bg-white rounded-lg hover:bg-[#5BA582]/10 transition-colors flex items-center justify-center flex-shrink-0"
                         >
+                          {(team as any).unreadCount > 0 && (
+                             <span className="absolute -top-1.5 -right-1.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 text-[9px] font-bold text-white shadow-sm ring-2 ring-white">
+                               {(team as any).unreadCount > 99 ? '99+' : (team as any).unreadCount}
+                             </span>
+                          )}
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" /></svg>
                         </button>
                         <button className="h-10 px-4 border border-[#f3ebcd] text-[#dba032] font-bold text-sm bg-white rounded-lg hover:bg-[#fdfaf1] transition-colors whitespace-nowrap grow sm:grow-0">

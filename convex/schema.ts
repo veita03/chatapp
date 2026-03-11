@@ -23,10 +23,11 @@ export default defineSchema({
   }).index("email", ["email"]).index("phone", ["phone"]),
   messages: defineTable({
     teamId: v.optional(v.id("teams")), // Added for per-team scoping
+    authorId: v.optional(v.id("users")), // Added to sync profile name changes dynamically
     author: v.string(),
     authorImage: v.optional(v.string()),
     text: v.string(),
-    type: v.optional(v.string()), // 'text', 'poll', 'location'
+    type: v.optional(v.string()), // 'text', 'poll', 'location', 'event'
     pollData: v.optional(
       v.object({
         question: v.string(),
@@ -43,6 +44,13 @@ export default defineSchema({
       v.object({
         lat: v.number(),
         lng: v.number(),
+      })
+    ),
+    eventData: v.optional(
+      v.object({
+        eventId: v.id("events"),
+        title: v.string(),
+        date: v.number(),      // timestamp
       })
     ),
     reactions: v.optional(
@@ -87,7 +95,8 @@ export default defineSchema({
     eventId: v.optional(v.id("events")),   // If set, they only RSVP'd to one specific event
     role: v.string(), // 'admin' | 'player'
     status: v.optional(v.string()), // 'active' | 'injured' | 'reserve'
-    attendance: v.optional(v.string()) // 'attending' | 'declined' | 'undecided' (for event-only logic)
+    attendance: v.optional(v.string()), // 'attending' | 'declined' | 'undecided' (for event-only logic)
+    lastReadTime: v.optional(v.number()) // Added for chat unread tracking
   })
     .index("by_user", ["userId"])
     .index("by_team", ["teamId"])

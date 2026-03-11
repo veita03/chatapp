@@ -1,56 +1,67 @@
-# MRAZ Chat Redesign Instructions
+# Povzetek zahtev za Chat (V3)
 
-The user provided extensive instructions regarding the Chat feature overhaul, heavily inspired by Viber. 
+- vse to glede chata navodila in ureditev si shrani v nek chat_instructions.md (tudi ta ves zapis kaj ti ga zdaj promptam da veš katere spremembe je vse potrehno urediti)
+UREJENO
 
-**UPDATE:** Below is the combined list of both initial requirements and the V2 feedback requested by the user.
+- nazadnje sva naredila da je chat vezan na vsako ekipo + globalni chat. urediva sedaj tako: globalnega chata ne potrebujem. mora pa biti torej vsaj ena ekipa da je vsaj en chat. globalni gre torej ven. 
+UREJENO
 
-## Core Requirements & Changes Needed
+- rad bi imel ločen pogovor ter seznam chatov/skupin kot je to razvidno na sliki iz primera iz vibera. vglavnem ni mi všeč da imam sidebar na telefonu in se mi zdi ta reštiev iz vibera super
+UREJENO
 
-1. **Remove Global Chat & Create Inbox View**
-   * The application must have at least one team to have a chat.
-   * Remove the current split-view (sidebar + chat on desktop) and instead implement a dedicated "Chats List" page (Inbox).
-   * Inside the list, show each team/chat, the last message text, and the date/time of the last message.
-   * Sort the list by the most recent message.
-   * **V2 Addition:** On the *Teams* page, add a link/icon to the specific chat for that team, and show unread message counts if possible.
+- ko se v chatu odpre ali ikone ali tista besedila (tretja slika), se prekrije zgoraj pogovor. to bi se moralo zamaknit če se razume
+UREJENO
 
-2. **Overall Layout & Width**
-   * **V2 Addition:** The main container width on the desktop Chat page is too narrow compared to the Teams page. The width MUST be identical to the center container on the Teams page.
-   * **V2 Addition:** On the desktop Chat view, there is a weird empty gap between the header and the chat content (likely because there is no subheader). The spacing must start immediately or match exactly the height from other pages.
+- na seznamu chatov se prikažejo glede na to v katerem je bila zadnja aktivnos + zadnje sporočilo (tako kot n sliki v viberu + datum zadnje objave) 
+UREJENO
 
-3. **Input UI & Overlap Issues**
-   * Currently, the Quick Actions menu (emoji/poll/location) overlays the messages. The messages should scroll up/shrink to accommodate the dynamic height of the quick actions.
-   * Sometimes the last message touches the floor or overlaps with the input bar/date. Fix the bottom padding/margin on the chat history container.
-   * On mobile, the input field (where you type) is too thick (too much padding). Make it leaner.
+- včasih se zgodi da je zadnje sporočilo čisto zabito v pod in se že dotika ali pa se celo prekriva datum s poljem za vnos besedila v chat (ta iz 3 slike)
+UREJENO
 
-4. **Message Reactions (Emoji Reactions)**
-   * Users should be able to long-press or click a message to leave a reaction (Heart, Laugh, Shocked, Sad, Angry, Thumbs Up).
+- rad bi da se lahko posamezne poste znotraj chata ali lajka smeji sad suprised (4 slika)
+UREJENO
 
-5. **Message Display (Authors)**
-   * **V2 Addition:** The user explicitly requested to see WHO wrote what. Ensure the author's name is clearly visible above their messages, along with the time and avatar.
+- super bi bilo če se lahko pri userih zabeleži če so online na chatu (če je to sploh mogoče)
+UREJENO
 
-6. **Polls UI Update**
-   * For polls, the main chat view should only show the option text and a total count/bar.
-   * Clicking an option should open a secondary view (modal/drawer) showing exactly who voted for what and at what time.
-   * **V2 Addition:** Change the color of the Poll icon to orange.
+- pri votih bi rad da se prikažejo in izpišejo tako kot na 5 in 6 sliki, torej pri anketi je samo votes pa koliko je katerih. ob kliku na posamezno opcijo se izpišejo dejanski voti za posamezno opcijo
+UREJENO
 
-7. **Pinning Messages**
-   * Admins should be able to pin a message.
-   * Pinned messages should be visually distinct (different background color) and likely stick to the top of the chat (or have a pinned indicator).
+- super bi bilo da lahko administrator pri keri objavi določi da jo pina na vrh + da bi ta objava bila obarvana z drugo barvo
+UREJENO
 
-8. **Unread Messages & Pagination**
-   * When entering a chat with e.g. 30 new messages, the view should snap to the **first unread message**, allowing the user to scroll down to read new ones.
-   * Currently, loading a chat downloads everything. Limit the initial fetch to the last 30 messages. If the user scrolls up, fetch the next batch (10-30 messages dynamically).
+- na mobitelih je mogoče vrstica za vnos teksta oz sporočil malenkost prevelika, morda prevelik paddingn a inputu
+UREJENO
 
-9. **Participants List**
-   * Add a way to view all participants in a team/chat (since they are automatically added when joining a team).
+- če se mi prikaže chat/skupina kjer je npr 30 novih sporočil me mora ob kliku vrečti na prvo neprebrano in nato lahko scrollam navzdol
+ZA PREVERIT
 
-10. **Online Status (Presence)**
-   * Implement an online indicator for users in the chat (if feasible with Convex). Keep it simple (e.g., a green dot next to their name or in the participants list).
+- ob prihodu na posamezni chat je težava če je noter ogromno sporočil in me pol zascrolla navzdol in traja, rad bi da se morda prikže zadnjih 30 sporočil, za ostalo pa se mora user pomakni oz zascrollat na vrh - takrt se mu morajo vse vsebine naložiti dinamično navzgor npr vsakič po 10-30 novih sporočil (ne vem kaj je najbolj primerno število)
+DELNO UREJENO / SCROLL PREKINE
 
-11. **Events (Future Scope)**
-   * Prepare the ground for Event blocks inside the chat.
-   * Event blocks will show: Active/Finished status, Attendance list (Who is coming, who is not), and Results if finished.
-   * Keep this in mind, but it can be fully implemented later.
+- plus rad bi nekje da lahko kliknem pa vidim kdo so vse udeleženci v tej skupini chatu (so avtomatsko vsi noter ko so pridruženi ekipi/sezoni?)
+UREJENO
 
-12. **Fun Icons**
-   * Ensure there's a sports/fun icon available in the quick actions (like the beer or football).
+- lahko še dodaš kako športno ikono za zabavo
+NI UREJENO
+
+- nato pa ko bom imel urejene dogodke bi rad da se lahko znotraj chata shara dogodek preko katerega se potrdi prisotnost, nekako podobno kot je to pri anketah - namreč rad bi da je nek event block, v tem bi vedno videl status dogodka ali je aktiven ali zaključen, če je aktiven se mora kazati prisotnost kdo pride kdo ne, če je zaključen pa nek rezultat ali nekaj podobnega (to točko lahko pustiš za kasneje ko bomo imeli dogodke, samo da daš v plan)
+ZA KASNEJE
+
+- spet je osrednji del strani ožji kot tisti na ekiph. daj zapomni si enkrat d je širina osrednjega dela strani na desktopu vedno enako, ker ti pa mi vedno zmanjšaš. ne vem od kod dobiš to idejo ali še imaš kje zapisan kak stari width
+UREJENO
+
+plus na chatu moram videti kdo je kaj pisal zdaj je samo sporočilo, čas in avatar slika
+UREJENO
+
+- zdaj pa imaš neki vmesni prostor med headerjem in vsebino na desktop verziji - samo na chatu. chat nima subheaderja in je mogoče to problem. ker se takoj začne blok za chat
+UREJENO
+
+- rad bi menjal ikono za anketo v neki oranžni barvi naj bo
+UREJENO
+
+- plus rad bi da imam na seznamu ekip še povezavo do ikone za chat - da me perusmeri na chat stran z že izbrano grupo + tu pri ekipi se lahko pri chat ikono izpiše koliko je novih sporočil
+DELNO UREJENO
+
+zdaj pa vidim še en problem. če si spremenim ime v userih oz. profilu, ne vidim sprememb imena pri chatu. to mora biti ustrezno povezano
+ŠE NI UREJENO

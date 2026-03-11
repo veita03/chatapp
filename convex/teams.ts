@@ -214,9 +214,26 @@ export const getUserTeams = query({
           .withIndex("by_team", (q) => q.eq("teamId", tId))
           .collect();
 
-        // Get user's role in this team (highest role, or just look at admin)
-        const userMem = members.find(m => m.userId === userId && m.role === "admin");
-        const role = userMem ? "admin" : "player";
+        // Get user's role and lastReadTime in this team
+        let role = "player";
+        let maxLastReadTime = 0;
+        for (const m of members) {
+          if (m.userId === userId) {
+            if (m.role === "admin") role = "admin";
+            if (m.lastReadTime && m.lastReadTime > maxLastReadTime) {
+              maxLastReadTime = m.lastReadTime;
+            }
+          }
+        }
+
+        // Calculate unread count (cap at 99 to avoid massive scans)
+        const unreadMessages = await ctx.db
+          .query("messages")
+          .withIndex("by_team", (q) => q.eq("teamId", tId))
+          .filter(q => q.gt(q.field("_creationTime"), maxLastReadTime))
+          .take(99);
+          
+        const unreadCount = maxLastReadTime === 0 ? 0 : unreadMessages.length;
 
         // Fetch last message for the inbox preview
         const lastMessage = await ctx.db
@@ -225,14 +242,23 @@ export const getUserTeams = query({
           .order("desc")
           .first();
 
+        let lastMessageAuthor = lastMessage?.author;
+        if (lastMessage?.authorId) {
+           const authorUser = await ctx.db.get(lastMessage.authorId);
+           if (authorUser) {
+              lastMessageAuthor = authorUser.name || authorUser.email?.split("@")[0] || lastMessage.author;
+           }
+        }
+
         return {
           ...team,
           memberCount: uniqueMemberIds.size,
           seasonCount: seasons.length,
           userRole: role,
+          unreadCount,
           lastMessage: lastMessage ? {
              text: lastMessage.text,
-             author: lastMessage.author,
+             author: lastMessageAuthor,
              creationTime: lastMessage._creationTime,
              type: lastMessage.type,
           } : null,
@@ -243,8 +269,14 @@ export const getUserTeams = query({
     // Filter out nulls if team was deleted externally
     const filteredTeams = teamsWithDetails.filter((t) => t !== null) as NonNullable<typeof teamsWithDetails[0]>[];
 
-    // Sort by latest message descending. If no message, push to the bottom based on creationTime of the team itself.
+    // Sort by unread status first, then by latest message descending. 
+    // If no message, push to the bottom based on creationTime of the team itself.
     filteredTeams.sort((a, b) => {
+      // 1. Unread prioritized above all
+      if (a.unreadCount > 0 && b.unreadCount === 0) return -1;
+      if (b.unreadCount > 0 && a.unreadCount === 0) return 1;
+
+      // 2. Fall back to timestamp
       const timeA = a.lastMessage ? a.lastMessage.creationTime : a._creationTime;
       const timeB = b.lastMessage ? b.lastMessage.creationTime : b._creationTime;
       return timeB - timeA; // Descending
@@ -252,6 +284,26 @@ export const getUserTeams = query({
 
     return filteredTeams;
   },
+});
+
+export const markTeamRead = mutation({
+  args: {
+    teamId: v.id("teams")
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) return;
+
+    const memberships = await ctx.db
+      .query("memberships")
+      .withIndex("by_user_team", (q) => q.eq("userId", userId).eq("teamId", args.teamId))
+      .collect();
+
+    const now = Date.now();
+    await Promise.all(
+      memberships.map((m) => ctx.db.patch(m._id, { lastReadTime: now }))
+    );
+  }
 });
 
 export const deleteTeam = mutation({
@@ -318,16 +370,28 @@ export const getTeam = query({
     const userId = await getAuthUserId(ctx);
     if (!userId) return null;
 
-    const membership = await ctx.db
+    const memberships = await ctx.db
       .query("memberships")
       .withIndex("by_user", (q) => q.eq("userId", userId))
       .filter((q) => q.eq(q.field("teamId"), args.teamId))
-      .first();
+      .collect();
 
-    if (!membership) return null;
+    if (memberships.length === 0) return null;
+
+    let maxLastReadTime = 0;
+    for (const m of memberships) {
+      if (m.lastReadTime && m.lastReadTime > maxLastReadTime) {
+         maxLastReadTime = m.lastReadTime;
+      }
+    }
 
     const team = await ctx.db.get(args.teamId);
-    return team;
+    if (!team) return null;
+    
+    return {
+      ...team,
+      lastReadTime: maxLastReadTime
+    };
   },
 });
 

@@ -9,11 +9,13 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as events from "../events.js";
 import type * as http from "../http.js";
 import type * as messages from "../messages.js";
 import type * as rides from "../rides.js";
 import type * as seed from "../seed.js";
 import type * as teams from "../teams.js";
+import type * as testUtil from "../testUtil.js";
 import type * as users from "../users.js";
 
 import type {
@@ -24,11 +26,13 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  events: typeof events;
   http: typeof http;
   messages: typeof messages;
   rides: typeof rides;
   seed: typeof seed;
   teams: typeof teams;
+  testUtil: typeof testUtil;
   users: typeof users;
 }>;
 
