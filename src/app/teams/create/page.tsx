@@ -273,11 +273,11 @@ export default function CreateTeamPage() {
                     <div ref={sportInputRef} className={`ui-input bg-white py-4 px-3 flex flex-wrap justify-center gap-2.5 ${errors.sport ? 'border-red-400' : ''}`}>
                        {SPORTS.map((sport, idx) => (
                          <button
-                           key={sport.name}
+                           key={sport.id}
                            type="button"
-                           onClick={() => { setFormData({...formData, sport: sport.name}); setErrors({...errors, sport: undefined}); }}
+                           onClick={() => { setFormData({...formData, sport: sport.id}); setErrors({...errors, sport: undefined}); }}
                            className={`px-4 py-2 rounded-md border transition-all text-sm font-medium ${
-                             formData.sport === sport.name 
+                             (formData.sport === sport.id || formData.sport === sport.name)
                                ? 'border-[#eeb054] text-[#dba032] shadow-[0_0_0_1px_rgba(238,176,84,0.3)] bg-[#fdfaf1]' 
                                : 'border-[#f3ebcd] text-gray-500 hover:border-[#eeb054]/50 hover:text-gray-700 hover:bg-gray-50 bg-white'
                            }`}

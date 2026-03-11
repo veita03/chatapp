@@ -9,8 +9,13 @@ import { translations, Language } from "@/app/i18n";
 import { useLanguage } from "@/components/LanguageContext";
 
 const SPORTS = [
-  "Badminton", "Košarka", "Namizni tenis", "Nogomet",
-  "Odbojka", "Padel", "Tenis"
+  { id: "badminton", name: "Badminton", icon: "🏸" },
+  { id: "basketball", name: "Košarka", icon: "🏀" },
+  { id: "tableTennis", name: "Namizni tenis", icon: "🏓" },
+  { id: "football", name: "Nogomet", icon: "⚽" },
+  { id: "volleyball", name: "Odbojka", icon: "🏐" },
+  { id: "padel", name: "Padel", icon: "🎾" },
+  { id: "tennis", name: "Tenis", icon: "🎾" }
 ];
 
 export default function TeamsPage() {
@@ -37,10 +42,12 @@ export default function TeamsPage() {
       setIsDeleting(false);
     }
   };
-  const filteredTeams = teams?.filter(team => 
-    team.name.toLowerCase().includes(filterQuery.toLowerCase()) || 
-    team.sport.toLowerCase().includes(filterQuery.toLowerCase())
-  );
+  const filteredTeams = teams?.filter(team => {
+    const s = SPORTS.find(sp => sp.id === team.sport || sp.name === team.sport);
+    const displaySportName = s ? (t.sports ? t.sports[s.id] : s.name) : team.sport;
+    return team.name.toLowerCase().includes(filterQuery.toLowerCase()) || 
+           displaySportName.toLowerCase().includes(filterQuery.toLowerCase());
+  });
 
   useEffect(() => {
     if (!isAuthLoading && !isAuthenticated) {
