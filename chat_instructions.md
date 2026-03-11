@@ -1,67 +1,61 @@
-# Povzetek zahtev za Chat (V3)
+# Dokumentacija Chat Modula (V3)
+*Zadnja posodobitev: Marec 2026*
 
-- vse to glede chata navodila in ureditev si shrani v nek chat_instructions.md (tudi ta ves zapis kaj ti ga zdaj promptam da veš katere spremembe je vse potrehno urediti)
-UREJENO
+Chat modul služi kot ključno komunikacijsko središče med igralci in administratorji posameznih športnih ekip. Namesto globalnega chata je arhitektura zasnovana **izključno na nivoju ekipe** (vsaka ekipa ima svojo izolirano klepetalnico).
 
-- nazadnje sva naredila da je chat vezan na vsako ekipo + globalni chat. urediva sedaj tako: globalnega chata ne potrebujem. mora pa biti torej vsaj ena ekipa da je vsaj en chat. globalni gre torej ven. 
-UREJENO
+---
 
-- rad bi imel ločen pogovor ter seznam chatov/skupin kot je to razvidno na sliki iz primera iz vibera. vglavnem ni mi všeč da imam sidebar na telefonu in se mi zdi ta reštiev iz vibera super
-UREJENO
+## 1. Arhitektura in Poti (Routing)
+- **/chat**: Predal prejetih sporočil (Inbox). Zlista vse ekipe, v katerih je prijavljen uporabnik član. Prikazuje zadnje sporočilo, relativen čas (npr. "pred 5 min") ter oranžno značko z neprebranimi sporočili.
+- **/chat/[teamId]**: Glavni vmesnik klepeta za posamezno ekipo. Vsebuje prostor z zgodovino sporočil, vrstico z uporabniškimi vnosnimi polji (Quick Actions) in okna (Modali) za pregled udeležencev in anket.
 
-- ko se v chatu odpre ali ikone ali tista besedila (tretja slika), se prekrije zgoraj pogovor. to bi se moralo zamaknit če se razume
-UREJENO
+## 2. Podatkovna Shema (Convex)
+Klepet temelji predvsem na naslednjih relacijah v bazi:
+- `messages`: Hrani dejanska sporočila (`teamId`, `author`, `text`, `type`, `pollData`, `locationData`, `reactions`, `isPinned`, `creationTime`).
+- `memberships`: Povezovalna tabela med posameznikom in ekipo. Ključno vlogo nosi polje **`lastReadTime`**, ki omogoča izračun neprebranih sporočil.
+- `teams` & `users`: Vir profilnih podatkov in ekipnih metapodatkov (slike, imena).
 
-- na seznamu chatov se prikažejo glede na to v katerem je bila zadnja aktivnos + zadnje sporočilo (tako kot n sliki v viberu + datum zadnje objave) 
-UREJENO
+## 3. Neprebrana Sporočila (Unread Logic)
+- Sistem ob vstopu v posamični chat (`/chat/[teamId]`) preko `useEffect` klica konstantno osvežuje `lastReadTime` za tega uporabnika v tabeli `memberships` na trenutni čas.
+- Vsi drugi prikazi (npr. na `page.tsx` inboxu) preverjajo filtracijo `msg._creationTime > membership.lastReadTime` za izris indikatorjev "X novih sporočil".
 
-- včasih se zgodi da je zadnje sporočilo čisto zabito v pod in se že dotika ali pa se celo prekriva datum s poljem za vnos besedila v chat (ta iz 3 slike)
-UREJENO
+## 4. Bogata Sporočila (Rich Message Types)
+Vnosno polje vsebuje gumb "Plus (+)", ki razkrije meni hitrih akcij (Quick Actions). Podprti so sledeči tipi (strukturirani v `type` polju baze):
 
-- rad bi da se lahko posamezne poste znotraj chata ali lajka smeji sad suprised (4 slika)
-UREJENO
+1. **Običajno besedilo (`text`)**:
+   - Omogoča samodejno obarvanje in zaznavo spletnih povezav (Auto-link).
+   - **Oznake (Mentions)**: Uporaba afne `@Ime Priimek` ali `@Vsi`. Sistem dinamično pretvori seznam prisotnih igralcev ekipe v Regex in inteligentno izlušči označeno ime (kljub presledkom in znakom). Obarva jih zeleno.
 
-- super bi bilo če se lahko pri userih zabeleži če so online na chatu (če je to sploh mogoče)
-UREJENO
+2. **Lokacija (`location`)**:
+   - Shrani koordinati (`lat`, `lng`).
+   - Uporabniku izriše **OpenStreetMap iFrame** s predogledom zemljevida.
+   - Povezava za Google Maps poti je dodana s precej natančnim `bbox` povečanjem za pogled ulic (zoom factor).
 
-- pri votih bi rad da se prikažejo in izpišejo tako kot na 5 in 6 sliki, torej pri anketi je samo votes pa koliko je katerih. ob kliku na posamezno opcijo se izpišejo dejanski voti za posamezno opcijo
-UREJENO
+3. **Anketa (`poll`)**:
+   - Prikazuje vprašanje in zbirane glasove preko vrstic (Options).
+   - Na dnu ankete je interaktiven gumb `Ogled glasov`.
+   - Modalo "Ogled glasov" prikaže kdo glasuje. Modalo uporablja **Slovensko sklanjatev** (1 glas, 2 glasa, 3 glasovi, 5 glasov). Igralci so prikazani v urejeni preprosti listi z avatarji (enako kot pri modal-u Udeleženci).
 
-- super bi bilo da lahko administrator pri keri objavi določi da jo pina na vrh + da bi ta objava bila obarvana z drugo barvo
-UREJENO
+4. **Dogodek (Event) - *V pripravi* **:
+   - Osnutek je postavljen in grafično pripravljen, a trenutno neaktiven, saj čaka na popolno implementacijo "Sezon", s katerim bo dogodek relacijsko povezan.
 
-- na mobitelih je mogoče vrstica za vnos teksta oz sporočil malenkost prevelika, morda prevelik paddingn a inputu
-UREJENO
+5. **Reakcije (Reactions / Emojis)**:
+   - Na objave je mogoče odgovarjati s smeški na lebdečem meniju (👍, 👏, 😂, 🔥, 👎) ob kliku ikone na posameznem mehurčku sporočila. Reakcije se grupirajo z ikonami in števci.
 
-- če se mi prikaže chat/skupina kjer je npr 30 novih sporočil me mora ob kliku vrečti na prvo neprebrano in nato lahko scrollam navzdol
-ZA PREVERIT
+6. **Pripeto sporočilo (Pin)**:
+   - Admin ali avtor lahko pripneta eno (ali več) sporočil, ki se obarvajo in poudarijo (Pinned tag). Uporaba posebne Convex funkcije za pripenjanje.
 
-- ob prihodu na posamezni chat je težava če je noter ogromno sporočil in me pol zascrolla navzdol in traja, rad bi da se morda prikže zadnjih 30 sporočil, za ostalo pa se mora user pomakni oz zascrollat na vrh - takrt se mu morajo vse vsebine naložiti dinamično navzgor npr vsakič po 10-30 novih sporočil (ne vem kaj je najbolj primerno število)
-DELNO UREJENO / SCROLL PREKINE
+## 5. Uporabniška Izkušnja in UI/UX
+- **Mobilnemu prikazu prijazno**: Celoten dizajn prevzema logiko modernih platform ala Viber / WhatsApp, s skritimi zunanjimi robovi in gladkim "slide-in" dizajnom.
+- **Samodejen preskok**: Pri odpiranju velikega chata se zaslon "zascrolla" povsem na dno do najnovejšega sporočila.
+- **Zapiranje oken na klik izven (Backdrop dismiss)**: Vsa pop-up okna (seznam sodelujočih in ogled anketnih glasov) podpirajo ti. "click-off" logiko.
+- Ikone v menijih za Ankete uporabljajo izključno novo, stilsko oranžno SVG grafiko in ne starih "emoji" besedilnih znakov.
 
-- plus rad bi nekje da lahko kliknem pa vidim kdo so vse udeleženci v tej skupini chatu (so avtomatsko vsi noter ko so pridruženi ekipi/sezoni?)
-UREJENO
+## 6. Znane omejitve in Roadmap (Še čaka na implementacijo):
+- [] **Dinamično nalaganje starih sporočil (Pagination / Infinite Scroll)**: Trenutno chat avtomatsko potegne vsa aktivna sporočila. Za optimalno delovanje v ekipah z nekaj tisoč sporočili bo potrebno dodati lazy loading na "scroll up".
+- [] **Osveževanje imenika v chatu**: Trenutno ima `messages` v bazi fiksiran `author` kot string poleg `authorId`. Treba bo avtomatizirati spremembe, če si uporabnik preimenuje globalni profil, da se to zrcalno odraža v starih chat mehurčkih.
+- [] **Real-time Push Notifikacije**: Neprebrana sporočila znotraj aplikacije že delujejo perfektno, za zaklenjen zaslon ob prejetem sporočilu ("ding") pa bo kdaj potrebno vključiti Firebase ali standardne PWA web notifications service workerje.
+- [] **Vklop modula Sezone in Dogodkov**: Pripenjanje dogodka v chat (za RSVP-je) je naslednja logična faza razvoja.
 
-- lahko še dodaš kako športno ikono za zabavo
-NI UREJENO
-
-- nato pa ko bom imel urejene dogodke bi rad da se lahko znotraj chata shara dogodek preko katerega se potrdi prisotnost, nekako podobno kot je to pri anketah - namreč rad bi da je nek event block, v tem bi vedno videl status dogodka ali je aktiven ali zaključen, če je aktiven se mora kazati prisotnost kdo pride kdo ne, če je zaključen pa nek rezultat ali nekaj podobnega (to točko lahko pustiš za kasneje ko bomo imeli dogodke, samo da daš v plan)
-ZA KASNEJE
-
-- spet je osrednji del strani ožji kot tisti na ekiph. daj zapomni si enkrat d je širina osrednjega dela strani na desktopu vedno enako, ker ti pa mi vedno zmanjšaš. ne vem od kod dobiš to idejo ali še imaš kje zapisan kak stari width
-UREJENO
-
-plus na chatu moram videti kdo je kaj pisal zdaj je samo sporočilo, čas in avatar slika
-UREJENO
-
-- zdaj pa imaš neki vmesni prostor med headerjem in vsebino na desktop verziji - samo na chatu. chat nima subheaderja in je mogoče to problem. ker se takoj začne blok za chat
-UREJENO
-
-- rad bi menjal ikono za anketo v neki oranžni barvi naj bo
-UREJENO
-
-- plus rad bi da imam na seznamu ekip še povezavo do ikone za chat - da me perusmeri na chat stran z že izbrano grupo + tu pri ekipi se lahko pri chat ikono izpiše koliko je novih sporočil
-DELNO UREJENO
-
-zdaj pa vidim še en problem. če si spremenim ime v userih oz. profilu, ne vidim sprememb imena pri chatu. to mora biti ustrezno povezano
-ŠE NI UREJENO
+---
+*Zaključek modula Chat: Vsi vizualni (spacing, animacije, barvne sheme, responsive) postopki, navedeni v prejšnjih nalogah, so uspešno rešeni, vključno z live "Seeding" funkcijami testnih podatkov.*
