@@ -41,6 +41,8 @@ const generateHtmlTemplate = (title: string, bodyHtml: string) => `
     }
     .logo {
       height: 32px;
+      max-width: 100%;
+      object-fit: contain;
       vertical-align: middle;
       display: inline-block;
       margin-right: 8px;
@@ -118,7 +120,7 @@ export const sendVerificationEmail = action({
         Za nadaljevanje registracije in potrditev vašega e-poštnega naslova, prosimo vnesite spodnjo kodo v aplikacijo:
       </p>
       <div style="background-color: #fffbf2; border: 1px dashed #eeb054; border-radius: 8px; padding: 20px; text-align: center; display: inline-block; margin-bottom: 24px; min-width: 200px;">
-        <span style="font-size: 32px; font-weight: 800; letter-spacing: 4px; color: #dba032;">\${args.code}</span>
+        <span style="font-size: 32px; font-weight: 800; letter-spacing: 4px; color: #dba032;">${args.code}</span>
       </div>
       <p style="font-size: 14px; color: #888; font-style: italic;">
         Če tega niste zahtevali, prosimo ignorirajte to sporočilo.
@@ -157,7 +159,7 @@ export const sendWelcomeEmail = action({
     const title = "Uspešna registracija";
     const bodyHtml = `
       <h1 style="font-size: 26px; font-weight: 800; color: #353b41; margin-top: 0; margin-bottom: 16px;">
-        Hej \${args.name}! 🏆
+        Hej ${args.name}! 🏆
       </h1>
       <p style="font-size: 16px; color: #555; line-height: 1.6; margin-bottom: 24px;">
         Tvoj profil je sedaj potrjen. Dobrodošel v <strong>Sport2GO</strong>, 
