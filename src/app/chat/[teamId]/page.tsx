@@ -36,7 +36,7 @@ export default function ChatTeamPage() {
   const t = (translations as any)[currentLang] || translations["sl"];
 
   const [newMessageText, setNewMessageText] = useState("");
-  const author = currentUser?.name || currentUser?.email?.split("@")[0] || "Uporabnik";
+  const author = currentUser?.name || currentUser?.email?.split("@")[0] || t.userDefault || "Uporabnik";
   const authorImage = currentUser?.image ?? "";
   
   const [quickActionTab, setQuickActionTab] = useState<"emoji" | "text" | "poll" | "location" | "event">("emoji");
@@ -380,7 +380,7 @@ export default function ChatTeamPage() {
       author,
       authorImage,
       teamId,
-      text: "Poslal/a je anketo.",
+      text: t.chatPollSent || "Poslal/a je anketo.",
       type: "poll",
       pollData: {
         question: pollQuestion,
@@ -423,13 +423,13 @@ export default function ChatTeamPage() {
        setIsQuickActionsOpen(false);
        setTimeout(scrollToBottomContext, 50);
     } catch (err: any) {
-       alert(err.message || "Napaka pri ustvarjanju dogodka.");
+       alert(err.message || t.chatEventError || "Napaka pri ustvarjanju dogodka.");
     }
   };
 
   const handleSendLocation = async () => {
     if (!navigator.geolocation) {
-      alert("Geolokacija ni podprta v vašem brskalniku.");
+      alert(t.chatGeoNotSupported || "Geolokacija ni podprta v vašem brskalniku.");
       return;
     }
 
@@ -440,7 +440,7 @@ export default function ChatTeamPage() {
           author,
           authorImage,
           teamId,
-          text: "Poslal/a je lokacijo.",
+          text: t.chatLocationSent || "Poslal/a je lokacijo.",
           type: "location",
           locationData: { lat: latitude, lng: longitude }
         });
@@ -448,7 +448,7 @@ export default function ChatTeamPage() {
         setTimeout(scrollToBottomContext, 50);
       },
       (error) => {
-        alert("Ne morem dobiti lokacije. Preverite pravice za dostop.");
+        alert(t.chatGeoError || "Ne morem dobiti lokacije. Preverite pravice za dostop.");
         console.error(error);
       }
     );
@@ -494,7 +494,7 @@ export default function ChatTeamPage() {
   };
 
   const handleDeleteMessage = async (messageId: Id<"messages">) => {
-    if (window.confirm("Res želite izbrisati to sporočilo?")) {
+    if (window.confirm(t.chatDeleteConfirm || "Res želite izbrisati to sporočilo?")) {
       await deleteMessage({ messageId });
       setActiveReactionMessageId(null);
     }
@@ -534,7 +534,7 @@ export default function ChatTeamPage() {
             )}
             <div className="flex flex-col cursor-pointer truncate" onClick={() => setIsParticipantsModalOpen(true)}>
               <span className="font-bold text-gray-800 tracking-wide text-[15px] leading-tight truncate" style={{fontFamily: 'var(--font-montserrat)'}}>
-                {currentTeam?.name || "Ekipa"}
+                {currentTeam?.name || t.team || "Ekipa"}
               </span>
               <span className="text-[10px] text-gray-400 font-medium leading-tight">{t.tapForParticipants || "Dotakni se za udeležence"}</span>
             </div>
@@ -881,7 +881,7 @@ export default function ChatTeamPage() {
                  )}
                  {quickActionTab === "text" && (
                    <div className="flex items-center space-x-2 w-full px-1">
-                     {["Danes si bil zanič! 👎", "Dobra igra! 👏", "Častiš pivo! 🍻", "Spet zamujaš! ⏳", "Špilferdeber!", "Kdo ma žogo?", "Spet izgovori...", "Sodnik je kriv! 🙈", "Kje je kondicija? 🥵", "Gremo na polno! 💪", "Rabmo menjavo! 🔄"].map(txt => (
+                     {(t.quickTexts || ["Danes si bil zanič! 👎", "Dobra igra! 👏", "Častiš pivo! 🍻", "Spet zamujaš! ⏳", "Špilferdeber!", "Kdo ma žogo?", "Spet izgovori...", "Sodnik je kriv! 🙈", "Kje je kondicija? 🥵", "Gremo na polno! 💪", "Rabmo menjavo! 🔄"]).map((txt: string) => (
                         <button key={txt} type="button" onClick={() => setNewMessageText(prev => prev + (prev.endsWith(' ') || prev === '' ? '' : ' ') + txt + ' ')} className="text-[13px] font-semibold bg-white text-gray-700 px-4 py-2 rounded-full whitespace-nowrap border border-gray-200 shadow-[0_2px_8px_rgba(0,0,0,0.04)] active:scale-95 h-fit focus:outline-none transition-transform">{txt}</button>
                      ))}
                    </div>
@@ -919,7 +919,7 @@ export default function ChatTeamPage() {
                  )}
                  {quickActionTab === "location" && (
                    <div className="flex items-center justify-center w-full h-full">
-                     <button type="button" onClick={handleSendLocation} className="flex items-center justify-center w-full max-w-sm border border-dashed border-[#5BA582] rounded-xl py-2 space-x-2 text-[#5BA582] font-bold text-xs"><span className="text-lg">📍</span> <span>Deli trenutno lokacijo</span></button>
+                     <button type="button" onClick={handleSendLocation} className="flex items-center justify-center w-full max-w-sm border border-dashed border-[#5BA582] rounded-xl py-2 space-x-2 text-[#5BA582] font-bold text-xs"><span className="text-lg">📍</span> <span>{t.shareLocationBtn || "Deli trenutno lokacijo"}</span></button>
                    </div>
                  )}
                </div>
@@ -939,13 +939,13 @@ export default function ChatTeamPage() {
                           className={`px-4 py-2.5 flex items-center space-x-3 cursor-pointer transition-colors ${idx === mentionIndex ? 'bg-gray-50' : 'hover:bg-gray-50'}`}
                        >
                           {u._id === "all" ? (
-                             <div className="w-6 h-6 rounded-full bg-[#5BA582]/20 text-[#5BA582] flex items-center justify-center font-bold text-[10px]">VSI</div>
+                             <div className="w-6 h-6 rounded-full bg-[#5BA582]/20 text-[#5BA582] flex items-center justify-center font-bold text-[10px]">{(t.allUsers || "VSI").toUpperCase()}</div>
                           ) : (
                              <div className="w-6 h-6 rounded-full bg-gray-200 overflow-hidden">
                                 {u.image ? <img src={u.image} alt={u.name} className="w-full h-full object-cover" /> : <div className="w-full h-full bg-[#5BA582]/20" />}
                              </div>
                           )}
-                          <span className="text-sm font-semibold text-gray-800">{u.name === "vsi" ? "Vsi" : u.name}</span>
+                          <span className="text-sm font-semibold text-gray-800">{u.name === "vsi" ? (t.allUsers || "Vsi") : u.name}</span>
                        </li>
                     ))}
                   </ul>
