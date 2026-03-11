@@ -866,7 +866,7 @@ export default function ChatTeamPage() {
                <div className="flex w-full mb-3 overflow-x-auto scrollbar-hide space-x-4 border-b border-gray-200 pb-2 px-1">
                    {(["emoji", "text", "event", "poll", "location"] as const).map(tab => (
                      <button key={tab} type="button" onClick={() => setQuickActionTab(tab)} className={`text-[12px] font-bold tracking-wide focus:outline-none transition-all ${quickActionTab === tab ? "text-[#5BA582] border-b-2 border-[#5BA582] pb-[7px] -mb-[9px]" : "text-gray-400 hover:text-gray-600"}`}>
-                        {tab === 'emoji' ? 'Emoji' : tab === 'text' ? 'Tekst' : tab === 'event' ? 'Dogodek' : tab === 'poll' ? 'Anketa' : 'Lokacija'}
+                        {tab === 'emoji' ? 'Emoji' : tab === 'text' ? (t.chatTextTab || 'Tekst') : tab === 'event' ? (t.chatEventTab || 'Dogodek') : tab === 'poll' ? (t.chatPoll || 'Anketa') : (t.chatLocationTab || 'Lokacija')}
                      </button>
                   ))}
                </div>
@@ -888,7 +888,7 @@ export default function ChatTeamPage() {
                  )}
                  {quickActionTab === "poll" && (
                    <form className="flex flex-col w-full space-y-3 h-full overflow-y-auto pr-2 pb-2 px-1" onSubmit={handleSendPoll}>
-                     <input type="text" placeholder="Kako se glasi vprašanje?..." value={pollQuestion} onChange={e => setPollQuestion(e.target.value)} className="w-full text-[15px] font-semibold py-2 px-0 border-b-2 border-gray-200 focus:border-[#5BA582] rounded-none focus:outline-none bg-transparent placeholder-gray-400 transition-colors" />
+                     <input type="text" placeholder={t.pollQuestionPlaceholder || "Kako se glasi vprašanje?..."} value={pollQuestion} onChange={e => setPollQuestion(e.target.value)} className="w-full text-[15px] font-semibold py-2 px-0 border-b-2 border-gray-200 focus:border-[#5BA582] rounded-none focus:outline-none bg-transparent placeholder-gray-400 transition-colors" />
                      <div className="grid grid-cols-2 gap-3 mt-2">
                        {pollOptions.map((opt, i) => (
                          <div key={i} className="relative flex items-center">
