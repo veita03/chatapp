@@ -14,6 +14,7 @@ const generateHtmlTemplate = (title: string, bodyHtml: string) => `
 <head>
   <meta charset="utf-8">
   <title>${title}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
@@ -50,6 +51,7 @@ const generateHtmlTemplate = (title: string, bodyHtml: string) => `
     .logo-text {
       color: white;
       font-size: 24px;
+      font-family: 'Montserrat', sans-serif;
       font-weight: 600;
       vertical-align: middle;
       letter-spacing: 0.5px;
@@ -111,7 +113,7 @@ export const sendVerificationEmail = action({
       return { success: false, reason: "No API Key" };
     }
 
-    const title = "Potrditvena koda za prijavo";
+    const title = "Sport2GO - Potrditvena koda za dokončanje registracije";
     const bodyHtml = `
       <h1 style="font-size: 24px; font-weight: 800; color: #353b41; margin-top: 0; margin-bottom: 16px;">
         Dobrodošli na platformi! 👋
@@ -122,7 +124,12 @@ export const sendVerificationEmail = action({
       <div style="background-color: #fffbf2; border: 1px dashed #eeb054; border-radius: 8px; padding: 20px; text-align: center; display: inline-block; margin-bottom: 24px; min-width: 200px;">
         <span style="font-size: 32px; font-weight: 800; letter-spacing: 4px; color: #dba032;">${args.code}</span>
       </div>
-      <p style="font-size: 14px; color: #888; font-style: italic;">
+      <div>
+        <a href="https://chat.sport2go.app/profile" style="color: #dba032; font-weight: 600; text-decoration: underline; font-size: 16px;">
+          Dokončaj registracijo &gt;
+        </a>
+      </div>
+      <p style="font-size: 14px; color: #888; font-style: italic; margin-top: 32px;">
         Če tega niste zahtevali, prosimo ignorirajte to sporočilo.
       </p>
     `;
