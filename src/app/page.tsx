@@ -11,10 +11,12 @@ import { useRouter } from "next/navigation";
 import { translations, Language } from "./i18n";
 import Header from "../components/Header";
 
-function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { initialTab?: "login"|"register", onClose: () => void, currentLang?: Language }) {
+function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { initialTab?: "login"|"register"|"forgot", onClose: () => void, currentLang?: Language }) {
   const { signIn } = useAuthActions();
   const convex = useConvex();
-  const [tab, setTab] = useState<"login" | "register">(initialTab);
+  const [tab, setTab] = useState<"login" | "register" | "forgot">(initialTab);
+  const [resetStep, setResetStep] = useState<"email" | "code">("email");
+  const [resetCode, setResetCode] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -48,6 +50,36 @@ function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { 
       } catch (err) {
         console.error("Failed to check email availability:", err);
       }
+    }
+
+    if (tab === "forgot") {
+      setIsLoading(true);
+      try {
+        if (resetStep === "email") {
+          await signIn("password", { email, flow: "reset" });
+          setResetStep("code");
+          setError(null);
+        } else {
+          if (password !== confirmPassword) {
+            setError(t.passwordMismatch || "Gesli se ne ujemata.");
+            setIsLoading(false);
+            return;
+          }
+          if (password.length < 8) {
+            setError(t.passwordLength || "Geslo mora biti dolgo vsaj 8 znakov.");
+            setIsLoading(false);
+            return;
+          }
+          await signIn("password", { email, code: resetCode, newPassword: password, flow: "reset-verification" });
+          // Reset successful, automatically logged in
+        }
+      } catch (err: any) {
+        console.error("Reset error:", err);
+        setError("Napaka pri obnovi gesla. Preverite kodo ali e-pošto.");
+      } finally {
+        setIsLoading(false);
+      }
+      return;
     }
 
     setIsLoading(true);
@@ -137,10 +169,10 @@ function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { 
           <div className="p-6 sm:p-8 pt-5">
             <div className="mb-6">
               <h2 className="text-2xl font-bold text-gray-800 tracking-tight uppercase leading-none" style={{fontFamily: 'var(--font-cabin)'}}>
-                {tab === "login" ? t.login : t.register}
+                {tab === "login" ? t.login : tab === "register" ? t.register : "Obnova gesla"}
               </h2>
               <p className="text-xs text-gray-400 mt-2 font-medium" style={{fontFamily: 'var(--font-cabin)'}}>
-                {tab === "login" ? "Pozdravljeni nazaj! Prosimo, vpišite svoje podatke." : "Ustvarite račun in se pridružite skupnosti."}
+                {tab === "login" ? "Pozdravljeni nazaj! Prosimo, vpišite svoje podatke." : tab === "register" ? "Ustvarite račun in se pridružite skupnosti." : resetStep === "email" ? "Vnesite vaš e-poštni naslov za prejem 6-mestne kode za obnovo gesla." : "Vnesite kodo z e-pošte in izberite novo geslo."}
               </p>
             </div>
 
@@ -167,39 +199,43 @@ function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { 
             </div>
 
             <div className="relative">
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">{t.password}</label>
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="w-full bg-gray-50 text-gray-800 rounded-xl pl-4 pr-12 py-3 focus:outline-none focus:ring-2 focus:ring-[#5BA582]/50 border border-gray-200 transition-all text-sm"
-                  placeholder="••••••••"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-gray-400 hover:text-gray-600 transition-colors"
-                  tabIndex={-1}
-                >
-                  {showPassword ? (
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
-                    </svg>
-                  ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                    </svg>
-                  )}
-                </button>
-              </div>
+              {tab !== "forgot" || resetStep === "code" ? (
+                <>
+                  <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">{tab === "forgot" ? "Novo geslo" : t.password}</label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      className="w-full bg-gray-50 text-gray-800 rounded-xl pl-4 pr-12 py-3 focus:outline-none focus:ring-2 focus:ring-[#5BA582]/50 border border-gray-200 transition-all text-sm"
+                      placeholder="••••••••"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-gray-400 hover:text-gray-600 transition-colors"
+                      tabIndex={-1}
+                    >
+                      {showPassword ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+                        </svg>
+                      ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
+                </>
+              ) : null}
             </div>
 
-            {tab === "register" && (
+            {(tab === "register" || (tab === "forgot" && resetStep === "code")) && (
               <div className="relative animate-in fade-in slide-in-from-top-2 duration-300">
-                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">{t.confirmPassword}</label>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">{tab === "forgot" ? "Potrdi novo geslo" : t.confirmPassword}</label>
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
@@ -226,18 +262,54 @@ function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { 
               </div>
             )}
 
-            {tab === "login" && (
-              <div className="flex items-center space-x-2 pt-1 pb-2">
+            {tab === "forgot" && resetStep === "code" && (
+              <div className="relative animate-in fade-in slide-in-from-top-2 duration-300">
+                <label className="block text-xs font-bold text-[#dba032] uppercase tracking-wider mb-1.5 ml-1">6-mestna potrditvena koda z e-pošte</label>
                 <input
-                  type="checkbox"
-                  id="remember"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className="w-4 h-4 text-[#5BA582] bg-gray-50 border-gray-300 rounded focus:ring-[#5BA582] focus:ring-2 accent-[#5BA582]"
+                  type="text"
+                  value={resetCode}
+                  onChange={(e) => setResetCode(e.target.value)}
+                  maxLength={6}
+                  required
+                  className="w-full bg-[#dba032]/5 text-gray-800 font-bold tracking-[0.2em] text-center rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#dba032]/50 border border-[#dba032]/30 transition-all uppercase placeholder-gray-300 text-lg"
+                  placeholder="------"
                 />
-                <label htmlFor="remember" className="text-xs font-medium text-gray-500 cursor-pointer select-none">
-                  {t.rememberMe}
-                </label>
+              </div>
+            )}
+
+            {tab === "login" && (
+              <div className="flex items-center justify-between space-x-2 pt-1 pb-2">
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="remember"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    className="w-4 h-4 text-[#5BA582] bg-gray-50 border-gray-300 rounded focus:ring-[#5BA582] focus:ring-2 accent-[#5BA582]"
+                  />
+                  <label htmlFor="remember" className="text-xs font-medium text-gray-500 cursor-pointer select-none">
+                    {t.rememberMe}
+                  </label>
+                </div>
+                <button 
+                  type="button" 
+                  onClick={() => { setTab("forgot"); setError(null); }} 
+                  className="text-xs font-semibold text-[#5BA582] hover:text-[#4d8c6f] transition-colors"
+                >
+                  Pozabljeno geslo?
+                </button>
+              </div>
+            )}
+
+            {tab === "forgot" && (
+              <div className="flex items-center justify-end space-x-2 pt-0 pb-1">
+                <button 
+                  type="button" 
+                  onClick={() => { setTab("login"); setError(null); setResetStep("email"); }} 
+                  className="text-xs font-semibold text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  Nazaj na prijavo
+                </button>
               </div>
             )}
 
@@ -248,7 +320,7 @@ function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { 
             >
               {isLoading ? (
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              ) : tab === "login" ? t.loginBtn : t.registerBtn}
+              ) : tab === "login" ? t.loginBtn : tab === "register" ? t.registerBtn : resetStep === "email" ? "Pošlji kodo na e-pošto" : "Spremeni geslo in se prijavi"}
             </button>
           </form>
 
