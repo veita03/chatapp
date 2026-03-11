@@ -584,7 +584,7 @@ export default function ChatTeamPage() {
           onClick={() => { if(activeReactionMessageId) setActiveReactionMessageId(null); }}
           className="flex-1 overflow-y-auto space-y-5 relative bg-[#FAFAFA] flex flex-col"
         >
-          <div className="w-full px-4 md:px-6 flex flex-col space-y-4 pt-4 mt-auto">
+          <div className="w-full max-w-full px-4 md:px-6 flex flex-col space-y-4 pt-4 mt-auto overflow-x-hidden">
           {status === "LoadingMore" && (
              <div className="flex justify-center my-2 text-xs text-gray-400 animate-pulse">Nalagam starejša sporočila...</div>
           )}
@@ -637,7 +637,7 @@ export default function ChatTeamPage() {
                 )}
                 
 
-                <div className={`flex ${isMe ? "justify-end" : "justify-start"} items-end space-x-2 animate-in fade-in slide-in-from-bottom-2 duration-300 w-full mb-2`}>
+                <div className={`flex ${isMe ? "justify-end" : "justify-start"} items-end space-x-2 animate-in fade-in slide-in-from-bottom-2 duration-300 w-full max-w-full mb-2`}>
                   {!isMe && (
                     <div className="w-8 h-8 rounded-full bg-gray-200 flex-shrink-0 flex items-center justify-center shadow-sm border border-gray-300 overflow-hidden mb-5">
                       {msg.authorImage ? (
