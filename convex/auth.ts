@@ -18,4 +18,19 @@ export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
     }),
     Password,
   ],
+  callbacks: {
+    async createOrUpdateUser(ctx, args) {
+      if (args.existingUserId) {
+        return args.existingUserId;
+      }
+      
+      // Filter out undefined values that crash the schema
+      const userData: any = {
+        email: args.profile.email,
+        isProfileComplete: false,
+      };
+      
+      return await ctx.db.insert("users", userData);
+    },
+  },
 });
