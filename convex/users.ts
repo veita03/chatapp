@@ -1,6 +1,7 @@
 import { query, mutation } from "./_generated/server";
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
+import { api } from "./_generated/api";
 
 export const current = query({
   args: {},
@@ -26,11 +27,25 @@ export const updateProfile = mutation({
     dateOfBirth: v.optional(v.string()),
     gender: v.optional(v.string()),
     image: v.optional(v.string()),
+    otpCode: v.optional(v.string()), // Added for the verification flow
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (userId === null) {
       throw new Error("Not authenticated");
+    }
+    
+    const user = await ctx.db.get(userId);
+    if (!user) throw new Error("User not found");
+
+    // Check OTP if email is present and not verified
+    const isEmailLogin = user.email && !user.isAnonymous;
+    const needsVerification = isEmailLogin && !user.emailVerificationTime;
+
+    if (needsVerification) {
+      if (!args.otpCode || args.otpCode !== user.emailVerificationCode) {
+        throw new Error("Neveljavna ali prazna potrditvena koda.");
+      }
     }
     
     await ctx.db.patch(userId, {
@@ -41,12 +56,46 @@ export const updateProfile = mutation({
       gender: args.gender,
       image: args.image,
       isProfileComplete: true,
-      // name is optionally constructed here if needed but let's just keep original or update it
-      name: `${args.firstName} ${args.lastName}`.trim()
+      name: `${args.firstName} ${args.lastName}`.trim(),
+      ...(needsVerification ? { emailVerificationTime: Date.now(), emailVerificationCode: undefined } : {})
     });
+
+    // If we just verified them, send the welcome email
+    if (needsVerification && user.email) {
+      await ctx.scheduler.runAfter(0, api.emails.sendWelcomeEmail, {
+        email: user.email,
+        name: args.firstName
+      });
+    }
     
     return { success: true };
   },
+});
+
+export const generateOtp = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) throw new Error("Not authenticated");
+    
+    const user = await ctx.db.get(userId);
+    if (!user || !user.email) return { success: false };
+
+    // If already verified, do nothing
+    if (user.emailVerificationTime) return { success: false, reason: "Already verified" };
+
+    // Generate random 6-digit number
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    await ctx.db.patch(userId, { emailVerificationCode: code });
+    
+    await ctx.scheduler.runAfter(0, api.emails.sendVerificationEmail, {
+      email: user.email,
+      code: code
+    });
+
+    return { success: true };
+  }
 });
 
 export const generateNextJoinCode = mutation({

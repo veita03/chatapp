@@ -77,7 +77,7 @@ export default function Header({ onLoginClick, onRegisterClick }: HeaderProps) {
       </a>
 
       {/* Right nav */}
-      <div className="flex items-center space-x-2 md:space-x-3">
+      <div className="flex items-center gap-1.5 md:gap-2">
         {!isAuthenticated ? (
            <>
              {onLoginClick && <button onClick={onLoginClick} className="text-white hover:text-white/80 font-medium text-sm md:text-[15px] transition-colors uppercase tracking-wide cursor-pointer" style={{fontFamily: 'var(--font-cabin)'}}>{t.login}</button>}
@@ -134,7 +134,7 @@ export default function Header({ onLoginClick, onRegisterClick }: HeaderProps) {
 
         {/* LOGOUT (only if authenticated) */}
         {isAuthenticated && (
-          <div className="relative ml-1">
+          <div className="relative">
              <NavButton 
                onClick={() => {
                  signOut();
@@ -151,7 +151,7 @@ export default function Header({ onLoginClick, onRegisterClick }: HeaderProps) {
         )}
 
         {/* Language Dropdown Area */}
-        <div className="relative md:ml-2">
+        <div className="relative">
           <NavButton 
              onClick={() => setIsLangOpen(!isLangOpen)} 
              icon={

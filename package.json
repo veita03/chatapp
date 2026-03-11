@@ -19,7 +19,8 @@
     "react-dom": "19.2.3",
     "react-easy-crop": "^5.5.6",
     "react-google-places-autocomplete": "^4.1.0",
-    "react-phone-number-input": "^3.4.16"
+    "react-phone-number-input": "^3.4.16",
+    "resend": "^6.9.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

@@ -43,6 +43,13 @@ function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { 
       // The Convex provider handles 'password' as the underlying method.
       const flow = tab === "login" ? "signIn" : "signUp";
       await signIn("password", { email, password, flow });
+      
+      if (!rememberMe) {
+        localStorage.setItem("ephemeralLogin", "true");
+        sessionStorage.setItem("sessionActive", "true");
+      } else {
+        localStorage.removeItem("ephemeralLogin");
+      }
     } catch (err: any) {
       console.error("Auth error:", err);
       const msg = err?.message || String(err);

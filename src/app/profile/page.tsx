@@ -29,6 +29,8 @@ export default function ProfilePage() {
   const updateProfile = useMutation(api.users.updateProfile);
   const router = useRouter();
 
+  const generateOtp = useMutation(api.users.generateOtp);
+
   const [lang, setLang] = useState<Language>("sl");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -40,6 +42,8 @@ export default function ProfilePage() {
 
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [otpCode, setOtpCode] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
 
   useEffect(() => {
     const savedLang = Cookies.get("lang") as Language;
@@ -60,6 +64,15 @@ export default function ProfilePage() {
       if (currentUser.image) setSelectedAvatar(currentUser.image);
     }
   }, [currentUser]);
+
+  const needsOtp = currentUser ? (currentUser.email && !currentUser.isAnonymous && !currentUser.emailVerificationTime) : false;
+
+  useEffect(() => {
+    if (needsOtp && !otpSent) {
+      setOtpSent(true);
+      generateOtp().catch(console.error);
+    }
+  }, [needsOtp, otpSent, generateOtp]);
 
   // Auth Protection
   useEffect(() => {
@@ -82,6 +95,11 @@ export default function ProfilePage() {
       return;
     }
 
+    if (needsOtp && otpCode.length !== 6) {
+      setError("Prosimo, vnesite pravilno 6-mestno kodo z emaila.");
+      return;
+    }
+
     setIsSaving(true);
     try {
       await updateProfile({
@@ -91,12 +109,13 @@ export default function ProfilePage() {
         dateOfBirth: dateOfBirth || undefined,
         gender: gender || undefined,
         image: selectedAvatar || undefined,
+        otpCode: needsOtp ? otpCode : undefined,
       });
       // On success, go to teams
       router.push("/teams");
     } catch (err: unknown) {
       console.error(err);
-      setError("Prišlo je do napake pri shranjevanju.");
+      setError(err instanceof Error ? err.message : "Prišlo je do napake pri shranjevanju.");
     } finally {
       setIsSaving(false);
     }
@@ -400,6 +419,36 @@ export default function ProfilePage() {
                     </label>
                  </div>
               </div>
+
+              {needsOtp && (
+                <div className="flex flex-col pt-6 border-t border-[#f3ebcd] mt-6 animate-in fade-in slide-in-from-bottom-2">
+                   <div className="bg-[#fffbf2] border border-[#eeb054] rounded-xl p-5 mb-2 shadow-sm relative overflow-hidden">
+                      <div className="absolute top-0 left-0 w-1.5 h-full bg-[#eeb054]"></div>
+                      <h3 className="text-[16px] font-bold text-gray-800 mb-2 tracking-tight" style={{fontFamily: 'var(--font-montserrat)'}}>
+                        Potrditev E-pošte
+                      </h3>
+                      <p className="text-[13px] text-gray-600 mb-4 font-light leading-relaxed" style={{fontFamily: 'var(--font-cabin)'}}>
+                        Na <strong className="font-semibold text-gray-800">{currentUser?.email}</strong> smo poslali 6-mestno varnostno kodo. 
+                        Vnesite jo spodaj za potrditev računa in dokončanje registracije.
+                      </p>
+                      
+                      <div className="flex justify-center mb-1">
+                        <input
+                          type="text"
+                          maxLength={6}
+                          value={otpCode}
+                          onChange={(e) => setOtpCode(e.target.value.replace(/[^0-9]/g, ''))}
+                          placeholder="000000"
+                          className="w-[180px] text-center text-2xl tracking-[0.5em] font-bold text-[#dba032] py-3 bg-white border-2 border-dashed border-[#eeb054]/50 rounded-lg focus:outline-none focus:border-[#dba032] focus:ring-4 focus:ring-[#eeb054]/20 transition-all shadow-inner"
+                        />
+                      </div>
+                      
+                      {otpCode.length > 0 && otpCode.length < 6 && (
+                        <p className="text-center text-[11px] text-[#dba032] mt-2 font-medium">Vnesti morate vseh 6 številk.</p>
+                      )}
+                   </div>
+                </div>
+              )}
 
               <div className="flex justify-center pt-8 border-t border-[#f3ebcd] mt-8">
                  <button
