@@ -45,7 +45,7 @@ export default function ChatInboxPage() {
       return t.yesterday || "Včeraj";
     }
 
-    return new Intl.DateTimeFormat("sl-SI", { day: "numeric", month: "short" }).format(messageDate);
+    return new Intl.DateTimeFormat(currentLang, { day: "numeric", month: "short" }).format(messageDate);
   };
 
   if (isLoading || !isAuthenticated || (currentUser !== undefined && !currentUser?.isProfileComplete)) {

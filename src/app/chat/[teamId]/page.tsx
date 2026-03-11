@@ -464,7 +464,7 @@ export default function ChatTeamPage() {
     if (Math.abs(diffInMinutes) < 60) return (t.minAgo || "pred {n} min").replace("{n}", Math.abs(diffInMinutes).toString());
     if (Math.abs(diffInHours) < 24) return (t.hAgo || "pred {n} h").replace("{n}", Math.abs(diffInHours).toString());
 
-    return new Intl.DateTimeFormat("sl-SI", { hour: "2-digit", minute: "2-digit" }).format(timestampMs);
+    return new Intl.DateTimeFormat(currentLang, { hour: "2-digit", minute: "2-digit" }).format(timestampMs);
   };
 
   const getDaySeparatorLabel = (timestampMs: number) => {
@@ -485,7 +485,7 @@ export default function ChatTeamPage() {
       messageDate.getFullYear() === yesterday.getFullYear()
     ) return t.chatDayYesterday || "VČERAJ";
 
-    return new Intl.DateTimeFormat("sl-SI", { day: "numeric", month: "long", year: "numeric" }).format(messageDate).toUpperCase();
+    return new Intl.DateTimeFormat(currentLang, { day: "numeric", month: "long", year: "numeric" }).format(messageDate).toUpperCase();
   };
 
   const handleReaction = async (messageId: Id<"messages">, emoji: string) => {
