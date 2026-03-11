@@ -78,7 +78,7 @@ const generateHtmlTemplate = (title: string, bodyHtml: string) => `
     <div class="container">
       <!-- Header -->
       <div class="header">
-        <img src="https://www.sport2go.app/image/logo.svg" alt="Logo" class="logo" style="filter: brightness(0) invert(1);" />
+        <img src="https://www.sport2go.app/image/logo.svg" alt="Logo" width="32" height="32" style="width: 32px; height: 32px; vertical-align: middle; filter: brightness(0) invert(1);" />
         <div class="logo-text">
           <span style="font-weight: 400">SPORT</span><span>2GO</span>
         </div>
