@@ -128,15 +128,17 @@ export const sendVerificationEmail = action({
     const html = generateHtmlTemplate(title, bodyHtml);
 
     try {
-      await resend.emails.send({
+      console.log("Sending verification email via Resend to:", args.email);
+      const data = await resend.emails.send({
         from: SENDER,
         to: args.email,
         subject: title,
         html: html,
       });
+      console.log("Resend response:", data);
       return { success: true };
     } catch (error) {
-      console.error("Failed to send verification email:", error);
+      console.error("Failed to send verification email. Details:", error);
       return { success: false };
     }
   },
@@ -175,15 +177,17 @@ export const sendWelcomeEmail = action({
     const html = generateHtmlTemplate(title, bodyHtml);
 
     try {
-      await resend.emails.send({
+      console.log("Sending welcome email via Resend to:", args.email);
+      const data = await resend.emails.send({
         from: SENDER,
         to: args.email,
         subject: "Dobrodošli v Sport2GO 🚀",
         html: html,
       });
+      console.log("Resend welcome response:", data);
       return { success: true };
     } catch (error) {
-      console.error("Failed to send welcome email:", error);
+      console.error("Failed to send welcome email. Details:", error);
       return { success: false };
     }
   },

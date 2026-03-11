@@ -44,6 +44,25 @@ export default function ProfilePage() {
   const [isSaving, setIsSaving] = useState(false);
   const [otpCode, setOtpCode] = useState("");
   const [otpSent, setOtpSent] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (resendCooldown > 0) {
+      timer = setTimeout(() => setResendCooldown(c => c - 1), 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [resendCooldown]);
+
+  const handleResendCode = async () => {
+    if (resendCooldown > 0) return;
+    setResendCooldown(60); // 60 seconds cooldown
+    try {
+      await generateOtp();
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   useEffect(() => {
     const savedLang = Cookies.get("lang") as Language;
@@ -330,6 +349,59 @@ export default function ProfilePage() {
                  </div>
               </div>
 
+              {needsOtp && (
+                <div className="flex flex-col pt-3 pb-2 animate-in fade-in slide-in-from-top-2">
+                   <div className="bg-[#fffbf2] border-2 border-[#eeb054] rounded-xl p-5 shadow-sm relative overflow-hidden">
+                      <div className="absolute top-0 left-0 w-1.5 h-full bg-[#eeb054]"></div>
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <h3 className="text-[17px] font-bold text-gray-800 mb-1.5 tracking-tight flex items-center gap-2" style={{fontFamily: 'var(--font-montserrat)'}}>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 text-[#dba032]">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.909A2.25 2.25 0 0 1 2.25 6.993V6.75m19.5 0v.243m0 0a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.909A2.25 2.25 0 0 1 2.25 6.993V6.75m0 0v.243" />
+                            </svg>
+                            Potrditev E-pošte
+                          </h3>
+                          <p className="text-[14px] text-gray-600 mb-4 font-normal leading-relaxed" style={{fontFamily: 'var(--font-cabin)'}}>
+                            Na zgornji naslov smo pravkar poslali <strong>6-mestno varnostno kodo</strong>. Prosimo, preverite svoj nabiralnik in jo vnesite spodaj za dokončanje registracije.
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex flex-col md:flex-row items-center gap-4">
+                        <div className="relative">
+                          <input
+                            type="text"
+                            maxLength={6}
+                            value={otpCode}
+                            onChange={(e) => setOtpCode(e.target.value.replace(/[^0-9]/g, ''))}
+                            placeholder="000 000"
+                            className="w-[180px] text-center text-3xl tracking-[0.25em] font-bold text-[#dba032] py-3.5 bg-white border-2 border-dashed border-[#eeb054]/60 rounded-xl focus:outline-none focus:border-[#dba032] focus:ring-4 focus:ring-[#eeb054]/20 transition-all shadow-inner placeholder:text-gray-200 placeholder:tracking-normal"
+                          />
+                        </div>
+
+                        <div className="flex flex-col gap-2 items-center md:items-start text-sm md:ml-2">
+                           <span className="text-gray-500 italic max-w-xs text-center md:text-left text-[12.5px]">
+                             Niste prejeli kode? Preverite tudi mapo "Vsiljena pošta".
+                           </span>
+                           <button
+                             type="button"
+                             onClick={handleResendCode}
+                             disabled={resendCooldown > 0}
+                             className={`px-4 py-1.5 rounded-md font-bold text-[13px] transition-colors border ${resendCooldown > 0 ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed' : 'bg-white text-[#d29729] border-[#d29729] hover:bg-[#fffbf2] shadow-sm'}`}
+                             style={{fontFamily: 'var(--font-cabin)'}}
+                           >
+                              {resendCooldown > 0 ? `Počakajte (${resendCooldown}s)` : "Pošlji znova"}
+                           </button>
+                        </div>
+                      </div>
+                      
+                      {otpCode.length > 0 && otpCode.length < 6 && (
+                        <p className="text-left text-[12px] text-red-500 mt-2.5 font-bold ml-1">Koda mora vsebovati 6 številk.</p>
+                      )}
+                   </div>
+                </div>
+              )}
+
               <div className="flex flex-col md:flex-row md:items-center py-2 border-b border-[#f3ebcd]">
                  <label className="w-full md:w-[35%] ui-label mb-2 md:mb-0 pr-4">{t.phone}</label>
                  <div className="w-full md:w-[65%] flex">
@@ -420,36 +492,6 @@ export default function ProfilePage() {
                  </div>
               </div>
 
-              {needsOtp && (
-                <div className="flex flex-col pt-6 border-t border-[#f3ebcd] mt-6 animate-in fade-in slide-in-from-bottom-2">
-                   <div className="bg-[#fffbf2] border border-[#eeb054] rounded-xl p-5 mb-2 shadow-sm relative overflow-hidden">
-                      <div className="absolute top-0 left-0 w-1.5 h-full bg-[#eeb054]"></div>
-                      <h3 className="text-[16px] font-bold text-gray-800 mb-2 tracking-tight" style={{fontFamily: 'var(--font-montserrat)'}}>
-                        Potrditev E-pošte
-                      </h3>
-                      <p className="text-[13px] text-gray-600 mb-4 font-light leading-relaxed" style={{fontFamily: 'var(--font-cabin)'}}>
-                        Na <strong className="font-semibold text-gray-800">{currentUser?.email}</strong> smo poslali 6-mestno varnostno kodo. 
-                        Vnesite jo spodaj za potrditev računa in dokončanje registracije.
-                      </p>
-                      
-                      <div className="flex justify-center mb-1">
-                        <input
-                          type="text"
-                          maxLength={6}
-                          value={otpCode}
-                          onChange={(e) => setOtpCode(e.target.value.replace(/[^0-9]/g, ''))}
-                          placeholder="000000"
-                          className="w-[180px] text-center text-2xl tracking-[0.5em] font-bold text-[#dba032] py-3 bg-white border-2 border-dashed border-[#eeb054]/50 rounded-lg focus:outline-none focus:border-[#dba032] focus:ring-4 focus:ring-[#eeb054]/20 transition-all shadow-inner"
-                        />
-                      </div>
-                      
-                      {otpCode.length > 0 && otpCode.length < 6 && (
-                        <p className="text-center text-[11px] text-[#dba032] mt-2 font-medium">Vnesti morate vseh 6 številk.</p>
-                      )}
-                   </div>
-                </div>
-              )}
-
               <div className="flex justify-center pt-8 border-t border-[#f3ebcd] mt-8">
                  <button
                    type="submit"
@@ -465,8 +507,7 @@ export default function ProfilePage() {
                    ) : (
                      <>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-                          <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
-                        </svg>
+                          <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" /></svg>
                         <span>{t.save || "Shrani"}</span>
                      </>
                    )}
