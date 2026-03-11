@@ -58,10 +58,10 @@ export default function ChatTeamPage() {
   const formatGlasovi = (count: number) => {
     const absCount = Math.abs(count);
     const mod100 = absCount % 100;
-    if (mod100 === 1) return `${count} glas`;
-    if (mod100 === 2) return `${count} glasa`;
-    if (mod100 === 3 || mod100 === 4) return `${count} glasovi`;
-    return `${count} glasov`;
+    if (mod100 === 1) return (t.msgVotePlural1 || "{n} glas").replace("{n}", count.toString());
+    if (mod100 === 2) return (t.msgVotePlural2 || "{n} glasa").replace("{n}", count.toString());
+    if (mod100 === 3 || mod100 === 4) return (t.msgVotePlural3 || "{n} glasovi").replace("{n}", count.toString());
+    return (t.msgVotePlural5 || "{n} glasov").replace("{n}", count.toString());
   };
 
   const renderMessageText = (text: string, isMe: boolean, participantsList: any[] | undefined) => {
@@ -460,9 +460,9 @@ export default function ChatTeamPage() {
     const diffInMinutes = Math.round(diffInSeconds / 60);
     const diffInHours = Math.round(diffInMinutes / 60);
 
-    if (Math.abs(diffInSeconds) < 60) return "pravkar";
-    if (Math.abs(diffInMinutes) < 60) return `pred ${Math.abs(diffInMinutes)} min`;
-    if (Math.abs(diffInHours) < 24) return `pred ${Math.abs(diffInHours)} h`;
+    if (Math.abs(diffInSeconds) < 60) return t.justNow || "pravkar";
+    if (Math.abs(diffInMinutes) < 60) return (t.minAgo || "pred {n} min").replace("{n}", Math.abs(diffInMinutes).toString());
+    if (Math.abs(diffInHours) < 24) return (t.hAgo || "pred {n} h").replace("{n}", Math.abs(diffInHours).toString());
 
     return new Intl.DateTimeFormat("sl-SI", { hour: "2-digit", minute: "2-digit" }).format(timestampMs);
   };
@@ -477,13 +477,13 @@ export default function ChatTeamPage() {
       messageDate.getDate() === today.getDate() &&
       messageDate.getMonth() === today.getMonth() &&
       messageDate.getFullYear() === today.getFullYear()
-    ) return "DANES";
+    ) return t.chatDayToday || "DANES";
 
     if (
       messageDate.getDate() === yesterday.getDate() &&
       messageDate.getMonth() === yesterday.getMonth() &&
       messageDate.getFullYear() === yesterday.getFullYear()
-    ) return "VČERAJ";
+    ) return t.chatDayYesterday || "VČERAJ";
 
     return new Intl.DateTimeFormat("sl-SI", { day: "numeric", month: "long", year: "numeric" }).format(messageDate).toUpperCase();
   };
@@ -536,7 +536,7 @@ export default function ChatTeamPage() {
               <span className="font-bold text-gray-800 tracking-wide text-[15px] leading-tight truncate" style={{fontFamily: 'var(--font-montserrat)'}}>
                 {currentTeam?.name || "Ekipa"}
               </span>
-              <span className="text-[10px] text-gray-400 font-medium leading-tight">Dotakni se za udeležence</span>
+              <span className="text-[10px] text-gray-400 font-medium leading-tight">{t.tapForParticipants || "Dotakni se za udeležence"}</span>
             </div>
           </div>
         
@@ -564,8 +564,8 @@ export default function ChatTeamPage() {
                 <div className="flex flex-col truncate">
                    <div className="text-[10px] font-bold text-gray-500 uppercase">{pinnedMessage.author}</div>
                    <div className="text-xs text-gray-700 truncate font-semibold">
-                      {pinnedMessage.type === 'poll' ? `Anketa: ${pinnedMessage.pollData?.question}` : 
-                       pinnedMessage.type === 'location' ? 'Deli lokacijo' : 
+                      {pinnedMessage.type === 'poll' ? `${t.chatPoll || "Anketa"}: ${pinnedMessage.pollData?.question}` : 
+                       pinnedMessage.type === 'location' ? (t.shareLocationBtn || 'Deli lokacijo') : 
                        pinnedMessage.text}
                    </div>
                 </div>
@@ -586,15 +586,15 @@ export default function ChatTeamPage() {
         >
           <div className="w-full max-w-full px-4 md:px-6 flex flex-col space-y-4 pt-4 mt-auto overflow-x-hidden">
           {status === "LoadingMore" && (
-             <div className="flex justify-center my-2 text-xs text-gray-400 animate-pulse">Nalagam starejša sporočila...</div>
+             <div className="flex justify-center my-2 text-xs text-gray-400 animate-pulse">{t.loadingOldMessages || "Nalagam starejša sporočila..."}</div>
           )}
           {messages.length === 0 && status !== "LoadingFirstPage" && (
             <div className="flex flex-col items-center justify-center space-y-4 text-center text-gray-400 h-full min-h-[50vh] animate-in fade-in duration-500">
                <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-2">
                  <span className="text-5xl">👋</span>
                </div>
-               <h3 className="font-bold text-gray-700 text-lg">Tukaj je še čisto tiho...</h3>
-               <p className="text-sm max-w-xs">Bodi prvi in pošlji sporočilo, fotografijo ali anketo vaši ekipi!</p>
+               <h3 className="font-bold text-gray-700 text-lg">{t.chatEmptyTitle || "Tukaj je še čisto tiho..."}</h3>
+               <p className="text-sm max-w-xs">{t.chatEmptyDesc || "Bodi prvi in pošlji sporočilo, fotografijo ali anketo vaši ekipi!"}</p>
             </div>
           )}
           {messages.length > 0 && messages.slice().reverse().map((msg, index, arr) => {
@@ -717,7 +717,7 @@ export default function ChatTeamPage() {
                                 />
                                 <div className="absolute inset-0 bg-transparent group-hover:bg-black/5 transition-colors flex flex-col justify-end">
                                   <div className="bg-white/90 backdrop-blur-sm text-xs font-bold text-[#5BA582] text-center py-2 w-full truncate border-t border-gray-100">
-                                    Odpri v Google Maps
+                                    {t.openInMaps || "Odpri v Google Maps"}
                                   </div>
                                 </div>
                              </div>
@@ -746,7 +746,7 @@ export default function ChatTeamPage() {
                                 })}
                              </div>
                              <div className="mt-2 text-xs text-[#5BA582] font-semibold text-center cursor-pointer hover:underline" onClick={(e) => { e.stopPropagation(); setSelectedPollForDetails(msg.pollData); }}>
-                                 Ogled glasov ({msg.pollData.options.reduce((sum, o) => sum + o.votes.length, 0)})
+                                 {t.viewVotes || "Ogled glasov"} ({msg.pollData.options.reduce((sum, o) => sum + o.votes.length, 0)})
                              </div>
                           </div>
                         ) : (
@@ -851,7 +851,7 @@ export default function ChatTeamPage() {
         {unreadCount > 0 && (
           <div className="absolute bottom-[80px] md:bottom-[100px] left-1/2 transform -translate-x-1/2 z-30">
             <button onClick={scrollToBottomContext} className="bg-[#ECA245] hover:bg-[#D99133] text-white font-bold text-xs py-2 px-5 rounded-full shadow-lg border border-[#ECA245] transition-transform animate-bounce flex items-center space-x-2">
-              <span>Nova sporočila ({unreadCount})</span>
+              <span>{t.newMessagesBadge || "Nova sporočila"} ({unreadCount})</span>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
             </button>
           </div>
@@ -893,27 +893,27 @@ export default function ChatTeamPage() {
                        {pollOptions.map((opt, i) => (
                          <div key={i} className="relative flex items-center">
                             <span className="absolute left-3 text-xs font-bold text-gray-300">{i+1}.</span>
-                            <input type="text" placeholder={`Odgovor`} value={opt} onChange={e => { const newOpts = [...pollOptions]; newOpts[i] = e.target.value; setPollOptions(newOpts); }} className="w-full text-sm py-2 pl-8 pr-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#5BA582]/20 focus:border-[#5BA582] shadow-sm transition-all" />
+                            <input type="text" placeholder={t.pollAnswerPlaceholder || `Odgovor`} value={opt} onChange={e => { const newOpts = [...pollOptions]; newOpts[i] = e.target.value; setPollOptions(newOpts); }} className="w-full text-sm py-2 pl-8 pr-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#5BA582]/20 focus:border-[#5BA582] shadow-sm transition-all" />
                          </div>
                        ))}
                      </div>
                      <div className="flex justify-between items-center mt-2 pt-1">
                        <button type="button" onClick={() => setPollOptions([...pollOptions, ""])} disabled={pollOptions.length >= 4} className="text-xs text-[#5BA582] font-extrabold hover:text-[#4a8a6b] px-2 py-1 transition-colors flex items-center disabled:opacity-30 disabled:cursor-not-allowed">
                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-3 h-3 mr-1"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-                         Dodaj opcijo
+                         {t.addOption || "Dodaj opcijo"}
                        </button>
-                       <button type="submit" disabled={!pollQuestion.trim() || pollOptions.filter(o => o.trim()).length < 2} className="bg-[#5BA582] text-white text-[13px] font-bold px-5 py-2 rounded-full shadow-md disabled:opacity-40 disabled:scale-100 hover:scale-105 active:scale-95 transition-all">Objavi</button>
+                       <button type="submit" disabled={!pollQuestion.trim() || pollOptions.filter(o => o.trim()).length < 2} className="bg-[#5BA582] text-white text-[13px] font-bold px-5 py-2 rounded-full shadow-md disabled:opacity-40 disabled:scale-100 hover:scale-105 active:scale-95 transition-all">{t.publish || "Objavi"}</button>
                      </div>
                    </form>
                  )}
                  {quickActionTab === "event" && (
                    <form className="flex flex-col w-full space-y-3 h-full overflow-visible px-1" onSubmit={handleSendEvent}>
                       <div className="flex items-center space-x-3 w-full">
-                         <input type="text" placeholder="Ime dogodka (npr. Trening, Zbor, Liga)" value={eventTitle} onChange={e => setEventTitle(e.target.value)} className="flex-1 w-full text-[15px] font-semibold py-2 px-0 border-b-2 border-gray-200 focus:border-[#5BA582] rounded-none focus:outline-none bg-transparent placeholder-gray-400 transition-colors" />
+                         <input type="text" placeholder={t.eventNamePlaceholder || "Ime dogodka (npr. Trening, Zbor, Liga)"} value={eventTitle} onChange={e => setEventTitle(e.target.value)} className="flex-1 w-full text-[15px] font-semibold py-2 px-0 border-b-2 border-gray-200 focus:border-[#5BA582] rounded-none focus:outline-none bg-transparent placeholder-gray-400 transition-colors" />
                       </div>
                       <div className="flex items-center space-x-3 w-full">
                          <input type="datetime-local" value={eventDate} onChange={e => setEventDate(e.target.value)} className="flex-1 text-sm py-2 px-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#5BA582]/20 focus:border-[#5BA582] shadow-sm transition-all text-gray-700" />
-                         <button type="submit" disabled={!eventTitle.trim() || !eventDate} className="bg-[#5BA582] text-white text-[13px] font-bold px-6 py-2.5 rounded-full shadow-md disabled:opacity-40 disabled:scale-100 hover:scale-105 active:scale-95 transition-all">Ustvari Dogodek</button>
+                         <button type="submit" disabled={!eventTitle.trim() || !eventDate} className="bg-[#5BA582] text-white text-[13px] font-bold px-6 py-2.5 rounded-full shadow-md disabled:opacity-40 disabled:scale-100 hover:scale-105 active:scale-95 transition-all">{t.createEventBtn || "Ustvari Dogodek"}</button>
                       </div>
                    </form>
                  )}
@@ -963,7 +963,7 @@ export default function ChatTeamPage() {
                       else if (e.key === "Tab") { e.preventDefault(); handleMentionSelect(mentionedUsers[mentionIndex]); }
                       else if (e.key === "Escape") { e.preventDefault(); setMentionQuery(null); }
                    }
-                }} type="text" className="flex-1 bg-gray-50 text-gray-800 font-medium rounded-[20px] md:rounded-2xl px-3 py-1.5 md:px-4 md:py-2.5 focus:outline-none focus:ring-2 focus:ring-[#5BA582]/30 border border-gray-200 text-[13px] md:text-sm shadow-inner" placeholder={t.send + "..."} value={newMessageText} onChange={handleInputChange} />
+                }} type="text" className="flex-1 bg-gray-50 text-gray-800 font-medium rounded-[20px] md:rounded-2xl px-3 py-1.5 md:px-4 md:py-2.5 focus:outline-none focus:ring-2 focus:ring-[#5BA582]/30 border border-gray-200 text-[13px] md:text-sm shadow-inner" placeholder={(t.send || "Napiši sporočilo") + "..."} value={newMessageText} onChange={handleInputChange} />
                 <button type="submit" disabled={!newMessageText.trim()} className="bg-[#5BA582] text-white rounded-full md:rounded-2xl w-8 h-8 md:w-10 md:h-10 mb-0.5 md:mb-0 transition-all disabled:opacity-40 flex-shrink-0 shadow-md flex items-center justify-center focus:outline-none">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4 md:w-5 md:h-5 -rotate-45 relative md:-left-0.5 -top-0.5 md:-top-0.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
                 </button>
@@ -978,7 +978,7 @@ export default function ChatTeamPage() {
         <div className="fixed inset-0 z-50 flex flex-col justify-end sm:items-center sm:justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-200" onClick={() => setIsParticipantsModalOpen(false)}>
           <div className="bg-white rounded-t-2xl sm:rounded-2xl w-full sm:w-[400px] max-h-[85vh] flex flex-col shadow-xl animate-in slide-in-from-bottom-5 sm:slide-in-from-bottom-0 sm:zoom-in-95" onClick={(e) => e.stopPropagation()}>
              <div className="flex justify-between items-center p-4 border-b border-gray-100">
-               <h3 className="font-bold text-gray-800 text-lg" style={{fontFamily: 'var(--font-montserrat)'}}>Udeleženci klepeta</h3>
+               <h3 className="font-bold text-gray-800 text-lg" style={{fontFamily: 'var(--font-montserrat)'}}>{t.chatParticipants || "Udeleženci klepeta"}</h3>
                <button onClick={() => setIsParticipantsModalOpen(false)} className="text-gray-400 hover:bg-gray-100 p-1.5 rounded-full transition-colors">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                </button>
@@ -987,7 +987,7 @@ export default function ChatTeamPage() {
                {participantsList === undefined ? (
                   <div className="flex justify-center p-8"><div className="w-5 h-5 border-2 border-[#5BA582] border-t-white rounded-full animate-spin"></div></div>
                ) : !participantsList || participantsList.length === 0 ? (
-                  <p className="text-center text-gray-500 text-sm py-4">Ni udeležencev.</p>
+                  <p className="text-center text-gray-500 text-sm py-4">{t.noParticipants || "Ni udeležencev."}</p>
                ) : (
                   participantsList.map(p => {
                      // Check presence
@@ -1009,9 +1009,9 @@ export default function ChatTeamPage() {
                           <div className="flex flex-col flex-1 truncate">
                              <div className="flex items-center space-x-2">
                                 <span className="font-bold text-gray-800 text-sm truncate">{p.name}</span>
-                                {p.role === "admin" && <span className="text-[9px] font-bold tracking-wider text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded uppercase">Admin</span>}
+                                {p.role === "admin" && <span className="text-[9px] font-bold tracking-wider text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded uppercase">{t.adminBadge || "Admin"}</span>}
                              </div>
-                             <span className="text-xs text-gray-400">{isOnline ? 'Prisoten/a nedavno' : 'Nedosegljiv/a'}</span>
+                             <span className="text-xs text-gray-400">{isOnline ? (t.onlineRecent || 'Prisoten/a nedavno') : (t.offline || 'Nedosegljiv/a')}</span>
                           </div>
                        </div>
                      );
@@ -1033,7 +1033,7 @@ export default function ChatTeamPage() {
                     <span>{selectedPollForDetails.question}</span>
                  </h3>
                  <span className="text-xs text-[#5BA582] font-semibold mt-1 ml-6">
-                   Skupaj: {formatGlasovi(selectedPollForDetails.options.reduce((sum: number, o: any) => sum + o.votes.length, 0))}
+                   {t.totalVotes || "Skupaj"}: {formatGlasovi(selectedPollForDetails.options.reduce((sum: number, o: any) => sum + o.votes.length, 0))}
                  </span>
                </div>
                <button onClick={() => setSelectedPollForDetails(null)} className="text-gray-400 hover:bg-gray-200 bg-white shadow-sm p-1.5 rounded-full transition-colors shrink-0">
@@ -1068,7 +1068,7 @@ export default function ChatTeamPage() {
                          })}
                       </div>
                     ) : (
-                      <span className="text-xs text-gray-400 italic py-1">Ni glasov.</span>
+                      <span className="text-xs text-gray-400 italic py-1">{t.noVotesYet || "Ni glasov."}</span>
                     )}
                  </div>
                ))}

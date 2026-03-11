@@ -32,9 +32,9 @@ export default function ChatInboxPage() {
     const diffInMinutes = Math.round(diffInSeconds / 60);
     const diffInHours = Math.round(diffInMinutes / 60);
 
-    if (Math.abs(diffInSeconds) < 60) return "pravkar";
-    if (Math.abs(diffInMinutes) < 60) return `pred ${Math.abs(diffInMinutes)} min`;
-    if (Math.abs(diffInHours) < 24) return `pred ${Math.abs(diffInHours)} h`;
+    if (Math.abs(diffInSeconds) < 60) return t.justNow || "pravkar";
+    if (Math.abs(diffInMinutes) < 60) return (t.minAgo || "pred {n} min").replace("{n}", Math.abs(diffInMinutes).toString());
+    if (Math.abs(diffInHours) < 24) return (t.hAgo || "pred {n} h").replace("{n}", Math.abs(diffInHours).toString());
 
     const messageDate = new Date(timestampMs);
     const today = new Date();
@@ -42,7 +42,7 @@ export default function ChatInboxPage() {
     yesterday.setDate(today.getDate() - 1);
 
     if (messageDate.getDate() === yesterday.getDate() && messageDate.getMonth() === yesterday.getMonth() && messageDate.getFullYear() === yesterday.getFullYear()) {
-      return "Včeraj";
+      return t.yesterday || "Včeraj";
     }
 
     return new Intl.DateTimeFormat("sl-SI", { day: "numeric", month: "short" }).format(messageDate);
@@ -71,7 +71,7 @@ export default function ChatInboxPage() {
              <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
            </svg>
            <h1 className="text-2xl md:text-[28px] font-bold text-white tracking-wide" style={{fontFamily: 'var(--font-montserrat)'}}>
-              Chat
+              {t.chatTab || "Chat"}
            </h1>
         </div>
       </div>
@@ -82,26 +82,26 @@ export default function ChatInboxPage() {
         ) : !userTeams || userTeams.length === 0 ? (
            <div className="text-center py-16 text-gray-500 bg-white rounded-2xl shadow-sm border border-gray-100">
              <div className="text-4xl mb-4">💬</div>
-             <p className="text-lg font-bold mb-2">Trenutno niste v nobeni ekipi.</p>
-             <p className="text-sm">Za klepet se morate pridružiti ekipi ali ustvariti novo.</p>
+             <p className="text-lg font-bold mb-2">{t.noTeamsChatTitle || "Trenutno niste v nobeni ekipi."}</p>
+             <p className="text-sm">{t.noTeamsChatDesc || "Za klepet se morate pridružiti ekipi ali ustvariti novo."}</p>
              <button onClick={() => router.push('/teams')} className="mt-6 bg-[#6db592] hover:bg-[#5b9e7e] text-white px-6 py-2 rounded-lg font-bold text-sm transition-colors shadow-sm">
-                Pojdi na ekipe
+                {t.goToTeamsBtn || "Pojdi na ekipe"}
              </button>
            </div>
         ) : (
            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-50">
-             {userTeams.map(team => {
+              {userTeams.map(team => {
                const lastMsg = team.lastMessage;
-               let previewText: React.ReactNode = "Ni sporočil ...";
+               let previewText: React.ReactNode = t.noMessagesYet || "Ni sporočil ...";
                if (lastMsg) {
                  if (lastMsg.type === "poll") previewText = (
                    <span className="flex items-center">
                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5 text-[#ECA245] mr-1 inline-block shrink-0"><path fillRule="evenodd" d="M3 2.25a.75.75 0 0 1 .75.75v16.5h17.25a.75.75 0 0 1 0 1.5H3.75A1.5 1.5 0 0 1 2.25 19.5V3a.75.75 0 0 1 .75-.75Zm6.75 14.25a.75.75 0 0 1 .75-.75h11.25a.75.75 0 0 1 0 1.5H10.5a.75.75 0 0 1-.75-.75Zm0-4.5a.75.75 0 0 1 .75-.75h11.25a.75.75 0 0 1 0 1.5H10.5a.75.75 0 0 1-.75-.75Zm0-4.5a.75.75 0 0 1 .75-.75h11.25a.75.75 0 0 1 0 1.5H10.5a.75.75 0 0 1-.75-.75Zm0-4.5a.75.75 0 0 1 .75-.75h11.25a.75.75 0 0 1 0 1.5H10.5a.75.75 0 0 1-.75-.75Z" clipRule="evenodd"/></svg>
-                     Anketa
+                     {t.chatPoll || "Anketa"}
                    </span>
                  );
-                 else if (lastMsg.type === "location") previewText = `📍 Lokacija`;
-                 else previewText = lastMsg.text || "Pripeta datoteka";
+                 else if (lastMsg.type === "location") previewText = `📍 ${t.chatLocation || "Lokacija"}`;
+                 else previewText = lastMsg.text || t.chatAttachment || "Pripeta datoteka";
                }
                
                return (
