@@ -23,7 +23,7 @@ const AVATAR_OPTIONS = [
   "/avatars/uniform/f4.png",
 ];
 
-function OtpBlock({ email, otpCode, setOtpCode, generateOtp }: { email: string | undefined; otpCode: string; setOtpCode: (c: string) => void; generateOtp: () => Promise<any> }) {
+function OtpBlock({ email, otpCode, setOtpCode, generateOtp, error }: { email: string | undefined; otpCode: string; setOtpCode: (c: string) => void; generateOtp: () => Promise<any>; error?: string }) {
   const [cooldown, setCooldown] = useState(0);
 
   useEffect(() => {
@@ -93,6 +93,9 @@ function OtpBlock({ email, otpCode, setOtpCode, generateOtp }: { email: string |
           {otpCode.length > 0 && otpCode.length < 6 && (
             <p className="text-left text-[12px] text-red-500 mt-2.5 font-bold ml-1">Koda mora vsebovati 6 številk.</p>
           )}
+          {error && (
+            <p className="text-left text-[13px] text-red-500 mt-2.5 font-bold ml-1 bg-red-50 px-2 py-1 rounded inline-block">{error}</p>
+          )}
        </div>
     </div>
   );
@@ -115,7 +118,7 @@ export default function ProfilePage() {
   const [selectedAvatar, setSelectedAvatar] = useState<string>("");
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
 
-  const [error, setError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<{global?: string, firstName?: string, lastName?: string, otp?: string}>({});
   const [isSaving, setIsSaving] = useState(false);
   const [otpCode, setOtpCode] = useState("");
   const [otpSent, setOtpSent] = useState(false);
@@ -158,20 +161,30 @@ export default function ProfilePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
+    setErrors({});
 
-    if (!firstName.trim() || !lastName.trim()) {
-      setError(t.fillRequired);
-      return;
+    let hasClientError = false;
+    const newErrors: typeof errors = {};
+
+    if (!firstName.trim()) {
+      newErrors.firstName = t.fillRequired || "To polje je obvezno.";
+      hasClientError = true;
     }
-
+    if (!lastName.trim()) {
+      newErrors.lastName = t.fillRequired || "To polje je obvezno.";
+      hasClientError = true;
+    }
     if (phone && !isValidPhoneNumber(phone)) {
-      setError(t.phoneInvalid);
-      return;
+      newErrors.global = t.phoneInvalid || "Neveljavna telefonska številka.";
+      hasClientError = true;
+    }
+    if (needsOtp && otpCode.length !== 6) {
+      newErrors.otp = "Prosimo, vnesite pravilno 6-mestno kodo z emaila.";
+      hasClientError = true;
     }
 
-    if (needsOtp && otpCode.length !== 6) {
-      setError("Prosimo, vnesite pravilno 6-mestno kodo z emaila.");
+    if (hasClientError) {
+      setErrors(newErrors);
       return;
     }
 
@@ -188,7 +201,11 @@ export default function ProfilePage() {
       });
       
       if (result && !result.success) {
-        setError(result.error || "Prišlo je do neznane napake.");
+        if (result.error?.includes("Neveljavna ali prazna potrditvena koda")) {
+          setErrors({ otp: result.error });
+        } else {
+          setErrors({ global: result.error || "Prišlo je do neznane napake." });
+        }
         setIsSaving(false);
         return;
       }
@@ -197,11 +214,10 @@ export default function ProfilePage() {
       router.push("/teams");
     } catch (err: unknown) {
       console.error(err);
-      setError(
-        err instanceof Error 
-          ? err.message.replace("Uncaught Error: ", "").replace("[CONVEX M(users:updateProfile)] ", "") 
-          : "Prišlo je do napake pri shranjevanju."
-      );
+      const msg = err instanceof Error 
+        ? err.message.replace("Uncaught Error: ", "").replace("[CONVEX M(users:updateProfile)] ", "") 
+        : "Prišlo je do napake pri shranjevanju.";
+      setErrors({ global: msg });
     } finally {
       setIsSaving(false);
     }
@@ -369,9 +385,9 @@ export default function ProfilePage() {
            </div>
 
            <form onSubmit={handleSubmit} className="ui-form-box space-y-6">
-              {error && (
+              {errors.global && (
                 <div className="bg-red-50 text-red-500 text-sm font-bold px-4 py-3 rounded-lg border border-red-100 mb-6">
-                  {error}
+                  {errors.global}
                 </div>
               )}
 
@@ -382,11 +398,11 @@ export default function ProfilePage() {
                    <input
                      type="text"
                      value={firstName}
-                     onChange={(e) => setFirstName(e.target.value)}
-                     required
-                     className="ui-input"
+                     onChange={(e) => { setFirstName(e.target.value); setErrors(p => ({...p, firstName: undefined})); }}
+                     className={`ui-input ${errors.firstName ? 'border-red-400 focus:border-red-500 focus:ring-red-500/20' : ''}`}
                      placeholder={t.enterName || "Vnesite ime"}
                    />
+                   {errors.firstName && <p className="text-red-500 text-xs mt-1.5 font-bold ml-1">{errors.firstName}</p>}
                  </div>
               </div>
 
@@ -396,11 +412,11 @@ export default function ProfilePage() {
                    <input
                      type="text"
                      value={lastName}
-                     onChange={(e) => setLastName(e.target.value)}
-                     required
-                     className="ui-input"
+                     onChange={(e) => { setLastName(e.target.value); setErrors(p => ({...p, lastName: undefined})); }}
+                     className={`ui-input ${errors.lastName ? 'border-red-400 focus:border-red-500 focus:ring-red-500/20' : ''}`}
                      placeholder={t.enterSurname || "Vnesite priimek"}
                    />
+                   {errors.lastName && <p className="text-red-500 text-xs mt-1.5 font-bold ml-1">{errors.lastName}</p>}
                  </div>
               </div>
 
@@ -420,8 +436,9 @@ export default function ProfilePage() {
                 <OtpBlock 
                   email={currentUser?.email} 
                   otpCode={otpCode} 
-                  setOtpCode={setOtpCode} 
-                  generateOtp={generateOtp} 
+                  setOtpCode={(code) => { setOtpCode(code); setErrors(p => ({...p, otp: undefined})); }} 
+                  generateOtp={generateOtp}
+                  error={errors.otp}
                 />
               )}
 
