@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery, useMutation } from "convex/react";
+import { useQuery, useMutation, useConvex } from "convex/react";
 import { useConvexAuth } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
@@ -13,6 +13,7 @@ import Header from "../components/Header";
 
 function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { initialTab?: "login"|"register", onClose: () => void, currentLang?: Language }) {
   const { signIn } = useAuthActions();
+  const convex = useConvex();
   const [tab, setTab] = useState<"login" | "register">(initialTab);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,6 +36,18 @@ function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { 
     if (password.length < 8) {
       setError(t.passwordLength);
       return;
+    }
+
+    if (tab === "register") {
+      try {
+        const check = await convex.query(api.users.checkEmailAvailable, { email });
+        if (!check.available) {
+          setError("Ta e-poštni naslov je že registriran. Poskusite se prijaviti.");
+          return;
+        }
+      } catch (err) {
+        console.error("Failed to check email availability:", err);
+      }
     }
 
     setIsLoading(true);

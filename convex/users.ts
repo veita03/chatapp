@@ -3,6 +3,18 @@ import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import { api } from "./_generated/api";
 
+export const checkEmailAvailable = query({
+  args: { email: v.string() },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("email", (q) => q.eq("email", args.email))
+      .first();
+    
+    return { available: user === null };
+  },
+});
+
 export const current = query({
   args: {},
   handler: async (ctx) => {
