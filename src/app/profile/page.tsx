@@ -177,7 +177,7 @@ export default function ProfilePage() {
 
     setIsSaving(true);
     try {
-      await updateProfile({
+      const result = await updateProfile({
         firstName: firstName.trim(),
         lastName: lastName.trim(),
         phone: phone || undefined,
@@ -186,6 +186,13 @@ export default function ProfilePage() {
         image: selectedAvatar || undefined,
         otpCode: needsOtp ? otpCode : undefined,
       });
+      
+      if (result && !result.success) {
+        setError(result.error || "Prišlo je do neznane napake.");
+        setIsSaving(false);
+        return;
+      }
+      
       // On success, go to teams
       router.push("/teams");
     } catch (err: unknown) {

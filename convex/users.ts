@@ -44,7 +44,7 @@ export const updateProfile = mutation({
 
     if (needsVerification) {
       if (!args.otpCode || args.otpCode !== user.emailVerificationCode) {
-        throw new Error("Neveljavna ali prazna potrditvena koda.");
+        return { success: false, error: "Neveljavna ali prazna potrditvena koda." };
       }
     }
     
