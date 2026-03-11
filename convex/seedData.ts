@@ -149,6 +149,64 @@ export const seedProductionTeams = mutation({
   }
 });
 
+export const seedUnreadMessages = mutation({
+  args: {
+     email: v.string()
+  },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("email", (q) => q.eq("email", args.email))
+      .unique();
+
+    if (!user) {
+       throw new Error("Uporabnik ne obstaja v bazi.");
+    }
+
+    // Find all memberships for this user
+    const memberships = await ctx.db
+       .query("memberships")
+       .withIndex("by_user", (q) => q.eq("userId", user._id))
+       .collect();
+
+    if (memberships.length === 0) {
+       return { success: true, message: "Uporabnik nima ekip." };
+    }
+
+    // Fake unread messages to inject
+    const fakeUnread = [
+       { author: "Marko", text: "Si videl zadnjo objavo? 🤯", reaction: { emoji: "🔥", users: ["Dejan"] } },
+       { author: "Dejan", text: "Ja, norišnica res. Bomo videli kako bo to zgledalo v praksi." },
+       { author: "Simon", text: "Fantje, ne pozabite potrditi prisotnosti za jutri!" }
+    ];
+
+    let timeMs = Date.now() - 1000 * 60 * 10; // start 10 mins ago
+
+    for (const membership of memberships) {
+       for (const msg of fakeUnread) {
+          timeMs += 1000 * 60 * 2; // 2 minutes spacing
+          await ctx.db.insert("messages", {
+             teamId: membership.teamId,
+             author: msg.author,
+             text: msg.text,
+             type: "text",
+             reactions: msg.reaction ? [msg.reaction] : [],
+             // We omit 'creationTime' because Convex natively uses _creationTime, 
+             // ensuring these are recent and thereby "unread" since the user's lastReadTime.
+          });
+       }
+       
+       // Force update the membership to simulate they haven't read these yet just to be absolutely sure
+       // We set lastReadTime to 15 mins ago
+       await ctx.db.patch(membership._id, {
+          lastReadTime: Date.now() - 1000 * 60 * 15
+       });
+    }
+
+    return { success: true };
+  }
+});
+
 export const getUsers = query({
   args: {},
   handler: async (ctx) => {
