@@ -5,7 +5,7 @@ import { Resend } from "resend";
 // Resend instance initialized with the environment variable from convex dashboard
 const resend = new Resend(process.env.RESEND_API_KEY || "dummy_key");
 
-const SENDER = "Sport2GO <info@sport2go.app>"; // Must be a verified domain in Resend
+const SENDER = "Sport2GO <info@chat.sport2go.app>"; // Must be a verified domain in Resend
 
 // Master template with placeholder for email content
 const generateHtmlTemplate = (title: string, bodyHtml: string) => `
