@@ -806,20 +806,20 @@ export default function ChatTeamPage() {
                     {msg.reactions && msg.reactions.length > 0 && (
                        <div className={`flex flex-wrap gap-1 mt-1 ${isMe ? 'justify-end' : 'justify-start'}`}>
                           {msg.reactions.map((r) => (
-                             <button 
+                             <div 
                                 key={r.emoji} 
-                                onClick={(e) => { e.stopPropagation(); handleReaction(msg._id, r.emoji); }}
-                                className={`group relative text-[10px] font-bold px-1.5 py-0.5 rounded-full border flex items-center ${r.users.includes(author) ? 'bg-[#5BA582]/10 border-[#5BA582]/30 text-[#5BA582]' : 'bg-white border-gray-200 text-gray-500'}`}
+                                tabIndex={0}
+                                className={`group relative text-[10px] font-bold px-1.5 py-0.5 rounded-full border flex items-center cursor-default outline-none ${r.users.includes(author) ? 'bg-[#5BA582]/10 border-[#5BA582]/30 text-[#5BA582]' : 'bg-white border-gray-200 text-gray-500'}`}
                              >
-                                <span className="mr-0.5">{r.emoji}</span>
-                                {r.users.length > 1 && <span>{r.users.length}</span>}
+                                <span className="mr-0.5 pointer-events-none">{r.emoji}</span>
+                                {r.users.length > 1 && <span className="pointer-events-none">{r.users.length}</span>}
                                 {/* Custom Tooltip for Reaction Users */}
-                                <div className="absolute top-full mb-2 hidden group-hover:flex group-active:flex flex-col items-center z-50 mt-1.5 left-1/2 -translate-x-1/2 pointer-events-none">
-                                   <div className="bg-white border border-gray-200 text-gray-700 text-[10px] font-semibold px-2.5 py-1.5 rounded-lg shadow-sm whitespace-nowrap">
+                                <div className="absolute bottom-full mb-1.5 hidden group-hover:flex group-focus:flex flex-col items-center z-50 left-1/2 -translate-x-1/2 pointer-events-none">
+                                   <div className="bg-white border border-gray-200 text-gray-700 text-[10px] font-semibold px-2.5 py-1.5 rounded-lg shadow-[0_4px_12px_rgba(0,0,0,0.08)] whitespace-nowrap">
                                       {r.users.join(', ')}
                                    </div>
                                 </div>
-                             </button>
+                             </div>
                           ))}
                        </div>
                     )}
