@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { translations, Language } from "../i18n";
+import { useLanguage } from "@/components/LanguageContext";
 
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
@@ -109,7 +110,7 @@ export default function ProfilePage() {
 
   const generateOtp = useMutation(api.users.generateOtp);
 
-  const [lang, setLang] = useState<Language>("sl");
+  const { language: currentLang } = useLanguage();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
@@ -123,13 +124,8 @@ export default function ProfilePage() {
   const [otpCode, setOtpCode] = useState("");
   const [otpSent, setOtpSent] = useState(false);
 
-  useEffect(() => {
-    const savedLang = Cookies.get("lang") as Language;
-    if (savedLang) setLang(savedLang);
-  }, []);
-
-  const t = (translations as any)[lang] || translations["sl"];
-  const defaultCountry = lang === "sl" ? "SI" : "US";
+  const t = (translations as any)[currentLang] || translations["sl"];
+  const defaultCountry = currentLang === "sl" ? "SI" : "US";
 
   // Sync current user data
   useEffect(() => {
