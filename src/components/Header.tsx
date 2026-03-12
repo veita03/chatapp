@@ -97,6 +97,7 @@ export default function Header({ onLoginClick, onRegisterClick }: HeaderProps) {
                }
              />
              {/* PREVOZI */}
+             {/* PREVOZI (Temporarily hidden)
              <NavButton 
                active={pathname.startsWith("/rides")}
                onClick={() => router.push("/rides")} 
@@ -107,6 +108,7 @@ export default function Header({ onLoginClick, onRegisterClick }: HeaderProps) {
                  </svg>
                }
              />
+             */}
              {/* CHAT */}
              <NavButton 
                active={pathname === "/chat"}
