@@ -144,26 +144,14 @@ export default function TeamDashboardPage() {
                       </button>
                       <div className="flex gap-2">
                         <button 
-                          onClick={() => {
-                            if (team.userRole !== 'admin') {
-                              alert("Samo administrator lahko ureja ekipo.");
-                              return;
-                            }
-                            router.push(`/team/${team._id}/edit`);
-                          }}
+                          onClick={() => router.push(`/team/${team._id}/edit`)}
                           title={t.editTeamTooltip || "Uredi ekipo"}
                           className="w-9 h-9 md:w-10 md:h-10 border border-gray-200 text-gray-500 hover:text-gray-700 bg-white rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center flex-shrink-0 shadow-sm"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4"><path d="M2.695 14.763l-1.262 3.152a.5.5 0 00.65.65l3.151-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" /></svg>
                         </button>
                         <button 
-                          onClick={() => {
-                            if (team.userRole !== 'admin') {
-                              alert("Samo administrator lahko izbriše ekipo.");
-                              return;
-                            }
-                            setTeamToDelete(team._id);
-                          }}
+                          onClick={() => setTeamToDelete(team._id)}
                           title={t.deleteTeamTooltip || "Izbriši ekipo"}
                           className="w-9 h-9 md:w-10 md:h-10 border border-red-100 text-red-500 hover:text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors flex items-center justify-center flex-shrink-0 shadow-sm"
                         >
