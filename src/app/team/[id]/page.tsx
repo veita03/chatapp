@@ -111,58 +111,55 @@ export default function TeamDashboardPage() {
            <div className="flex flex-col gap-5">
               
               {/* Top Row: Avatar + Title & Desc */}
-              <div className="flex items-center gap-4 md:gap-5">
-                  
-                  {/* Team Avatar */}
-                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white border-4 border-white shadow-md flex-shrink-0 flex items-center justify-center overflow-hidden relative">
-                    {team.image ? (
-                       <img src={team.image} alt={team.name} className="w-full h-full object-cover" />
-                    ) : (
-                       <span className="text-xl md:text-2xl font-bold text-[#eeb054] uppercase">{team.name.charAt(0)}</span>
-                    )}
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 w-full">
+                  <div className="flex items-center gap-4 md:gap-5">
+                      {/* Team Avatar */}
+                      <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white border-4 border-white shadow-md flex-shrink-0 flex items-center justify-center overflow-hidden relative">
+                        {team.image ? (
+                           <img src={team.image} alt={team.name} className="w-full h-full object-cover" />
+                        ) : (
+                           <span className="text-xl md:text-2xl font-bold text-[#eeb054] uppercase">{team.name.charAt(0)}</span>
+                        )}
+                      </div>
+
+                      {/* Team Info Container */}
+                      <div className="flex flex-col justify-center text-white">
+                        <h1 className="text-2xl md:text-[28px] font-bold tracking-wide leading-tight drop-shadow-sm mb-1" style={{fontFamily: 'var(--font-montserrat)'}}>
+                           {team.name}
+                        </h1>
+                        {/* Description */}
+                        {team.desc && (
+                          <p className="text-white/95 text-sm md:text-[15px] max-w-2xl leading-snug m-0 pr-4">
+                            {team.desc}
+                          </p>
+                        )}
+                      </div>
                   </div>
 
-                  {/* Team Info Container */}
-                  <div className="flex-1 flex flex-col justify-center text-white">
-                    
-                    {/* Title & Actions Row */}
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-1">
-                       <h1 className="text-2xl md:text-[28px] font-bold tracking-wide leading-tight drop-shadow-sm" style={{fontFamily: 'var(--font-montserrat)'}}>
-                          {team.name}
-                       </h1>
-                       
-                       <div className="flex items-center gap-2">
-                           <button onClick={() => router.push('/teams')} className="px-4 py-2 bg-white text-[#dba032] hover:bg-[#fdfaf1] rounded-lg font-bold text-sm transition-colors border border-[#f3ebcd] hidden sm:flex items-center gap-1.5 shadow-sm">
-                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
-                               <span>{t.backToTeams || "Seznam ekip"}</span>
-                           </button>
-                           {team.userRole === "admin" && (
-                             <div className="flex gap-2">
-                               <button 
-                                 onClick={() => router.push(`/team/${team._id}/edit`)}
-                                 title={t.editTeamTooltip || "Uredi ekipo"}
-                                 className="w-10 h-10 border border-gray-200 text-gray-500 hover:text-gray-700 bg-white rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center flex-shrink-0 shadow-sm"
-                               >
-                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4"><path d="M2.695 14.763l-1.262 3.152a.5.5 0 00.65.65l3.151-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" /></svg>
-                               </button>
-                               <button 
-                                 onClick={() => setTeamToDelete(team._id)}
-                                 title={t.deleteTeamTooltip || "Izbriši ekipo"}
-                                 className="w-10 h-10 border border-red-100 text-red-500 hover:text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors flex items-center justify-center flex-shrink-0 shadow-sm"
-                               >
-                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4"><path fillRule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z" clipRule="evenodd" /></svg>
-                               </button>
-                             </div>
-                           )}
-                       </div>
-                    </div>
-
-                    {/* Description */}
-                    {team.desc && (
-                      <p className="text-white/95 text-sm md:text-[15px] max-w-3xl leading-snug m-0">
-                        {team.desc}
-                      </p>
-                    )}
+                  {/* Actions Row */}
+                  <div className="flex items-center gap-2 self-start md:self-center ml-[5rem] md:ml-0 mt-1 md:mt-0">
+                      <button onClick={() => router.push('/teams')} className="px-3 md:px-4 py-2 bg-white text-[#dba032] hover:bg-[#fdfaf1] rounded-lg font-bold text-[13px] md:text-sm transition-colors border border-[#f3ebcd] flex items-center gap-1.5 shadow-sm whitespace-nowrap">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
+                          <span>{t.backToTeams || "Seznam ekip"}</span>
+                      </button>
+                      {team.userRole === "admin" && (
+                        <div className="flex gap-2">
+                          <button 
+                            onClick={() => router.push(`/team/${team._id}/edit`)}
+                            title={t.editTeamTooltip || "Uredi ekipo"}
+                            className="w-9 h-9 md:w-10 md:h-10 border border-gray-200 text-gray-500 hover:text-gray-700 bg-white rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center flex-shrink-0 shadow-sm"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4"><path d="M2.695 14.763l-1.262 3.152a.5.5 0 00.65.65l3.151-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" /></svg>
+                          </button>
+                          <button 
+                            onClick={() => setTeamToDelete(team._id)}
+                            title={t.deleteTeamTooltip || "Izbriši ekipo"}
+                            className="w-9 h-9 md:w-10 md:h-10 border border-red-100 text-red-500 hover:text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors flex items-center justify-center flex-shrink-0 shadow-sm"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4"><path fillRule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z" clipRule="evenodd" /></svg>
+                          </button>
+                        </div>
+                      )}
                   </div>
               </div>
 
