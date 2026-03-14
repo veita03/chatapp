@@ -119,7 +119,7 @@ export default function TeamDashboardPage() {
                        </button>
                        {team.userRole === "admin" && (
                          <div className="flex gap-2">
-                           <button onClick={() => router.push(`/teams/${team._id}/edit`)} className="w-10 h-10 bg-white text-gray-700 hover:bg-gray-50 rounded-lg shadow-sm flex items-center justify-center transition-colors border border-gray-100/50">
+                           <button onClick={() => router.push(`/team/${team._id}/edit`)} className="w-10 h-10 bg-white text-gray-700 hover:bg-gray-50 rounded-lg shadow-sm flex items-center justify-center transition-colors border border-gray-100/50">
                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4"><path d="M2.695 14.763l-1.262 3.152a.5.5 0 00.65.65l3.151-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" /></svg>
                            </button>
                            {/* Intentionally left red delete button out for safety on the dash, but kept edit */}

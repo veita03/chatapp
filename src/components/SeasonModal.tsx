@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useTranslations } from '@/hooks/useTranslations';
+import { useLanguage } from "@/components/LanguageContext";
+import { translations, Language } from "@/app/i18n";
 
 interface SeasonModalProps {
   isOpen: boolean;
@@ -9,7 +10,8 @@ interface SeasonModalProps {
 }
 
 export default function SeasonModal({ isOpen, onClose, teamId, seasonData }: SeasonModalProps) {
-  const { t } = useTranslations();
+  const { language: currentLang } = useLanguage();
+  const t = (translations[currentLang as Language] || translations.sl) as any;
   
   const [formData, setFormData] = useState({
     name: seasonData?.name || '',
