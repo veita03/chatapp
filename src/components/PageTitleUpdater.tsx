@@ -16,7 +16,7 @@ export default function PageTitleUpdater() {
     let moduleName = "";
     
     if (pathname === "/") {
-      moduleName = ""; // Base case, just Sport2GO
+      moduleName = `${t.heroTitle1 || ''} ${t.heroTitle2 || ''}`.trim();
     } else if (pathname.startsWith("/profile")) {
       moduleName = t.navProfile || "Profil";
     } else if (pathname.startsWith("/teams")) {

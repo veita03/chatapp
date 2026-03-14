@@ -357,7 +357,7 @@ function LandingPage() {
   const [currentLang, setCurrentLang] = useState<Language>(() => {
     if (typeof window !== "undefined") {
       const saved = Cookies.get("lang") as Language;
-      if (saved && ["sl", "en", "es", "it", "fr", "hr", "sr", "de", "tr", "ar", "mx", "at", "us"].includes(saved)) return saved;
+      if (saved && ["sl", "en", "es", "it", "fr", "hr", "sr", "de", "tr", "ar", "mx", "at", "us", "nl", "el"].includes(saved)) return saved;
     }
     return "sl";
   });
