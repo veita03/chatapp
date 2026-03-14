@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { translations, Language } from "./i18n";
 import Header from "../components/Header";
+import { useLanguage } from "@/components/LanguageContext";
 
 function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { initialTab?: "login"|"register"|"forgot", onClose: () => void, currentLang?: Language }) {
   const { signIn } = useAuthActions();
@@ -353,14 +354,7 @@ function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { 
 function LandingPage() {
   const [authModal, setAuthModal] = useState<"login" | "register" | null>(null);
   
-  // Set initial state from cookie or default to sl
-  const [currentLang, setCurrentLang] = useState<Language>(() => {
-    if (typeof window !== "undefined") {
-      const saved = Cookies.get("lang") as Language;
-      if (saved && ["sl", "en", "es", "it", "fr", "hr", "sr", "de", "tr", "ar", "mx", "at", "us", "nl", "el"].includes(saved)) return saved;
-    }
-    return "sl";
-  });
+  const { language: currentLang } = useLanguage();
   
   const t = translations[currentLang];
 
