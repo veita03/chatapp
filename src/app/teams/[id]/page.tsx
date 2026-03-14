@@ -82,7 +82,7 @@ export default function TeamDashboardPage() {
 
   return (
     <div className="min-h-[100dvh] bg-[#F4F6F8] font-sans flex flex-col relative pb-20">
-      <PageTitleUpdater title={team.name} />
+      <PageTitleUpdater />
       <Header />
       <div className="h-[100px] md:h-[60px]" />
 
