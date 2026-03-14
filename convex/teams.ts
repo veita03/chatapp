@@ -379,7 +379,11 @@ export const getTeam = query({
     if (memberships.length === 0) return null;
 
     let maxLastReadTime = 0;
+    let userRole = "player";
     for (const m of memberships) {
+      if (m.role === "admin") {
+         userRole = "admin";
+      }
       if (m.lastReadTime && m.lastReadTime > maxLastReadTime) {
          maxLastReadTime = m.lastReadTime;
       }
@@ -390,7 +394,8 @@ export const getTeam = query({
     
     return {
       ...team,
-      lastReadTime: maxLastReadTime
+      lastReadTime: maxLastReadTime,
+      userRole
     };
   },
 });
