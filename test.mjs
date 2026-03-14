@@ -1,0 +1,1 @@
+import { Password } from '@convex-dev/auth/providers/Password';\nimport { Email } from '@convex-dev/auth/providers/Email';\nconst p = Password({ reset: Email({ id: 'test' }) });\nconsole.log(p.extraProviders);
