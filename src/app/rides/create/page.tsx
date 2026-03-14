@@ -177,7 +177,7 @@ export default function CreateRidePage() {
       <Header />
       <div className="h-[100px] md:h-[60px]" />
 
-       <div className="w-full" style={{background: '#f4c361'}}>
+       <div className="w-full" style={{background: '#efc463'}}>
          <div className="max-w-6xl mx-auto px-4 sm:px-8 py-5 flex items-center space-x-3">
            <button onClick={() => router.back()} className="text-white hover:bg-white/20 p-2 rounded-lg transition-colors mr-2">
              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>

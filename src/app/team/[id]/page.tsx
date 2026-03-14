@@ -89,10 +89,10 @@ export default function TeamDashboardPage() {
       <div className="h-[100px] md:h-[60px]" />
 
       {/* Legacy Subheader / Banner Design */}
-      <div className="w-full relative z-10" style={{background: '#f4c361'}}>
+      <div className="w-full relative z-10" style={{background: '#efc463'}}>
         <div className="max-w-6xl mx-auto px-4 sm:px-8 py-6 md:py-8 flex flex-col relative">
            
-           <div className="flex flex-col md:flex-row md:items-start gap-5">
+           <div className="flex flex-col md:flex-row md:items-center gap-5">
               
               {/* Team Avatar */}
               <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-white border-4 border-white shadow-md flex-shrink-0 flex items-center justify-center overflow-hidden relative">
@@ -130,39 +130,47 @@ export default function TeamDashboardPage() {
 
                 {/* Description */}
                 {team.desc && (
-                  <p className="text-white/90 text-sm mb-4 max-w-3xl leading-relaxed">
+                  <p className="text-white/95 text-sm md:text-[15px] mb-3 max-w-3xl leading-snug">
                     {team.desc}
                   </p>
                 )}
 
                 {/* Subheader Badges (Role, Seasons, Sport, Creator, Date) */}
-                <div className="flex flex-wrap gap-2 mt-auto pt-2">
+                <div className="flex flex-wrap items-center gap-2 mt-1">
                    
                    {/* Members Count */}
                    {team.memberCount > 0 && (
                      <div className="flex items-center gap-2 px-3 py-1.5 bg-white/95 rounded-full text-gray-700 text-[13px] font-bold shadow-sm whitespace-nowrap">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-gray-400"><path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-gray-500"><path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" /></svg>
                         {team.memberCount}
                      </div>
                    )}
 
                    {/* Add Season Count */}
                    {team.seasonCount > 0 && (
-                     <div className="flex items-center gap-2 px-3 py-1.5 bg-white/95 rounded-full text-gray-700 text-[13px] font-bold shadow-sm whitespace-nowrap">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-gray-400"><path fillRule="evenodd" d="M14.5 4V3.25a.75.75 0 0 0-1.5 0V4h-6V3.25a.75.75 0 0 0-1.5 0V4H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.5zM4 6h12v2H4V6zm0 3.5h12V16H4V9.5z" clipRule="evenodd" /></svg>
-                        {team.seasonCount} <span className="font-medium">sezon</span>
+                     <div className="flex items-center gap-1.5 px-3 py-1.5 bg-white/95 rounded-full text-gray-700 text-[13px] font-bold shadow-sm whitespace-nowrap">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-gray-500"><path fillRule="evenodd" d="M14.5 4V3.25a.75.75 0 0 0-1.5 0V4h-6V3.25a.75.75 0 0 0-1.5 0V4H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.5zM4 6h12v2H4V6zm0 3.5h12V16H4V9.5z" clipRule="evenodd" /></svg>
+                        {team.seasonCount} <span className="font-normal text-gray-600">sezon</span>
                      </div>
                    )}
 
                    {/* Sport */}
                    <div className="flex items-center gap-2 px-3 py-1.5 bg-white/95 rounded-full text-gray-700 text-[13px] font-bold shadow-sm whitespace-nowrap">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-gray-400"><path fillRule="evenodd" d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" clipRule="evenodd"/><path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
-                      <span className="font-semibold">{displaySportName}</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-gray-500"><path fillRule="evenodd" d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" clipRule="evenodd"/><path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                      {displaySportName}
                    </div>
                    
+                   {/* Creator Badge */}
+                   {team.creatorName && (
+                     <div className="flex items-center gap-2 px-3 py-1.5 bg-white/95 rounded-full text-gray-700 text-[13px] font-bold shadow-sm whitespace-nowrap">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-gray-500"><path fillRule="evenodd" d="M12 3a1 1 0 0 1 .894.553l2.844 5.688 6.132.863a1 1 0 0 1 .554 1.706l-4.43 4.225 1.045 5.925a1 1 0 0 1-1.45 1.054L12 20.026l-5.589 2.988a1 1 0 0 1-1.45-1.054l1.045-5.925-4.43-4.225a1 1 0 0 1 .554-1.706l6.132-.863 2.844-5.688A1 1 0 0 1 12 3Z" clipRule="evenodd"/></svg>
+                        {team.creatorName}
+                     </div>
+                   )}
+                   
                    {/* Date Created */}
-                   <div className="flex items-center gap-2 px-3 py-1.5 bg-white/95 rounded-full text-gray-700 text-[13px] font-bold shadow-sm whitespace-nowrap hidden sm:flex">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-gray-400"><path fillRule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clipRule="evenodd" /></svg>
+                   <div className="flex items-center gap-2 px-3 py-1.5 bg-white/95 rounded-full text-gray-700 text-[13px] font-bold shadow-sm whitespace-nowrap">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-gray-500"><path fillRule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clipRule="evenodd" /></svg>
                       {teamCreationDate}
                    </div>
                 </div>

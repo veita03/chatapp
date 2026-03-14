@@ -404,13 +404,22 @@ export const getTeam = query({
       .query("seasons")
       .withIndex("by_team", (q) => q.eq("teamId", args.teamId))
       .collect();
+    // Fetch creator Name for the subheader badge
+    let creatorName = "Ustanovitelj";
+    if (team.creatorId) {
+      const creator = await ctx.db.get(team.creatorId);
+      if (creator) {
+         creatorName = creator.name || creator.email?.split("@")[0] || "Ustanovitelj";
+      }
+    }
     
     return {
       ...team,
       lastReadTime: maxLastReadTime,
       userRole,
       memberCount: uniqueMemberIds.size,
-      seasonCount: seasons.length
+      seasonCount: seasons.length,
+      creatorName
     };
   },
 });
