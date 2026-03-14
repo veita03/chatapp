@@ -9,7 +9,6 @@ import Header from "@/components/Header";
 import { translations, Language } from "@/app/i18n";
 import { useLanguage } from "@/components/LanguageContext";
 import PageTitleUpdater from "@/components/PageTitleUpdater";
-import SeasonModal from '@/components/SeasonModal';
 
 const SPORTS = [
   { id: "badminton", name: "Badminton", icon: "🏸" },
@@ -27,7 +26,6 @@ export default function TeamDashboardPage() {
   const { isAuthenticated, isLoading: isAuthLoading } = useConvexAuth();
   const { language: currentLang } = useLanguage();
   const t = (translations[currentLang as Language] || translations.sl) as any;
-  const [isSeasonModalOpen, setIsSeasonModalOpen] = useState(false);
   const [teamToDelete, setTeamToDelete] = useState<Id<"teams"> | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const deleteTeam = useMutation(api.teams.deleteTeam);
@@ -216,7 +214,7 @@ export default function TeamDashboardPage() {
                  {t.seasons || "Sezone"}
                </h2>
                <button 
-                 onClick={() => setIsSeasonModalOpen(true)}
+                 onClick={() => router.push(`/team/${teamId}/seasons/create`)}
                  className="bg-[#5BA582] hover:bg-[#4d8f70] transition-colors text-white font-bold text-sm px-4 py-2 rounded-lg shadow-sm flex items-center gap-2"
                >
                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4"><path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" /></svg>
@@ -240,12 +238,6 @@ export default function TeamDashboardPage() {
           </div>
 
       </div>
-
-      <SeasonModal 
-        isOpen={isSeasonModalOpen} 
-        onClose={() => setIsSeasonModalOpen(false)} 
-        teamId={teamId} 
-      />
 
       {/* Delete Confirmation Modal */}
       {teamToDelete && (
