@@ -45,7 +45,7 @@ function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { 
       try {
         const check = await convex.query(api.users.checkEmailAvailable, { email });
         if (!check.available) {
-          setError("Ta e-poštni naslov je že registriran. Poskusite se prijaviti.");
+          setError(t.emailTakenError || "Ta e-poštni naslov je že registriran. Poskusite se prijaviti.");
           return;
         }
       } catch (err) {
@@ -76,7 +76,7 @@ function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { 
         }
       } catch (err: any) {
         console.error("Reset error:", err);
-        setError("Napaka pri obnovi gesla. Preverite kodo ali e-pošto.");
+        setError(t.resetError || "Napaka pri obnovi gesla. Preverite kodo ali e-pošto.");
       } finally {
         setIsLoading(false);
       }
@@ -100,9 +100,9 @@ function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { 
       console.error("Auth error:", err);
       const msg = err?.message || String(err);
       if (msg.includes("Invalid credentials") || msg.toLowerCase().includes("password")) {
-        setError(tab === "login" ? "Napačna e-pošta ali geslo." : "Napaka pri registraciji.");
+        setError(tab === "login" ? (t.loginInvalidError || "Napačna e-pošta ali geslo.") : (t.registerError || "Napaka pri registraciji."));
       } else {
-        setError(tab === "login" ? "Prijava ni uspela. Preverite podatke." : "Neznana napaka pri registraciji (morda e-pošta že obstaja).");
+        setError(tab === "login" ? (t.loginError || "Prijava ni uspela. Preverite podatke.") : (t.registerUnknownError || "Neznana napaka pri registraciji (morda e-pošta že obstaja)."));
       }
     } finally {
       setIsLoading(false);
@@ -170,10 +170,10 @@ function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { 
           <div className="p-6 sm:p-8 pt-5">
             <div className="mb-6">
               <h2 className="text-2xl font-bold text-gray-800 tracking-tight uppercase leading-none" style={{fontFamily: 'var(--font-cabin)'}}>
-                {tab === "login" ? t.login : tab === "register" ? t.register : "Obnova gesla"}
+                {tab === "login" ? t.login : tab === "register" ? t.register : (t.forgotPasswordTitle || "Obnova gesla")}
               </h2>
               <p className="text-xs text-gray-400 mt-2 font-medium" style={{fontFamily: 'var(--font-cabin)'}}>
-                {tab === "login" ? "Pozdravljeni nazaj! Prosimo, vpišite svoje podatke." : tab === "register" ? "Ustvarite račun in se pridružite skupnosti." : resetStep === "email" ? "Vnesite vaš e-poštni naslov za prejem 6-mestne kode za obnovo gesla." : "Vnesite kodo z e-pošte in izberite novo geslo."}
+                {tab === "login" ? (t.loginDesc || "Pozdravljeni nazaj! Prosimo, vpišite svoje podatke.") : tab === "register" ? (t.registerDesc || "Ustvarite račun in se pridružite skupnosti.") : resetStep === "email" ? (t.forgotDescEmail || "Vnesite vaš e-poštni naslov za prejem 6-mestne kode za obnovo gesla.") : (t.forgotDescCode || "Vnesite kodo z e-pošte in izberite novo geslo.")}
               </p>
             </div>
 
@@ -202,7 +202,7 @@ function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { 
             <div className="relative">
               {tab !== "forgot" || resetStep === "code" ? (
                 <>
-                  <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">{tab === "forgot" ? "Novo geslo" : t.password}</label>
+                  <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">{tab === "forgot" ? (t.newPassword || "Novo geslo") : t.password}</label>
                   <div className="relative">
                     <input
                       type={showPassword ? "text" : "password"}
@@ -236,7 +236,7 @@ function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { 
 
             {(tab === "register" || (tab === "forgot" && resetStep === "code")) && (
               <div className="relative animate-in fade-in slide-in-from-top-2 duration-300">
-                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">{tab === "forgot" ? "Potrdi novo geslo" : t.confirmPassword}</label>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">{tab === "forgot" ? (t.confirmNewPassword || "Potrdi novo geslo") : t.confirmPassword}</label>
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
@@ -265,7 +265,7 @@ function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { 
 
             {tab === "forgot" && resetStep === "code" && (
               <div className="relative animate-in fade-in slide-in-from-top-2 duration-300">
-                <label className="block text-xs font-bold text-[#dba032] uppercase tracking-wider mb-1.5 ml-1">6-mestna potrditvena koda z e-pošte</label>
+                <label className="block text-xs font-bold text-[#dba032] uppercase tracking-wider mb-1.5 ml-1">{t.resetCodeLabel || "6-mestna potrditvena koda z e-pošte"}</label>
                 <input
                   type="text"
                   value={resetCode}
@@ -297,7 +297,7 @@ function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { 
                   onClick={() => { setTab("forgot"); setError(null); }} 
                   className="text-xs font-semibold text-[#5BA582] hover:text-[#4d8c6f] transition-colors"
                 >
-                  Pozabljeno geslo?
+                  {t.forgotPasswordLabel || "Pozabljeno geslo?"}
                 </button>
               </div>
             )}
@@ -309,7 +309,7 @@ function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { 
                   onClick={() => { setTab("login"); setError(null); setResetStep("email"); }} 
                   className="text-xs font-semibold text-gray-400 hover:text-gray-600 transition-colors"
                 >
-                  Nazaj na prijavo
+                  {t.backToLoginLabel || "Nazaj na prijavo"}
                 </button>
               </div>
             )}
@@ -321,7 +321,7 @@ function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { 
             >
               {isLoading ? (
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              ) : tab === "login" ? t.loginBtn : tab === "register" ? t.registerBtn : resetStep === "email" ? "Pošlji kodo na e-pošto" : "Spremeni geslo in se prijavi"}
+              ) : tab === "login" ? t.loginBtn : tab === "register" ? t.registerBtn : resetStep === "email" ? (t.sendCodeBtn || "Pošlji kodo na e-pošto") : (t.resetPassBtn || "Spremeni geslo in se prijavi")}
             </button>
           </form>
 

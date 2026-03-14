@@ -182,6 +182,25 @@ const de = {
     allUsers: "Alle",
     userDefault: "Benutzer",
     quickTexts: ["Du warst heute mies! 👎", "Gutes Spiel! 👏", "Du gibst ein Bier aus! 🍻", "Schon wieder zu spät! ⏳", "Spielverderber!", "Wer hat den Ball?", "Wieder Ausreden...", "Der Schiri ist schuld! 🙈", "Wo ist die Ausdauer? 🥵", "Alles geben! 💪", "Wir brauchen einen Wechsel! 🔄"],
+
+    emailTakenError: "Diese E-Mail ist bereits registriert. Bitte melden Sie sich an.",
+    resetError: "Passwort-Wiederherstellung fehlgeschlagen.",
+    loginError: "Anmeldung fehlgeschlagen. Überprüfen Sie Ihre Daten.",
+    loginInvalidError: "Falsche E-Mail oder Passwort.",
+    registerError: "Registrierungsfehler.",
+    registerUnknownError: "Unbekannter Registrierungsfehler.",
+    forgotPasswordTitle: "Passwort wiederherstellen",
+    loginDesc: "Willkommen zurück! Bitte geben Sie Ihre Daten ein.",
+    registerDesc: "Erstellen Sie ein Konto und treten Sie der Community bei.",
+    forgotDescEmail: "Geben Sie Ihre E-Mail-Adresse ein, um einen 6-stelligen Code zu erhalten.",
+    forgotDescCode: "Geben Sie den Code ein und wählen Sie ein neues Passwort.",
+    newPassword: "Neues Passwort",
+    confirmNewPassword: "Neues Passwort bestätigen",
+    resetCodeLabel: "6-stelliger Bestätigungscode",
+    forgotPasswordLabel: "Passwort vergessen?",
+    backToLoginLabel: "Zurück zur Anmeldung",
+    sendCodeBtn: "Code per E-Mail senden",
+    resetPassBtn: "Passwort ändern und anmelden",
 };
 
 export default de;

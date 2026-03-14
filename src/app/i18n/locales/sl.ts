@@ -202,7 +202,26 @@ const sl = {
       "Kje je kondicija? 🥵", 
       "Gremo na polno! 💪", 
       "Rabmo menjavo! 🔄"
-    ]
-  };
+    ],
+  
+    emailTakenError: "Ta e-poštni naslov je že registriran. Poskusite se prijaviti.",
+    resetError: "Napaka pri obnovi gesla. Preverite kodo ali e-pošto.",
+    loginError: "Prijava ni uspela. Preverite podatke.",
+    loginInvalidError: "Napačna e-pošta ali geslo.",
+    registerError: "Napaka pri registraciji.",
+    registerUnknownError: "Neznana napaka pri registraciji (morda e-pošta že obstaja).",
+    forgotPasswordTitle: "Obnova gesla",
+    loginDesc: "Pozdravljeni nazaj! Prosimo, vpišite svoje podatke.",
+    registerDesc: "Ustvarite račun in se pridružite skupnosti.",
+    forgotDescEmail: "Vnesite vaš e-poštni naslov za prejem 6-mestne kode za obnovo gesla.",
+    forgotDescCode: "Vnesite kodo z e-pošte in izberite novo geslo.",
+    newPassword: "Novo geslo",
+    confirmNewPassword: "Potrdi novo geslo",
+    resetCodeLabel: "6-mestna potrditvena koda z e-pošte",
+    forgotPasswordLabel: "Pozabljeno geslo?",
+    backToLoginLabel: "Nazaj na prijavo",
+    sendCodeBtn: "Pošlji kodo na e-pošto",
+    resetPassBtn: "Spremeni geslo in se prijavi",
+};
 
 export default sl;

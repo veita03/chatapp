@@ -171,6 +171,25 @@ const sr = {
     allUsers: "Svi",
     userDefault: "Korisnik",
     quickTexts: ["Danas si bio loš! 👎", "Dobra igra! 👏", "Plaćaš pivo! 🍻", "Opet kasniš! ⏳", "Kvariigra!", "Ko ima loptu?", "Opet izgovori...", "Sudija je kriv! 🙈", "Gde je kondicija? 🥵", "Idemo na maksimum! 💪", "Treba nam izmena! 🔄"],
+
+    emailTakenError: "Ova e-mail adresa je već registrirana. Pokušajte se prijaviti.",
+    resetError: "Greška pri obnovi lozinke. Provjerite kod ili e-mail.",
+    loginError: "Prijava nije uspjela. Provjerite podatke.",
+    loginInvalidError: "Pogrešna e-mail adresa ili lozinka.",
+    registerError: "Greška pri registraciji.",
+    registerUnknownError: "Nepoznata greška pri registraciji.",
+    forgotPasswordTitle: "Obnova lozinke",
+    loginDesc: "Dobrodošli natrag! Molimo unesite svoje podatke.",
+    registerDesc: "Stvorite račun i pridružite se zajednici.",
+    forgotDescEmail: "Unesite svoju e-mail adresu za primanje 6-znamenkastog koda.",
+    forgotDescCode: "Unesite kod iz e-maila i odaberite novu lozinku.",
+    newPassword: "Nova lozinka",
+    confirmNewPassword: "Potvrdi novu lozinku",
+    resetCodeLabel: "6-znamenkasti kod za potvrdu",
+    forgotPasswordLabel: "Zaboravljena lozinka?",
+    backToLoginLabel: "Natrag na prijavu",
+    sendCodeBtn: "Pošalji kod na e-mail",
+    resetPassBtn: "Promijeni lozinku i prijavi se",
 };
 
 export default sr;

@@ -171,6 +171,25 @@ const tr = {
     allUsers: "Herkes",
     userDefault: "Kullanıcı",
     quickTexts: ["Berbattınız! 👎", "İyi oyun! 👏", "Biralar senden! 🍻", "Yine geç kaldın! ⏳", "Oyunbozan!", "Top kimde?", "Yine bahaneler...", "Hakem hatalı! 🙈", "Kondisyon nerede? 🥵", "Her şey tamam! 💪", "Yedeğe ihtiyacımız var! 🔄"],
+
+    emailTakenError: "This email is already registered. Please try logging in.",
+    resetError: "Password reset failed. Check the code or email.",
+    loginError: "Login failed. Check your data.",
+    loginInvalidError: "Invalid email or password.",
+    registerError: "Registration error.",
+    registerUnknownError: "Unknown registration error (email might exist).",
+    forgotPasswordTitle: "Password Recovery",
+    loginDesc: "Welcome back! Please enter your details.",
+    registerDesc: "Create an account and join the community.",
+    forgotDescEmail: "Enter your email address to receive a 6-digit password reset code.",
+    forgotDescCode: "Enter the email code and choose a new password.",
+    newPassword: "New password",
+    confirmNewPassword: "Confirm new password",
+    resetCodeLabel: "6-digit email confirmation code",
+    forgotPasswordLabel: "Forgot password?",
+    backToLoginLabel: "Back to login",
+    sendCodeBtn: "Send code to email",
+    resetPassBtn: "Change password and login",
 };
 
 export default tr;

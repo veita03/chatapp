@@ -188,6 +188,25 @@ const el = {
     allUsers: "Όλοι",
     userDefault: "Χρήστης",
     quickTexts: ["Κακό! 👎", "Καλό παιχνίδι! 👏", "Μπύρες! 🍻", "Πάλι άργησες! ⏳", "Ποιος έχει τη μπάλα;", "Δικαιολογίες...", "Φταίει ο διαιτητής! 🙈", "Πού είναι οι δυνάμεις; 🥵", "Πάμε! 💪", "Αλλαγή! 🔄"],
+
+    emailTakenError: "Αυτό το email είναι ήδη εγγεγραμμένο.",
+    resetError: "Αποτυχία επαναφοράς κωδικού.",
+    loginError: "Η σύνδεση απέτυχε.",
+    loginInvalidError: "Λάθος email ή κωδικός πρόσβασης.",
+    registerError: "Σφάλμα εγγραφής.",
+    registerUnknownError: "Άγνωστο σφάλμα.",
+    forgotPasswordTitle: "Ανάκτηση κωδικού",
+    loginDesc: "Καλώς ήρθατε! Παρακαλώ εισάγετε τα στοιχεία σας.",
+    registerDesc: "Δημιουργήστε έναν λογαριασμό.",
+    forgotDescEmail: "Εισάγετε το email σας για να λάβετε τον 6ψήφιο κωδικό.",
+    forgotDescCode: "Εισάγετε τον κωδικό και επιλέξτε νέο κωδικό πρόσβασης.",
+    newPassword: "Νέος κωδικός",
+    confirmNewPassword: "Επιβεβαίωση νέου κωδικού",
+    resetCodeLabel: "6ψήφιος κωδικός επιβεβαίωσης",
+    forgotPasswordLabel: "Ξεχάσατε τον κωδικό;",
+    backToLoginLabel: "Επιστροφή στη σύνδεση",
+    sendCodeBtn: "Αποστολή κωδικού στο email",
+    resetPassBtn: "Αλλαγή κωδικού και σύνδεση",
 };
   
   export default el;

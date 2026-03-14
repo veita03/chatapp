@@ -188,6 +188,25 @@ const en = {
     allUsers: "All",
     userDefault: "User",
     quickTexts: ["You sucked today! 👎", "Good game! 👏", "Beers on you! 🍻", "Late again! ⏳", "Party pooper!", "Who has the ball?", "Excuses again...", "Ref's fault! 🙈", "Where is the stamina? 🥵", "All in! 💪", "We need a sub! 🔄"],
+
+    emailTakenError: "This email is already registered. Please try logging in.",
+    resetError: "Password reset failed. Check the code or email.",
+    loginError: "Login failed. Check your data.",
+    loginInvalidError: "Invalid email or password.",
+    registerError: "Registration error.",
+    registerUnknownError: "Unknown registration error (email might exist).",
+    forgotPasswordTitle: "Password Recovery",
+    loginDesc: "Welcome back! Please enter your details.",
+    registerDesc: "Create an account and join the community.",
+    forgotDescEmail: "Enter your email address to receive a 6-digit password reset code.",
+    forgotDescCode: "Enter the email code and choose a new password.",
+    newPassword: "New password",
+    confirmNewPassword: "Confirm new password",
+    resetCodeLabel: "6-digit email confirmation code",
+    forgotPasswordLabel: "Forgot password?",
+    backToLoginLabel: "Back to login",
+    sendCodeBtn: "Send code to email",
+    resetPassBtn: "Change password and login",
 };
 
 export default en;
