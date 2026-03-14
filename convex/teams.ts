@@ -392,10 +392,25 @@ export const getTeam = query({
     const team = await ctx.db.get(args.teamId);
     if (!team) return null;
     
+    // Count members (unique users)
+    const members = await ctx.db
+      .query("memberships")
+      .withIndex("by_team", (q) => q.eq("teamId", args.teamId))
+      .collect();
+    const uniqueMemberIds = new Set(members.map(m => m.userId));
+
+    // Get Seasons
+    const seasons = await ctx.db
+      .query("seasons")
+      .withIndex("by_team", (q) => q.eq("teamId", args.teamId))
+      .collect();
+    
     return {
       ...team,
       lastReadTime: maxLastReadTime,
-      userRole
+      userRole,
+      memberCount: uniqueMemberIds.size,
+      seasonCount: seasons.length
     };
   },
 });
