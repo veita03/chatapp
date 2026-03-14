@@ -18,8 +18,8 @@ const cabin = Cabin({
 });
 
 export const metadata: Metadata = {
-  title: "SPORT2GO Chat",
-  description: "SPORT2GO Realtime Group Chat",
+  title: "Sport2GO",
+  description: "Sport2GO - Manj stresa, več časa za igro",
 };
 
 export const viewport: Viewport = {

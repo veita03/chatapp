@@ -30,7 +30,7 @@ export default function PageTitleUpdater() {
     }
 
     if (moduleName) {
-      document.title = `${moduleName} - Sport2GO`;
+      document.title = `Sport2GO - ${moduleName}`;
     } else {
       document.title = "Sport2GO";
     }
