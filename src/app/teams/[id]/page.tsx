@@ -88,7 +88,7 @@ export default function TeamDashboardPage() {
 
       {/* Legacy Subheader / Banner Design */}
       <div className="w-full bg-[#eab355] relative z-10 font-sans">
-        <div className="max-w-[1280px] mx-auto px-4 sm:px-8 py-6 flex flex-col relative md:min-h-[140px] justify-center">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8 py-6 flex flex-col relative md:min-h-[140px] justify-center">
            
            <div className="flex flex-col md:flex-row md:items-center gap-6">
               
