@@ -40,6 +40,7 @@ export const updateProfile = mutation({
     gender: v.optional(v.string()),
     image: v.optional(v.string()),
     otpCode: v.optional(v.string()), // Added for the verification flow
+    lang: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
@@ -76,7 +77,8 @@ export const updateProfile = mutation({
     if (needsVerification && user.email) {
       await ctx.scheduler.runAfter(0, api.emails.sendWelcomeEmail, {
         email: user.email,
-        name: args.firstName
+        name: args.firstName,
+        lang: args.lang
       });
     }
     
@@ -85,8 +87,10 @@ export const updateProfile = mutation({
 });
 
 export const generateOtp = mutation({
-  args: {},
-  handler: async (ctx) => {
+  args: {
+    lang: v.optional(v.string())
+  },
+  handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not authenticated");
     
@@ -103,7 +107,8 @@ export const generateOtp = mutation({
     
     await ctx.scheduler.runAfter(0, api.emails.sendVerificationEmail, {
       email: user.email,
-      code: code
+      code: code,
+      lang: args.lang
     });
 
     return { success: true };

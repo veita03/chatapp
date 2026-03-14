@@ -1,4 +1,4 @@
-export const generateHtmlTemplate = (title: string, bodyHtml: string) => `
+export const generateHtmlTemplate = (title: string, bodyHtml: string, platformTag: string = "Sport2GO — sports organization platform.") => `
 <!DOCTYPE html>
 <html>
 <head>
@@ -83,7 +83,7 @@ export const generateHtmlTemplate = (title: string, bodyHtml: string) => `
 
       <!-- Footer -->
       <div class="footer">
-        <p style="margin: 0 0 4px 0;">Sport2GO — platforma za organizacijo športa.</p>
+        <p style="margin: 0 0 4px 0;">${platformTag}</p>
         <p style="margin: 0;"><a href="mailto:info@sport2go.si">info@sport2go.si</a></p>
       </div>
     </div>

@@ -21,6 +21,7 @@ export default defineSchema({
     isProfileComplete: v.optional(v.boolean()),
     nextSeasonJoinCode: v.optional(v.string()), // Used to statically persist the join code during team creation
     lastSeen: v.optional(v.number()), // For online presence indicator
+    preferredLang: v.optional(v.string()), // For email translations
   }).index("email", ["email"]).index("phone", ["phone"]),
   messages: defineTable({
     teamId: v.optional(v.id("teams")), // Added for per-team scoping

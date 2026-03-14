@@ -147,7 +147,7 @@ export default function ProfilePage() {
     if (needsOtp && !otpSent && !otpFiredRef.current) {
       otpFiredRef.current = true;
       setOtpSent(true);
-      generateOtp().catch(console.error);
+      generateOtp({ lang: currentLang }).catch(console.error);
     }
   }, [needsOtp, otpSent, generateOtp]);
 
@@ -197,6 +197,7 @@ export default function ProfilePage() {
         gender: gender || undefined,
         image: selectedAvatar || undefined,
         otpCode: needsOtp ? otpCode : undefined,
+        lang: currentLang,
       });
       
       if (result && !result.success) {
@@ -436,7 +437,7 @@ export default function ProfilePage() {
                   email={currentUser?.email} 
                   otpCode={otpCode} 
                   setOtpCode={(code) => { setOtpCode(code); setErrors(p => ({...p, otp: undefined})); }} 
-                  generateOtp={generateOtp}
+                  generateOtp={() => generateOtp({ lang: currentLang })}
                   error={errors.otp}
                 />
               )}

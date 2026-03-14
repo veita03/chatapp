@@ -31,17 +31,17 @@ function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { 
     e.preventDefault();
     setError(null);
 
-    if (tab === "register" && password !== confirmPassword) {
-      setError(t.passwordMismatch);
-      return;
-    }
-
-    if (password.length < 8) {
-      setError(t.passwordLength);
-      return;
-    }
-
     if (tab === "register") {
+      if (password !== confirmPassword) {
+        setError(t.passwordMismatch || "Gesli se ne ujemata.");
+        return;
+      }
+
+      if (password.length < 8) {
+        setError(t.passwordLength || "Geslo mora biti dolgo vsaj 8 znakov.");
+        return;
+      }
+
       try {
         const check = await convex.query(api.users.checkEmailAvailable, { email });
         if (!check.available) {
@@ -57,7 +57,7 @@ function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { 
       setIsLoading(true);
       try {
         if (resetStep === "email") {
-          await signIn("password", { email, flow: "reset" });
+          await signIn("password", { email, flow: "reset", redirectTo: "/?lang=" + currentLang });
           setResetStep("code");
           setError(null);
         } else {
@@ -76,7 +76,14 @@ function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { 
         }
       } catch (err: any) {
         console.error("Reset error:", err);
-        setError(t.resetError || "Napaka pri obnovi gesla. Preverite kodo ali e-pošto.");
+        const msg = err?.message || String(err);
+        if (msg.includes("InvalidAccountId")) {
+            setError(t.emailNotFoundError || "Račun s tem e-poštnim naslovom ne obstaja.");
+        } else if (msg.includes("Invalid code") || msg.includes("InvalidSecret")) {
+            setError(t.invalidCodeError || "Neveljavna koda ali geslo.");
+        } else {
+            setError(t.resetError || "Napaka pri obnovi gesla. Preverite podatke ali e-pošto.");
+        }
       } finally {
         setIsLoading(false);
       }
@@ -99,7 +106,7 @@ function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { 
     } catch (err: any) {
       console.error("Auth error:", err);
       const msg = err?.message || String(err);
-      if (msg.includes("Invalid credentials") || msg.toLowerCase().includes("password")) {
+      if (msg.includes("Invalid credentials") || msg.toLowerCase().includes("password") || msg.includes("InvalidSecret") || msg.includes("InvalidAccountId")) {
         setError(tab === "login" ? (t.loginInvalidError || "Napačna e-pošta ali geslo.") : (t.registerError || "Napaka pri registraciji."));
       } else {
         setError(tab === "login" ? (t.loginError || "Prijava ni uspela. Preverite podatke.") : (t.registerUnknownError || "Neznana napaka pri registraciji (morda e-pošta že obstaja)."));
@@ -195,7 +202,7 @@ function DualAuthLogin({ initialTab = "login", onClose, currentLang = "sl" }: { 
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="w-full bg-gray-50 text-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#5BA582]/50 border border-gray-200 transition-all text-sm"
-                placeholder="ime@primer.si"
+                placeholder={t.emailPlaceholderAuth || "ime@primer.si"}
               />
             </div>
 
