@@ -98,7 +98,7 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                </div>
                
                {/* Event Body */}
-               <div className="p-3 sm:p-4 flex flex-col gap-3">
+               <div className="p-3 sm:p-4 flex flex-col gap-2">
                   {/* Row 1: Time and Location details */}
                   <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-gray-400 font-medium text-[12px]">
                      <div className="flex items-center gap-1.5 border-r border-gray-100 pr-2 sm:pr-4">
@@ -124,8 +124,8 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                   <hr className="border-t border-dashed border-gray-100" />
                   
                   {/* Row 2: Statuses and Avatars */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                     <div className="flex flex-col gap-1.5">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                     <div className="flex flex-col gap-0.5">
                         <div className="flex items-center gap-2 text-[#e5b352]">
                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3zM10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" /></svg>
                            <span className="text-[11px] font-medium tracking-wide">Ni roka za prijavo</span>
@@ -154,7 +154,7 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                   <hr className="border-t border-dashed border-gray-100" />
                   
                   {/* Row 3: Action Buttons */}
-                  <div className="bg-[#fefaf3] rounded-xl p-2.5 flex flex-col sm:flex-row items-center justify-center gap-3 w-full">
+                  <div className="bg-[#fefaf3] rounded-xl py-1.5 px-3 flex flex-col sm:flex-row items-center justify-center gap-3 w-full">
                      <span className="text-[#e5b352] text-[12px] font-bold flex items-center gap-1.5">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-[14px] h-[14px] -scale-x-100"><path fillRule="evenodd" d="M14.707 9.293a1 1 0 00-1.414 0L11 11.586V3a1 1 0 00-2 0v8.586L6.707 9.293a1 1 0 10-1.414 1.414l4 4a1 1 0 001.414 0l4-4a1 1 0 000-1.414z" clipRule="evenodd" /></svg>
                         Odzovi se:
@@ -199,7 +199,7 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                   </div>
                </div>
                {/* Event Body */}
-               <div className="p-3 sm:p-4 flex flex-col gap-3">
+               <div className="p-3 sm:p-4 flex flex-col gap-2">
                   <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-gray-400 font-medium text-[12px]">
                      <div className="flex items-center gap-1.5 border-r border-gray-100 pr-2 sm:pr-4">
                         <div className="bg-[#fcfaf4] text-[#e5b352] p-1.5 rounded-md border border-gray-100">
@@ -223,8 +223,8 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                   
                   <hr className="border-t border-dashed border-gray-100" />
                   
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                     <div className="flex flex-col gap-1.5">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                     <div className="flex flex-col gap-0.5">
                         <div className="flex items-center gap-2 text-[#e5b352]">
                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3zM10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" /></svg>
                            <span className="text-[11px] font-medium tracking-wide">Rok za prijavo do jutri.</span>
@@ -251,7 +251,7 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                   <hr className="border-t border-dashed border-gray-100" />
                   
                   {/* Row 3: Action Buttons (Already accepted state) */}
-                  <div className="bg-[#fefaf3] rounded-xl p-2.5 flex flex-col sm:flex-row items-center justify-center gap-3 w-full shadow-inner border border-[#fef1d8]">
+                  <div className="bg-[#fefaf3] rounded-xl py-1.5 px-3 flex flex-col sm:flex-row items-center justify-center gap-3 w-full shadow-inner border border-[#fef1d8]">
                      <span className="text-[#e5b352] text-[12px] font-bold flex items-center gap-1.5">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-[14px] h-[14px] -scale-x-100"><path fillRule="evenodd" d="M14.707 9.293a1 1 0 00-1.414 0L11 11.586V3a1 1 0 00-2 0v8.586L6.707 9.293a1 1 0 10-1.414 1.414l4 4a1 1 0 001.414 0l4-4a1 1 0 000-1.414z" clipRule="evenodd" /></svg>
                         Tvoj odziv:
@@ -266,41 +266,60 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                </div>
             </div>
             
-            {/* Sample Event Card 3 (Finished / New Minimalist Variant) */}
-            <div className="bg-[#fff6f5] rounded-[14px] border border-red-50 flex flex-col p-4 mb-3 transition-colors cursor-pointer group">
-               <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-center flex-wrap gap-2.5">
-                     <h3 className="font-bold text-gray-800 text-[15px]">Fuzbal 23.2.2026</h3>
-                     <span className="bg-[#eaf1ff] text-[#548bf2] text-[10px] font-bold px-2.5 py-0.5 rounded-full tracking-wide">Tekma</span>
-                     <span className="bg-[#cd5c5a] text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full tracking-wide">Zaključeno</span>
+            {/* Sample Event Card 3 (Finished / Red variant) */}
+            <div className="bg-white rounded-[14px] border border-gray-100 shadow-sm flex flex-col overflow-hidden opacity-80 hover:opacity-100 transition-opacity cursor-pointer group mb-3">
+               {/* Event Header Strip (Red Variant) */}
+               <div className="flex bg-[#fcf2f2] text-[#cd5c5a] border-b border-[#faeaea] items-stretch">
+                  <div className="flex flex-col items-center justify-center bg-[#f8e4e3] border-r border-[#faeaea] w-[60px] shrink-0 py-1.5 px-2">
+                     <span className="text-[9px] font-bold uppercase tracking-wider text-[#cd5c5a]/90">Feb</span>
+                     <span className="text-xl font-bold leading-none -mt-0.5">23</span>
                   </div>
-                  <button className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#f8e4e3] hover:bg-[#facccc] transition-colors text-[#cd5c5a] text-[11px] font-bold shrink-0">
-                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-[14px] h-[14px] opacity-80"><path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" /><path fillRule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" /></svg>
-                     Ogled dogodka
-                  </button>
-               </div>
-               
-               {/* Time and Location details */}
-               <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-gray-400 font-medium text-[12px] mb-4">
-                  <div className="flex items-center gap-1.5">
-                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="#efc463" className="w-[14px] h-[14px]"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" /></svg>
-                     <span>Ponedeljek, 23.02.2026</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="#efc463" className="w-[14px] h-[14px]"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                     <span>20:00 - 21:30</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="#efc463" className="w-[14px] h-[14px]"><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>
-                     <span className="truncate max-w-[150px]">Športno društvo studenci Maribor</span>
+                  <div className="flex-1 px-4 py-2 flex items-center justify-between">
+                     <div className="flex items-center gap-2">
+                        <span className="bg-[#eaf1ff] text-[#548bf2] text-[9px] font-bold px-2 py-0.5 rounded-md tracking-wide uppercase">Tekma</span>
+                        <h3 className="font-bold text-gray-800 text-[14px] truncate">Fuzbal 23.2.2026</h3>
+                        <span className="bg-[#cd5c5a] text-white text-[9px] font-bold px-2 py-0.5 rounded-md tracking-wide uppercase ml-1">Zaključeno</span>
+                     </div>
+                     <div className="flex flex-wrap sm:flex-nowrap items-center gap-1.5">
+                        <button className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#f8e4e3] hover:bg-[#facccc] transition-colors text-[#cd5c5a] text-[10px] font-bold tracking-wide">
+                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3"><path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" /><path fillRule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" /></svg>
+                           Ogled dogodka
+                        </button>
+                     </div>
                   </div>
                </div>
                
-               <hr className="border-t border-dashed border-[#fadee0] mb-3" />
-               
-               <div className="flex items-center gap-1.5 text-[#cd5c5a]">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" /></svg>
-                  <span className="text-[12px] font-bold tracking-wide">Tvoj strošek: €</span>
+               {/* Event Body */}
+               <div className="p-3 sm:p-4 flex flex-col gap-2 bg-[#fff6f5]">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-gray-400 font-medium text-[12px]">
+                     <div className="flex items-center gap-1.5 border-r border-[#fadee0] pr-2 sm:pr-4">
+                        <div className="bg-[#fffcfc] text-[#efc463] p-1.5 rounded-md border border-[#faeaea]">
+                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" /></svg>
+                        </div>
+                        <span>Ponedeljek, 23.02.2026</span>
+                     </div>
+                     <div className="flex items-center gap-1.5 border-r border-[#fadee0] pr-2 sm:pr-4">
+                        <div className="bg-[#fffcfc] text-[#efc463] p-1.5 rounded-md border border-[#faeaea]">
+                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        </div>
+                        <span>20:00 - 21:30</span>
+                     </div>
+                     <div className="flex items-center gap-1.5">
+                        <div className="bg-[#fffcfc] text-[#efc463] p-1.5 rounded-md border border-[#faeaea]">
+                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3"><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>
+                        </div>
+                        <span className="truncate max-w-[150px]">Športno društvo studenci Maribor</span>
+                     </div>
+                  </div>
+                  
+                  <hr className="border-t border-dashed border-[#fadee0]" />
+                  
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                     <div className="flex items-center gap-1.5 text-[#cd5c5a]">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" /></svg>
+                        <span className="text-[12px] font-bold tracking-wide">Tvoj strošek: €</span>
+                     </div>
+                  </div>
                </div>
             </div></div>
       </div>
