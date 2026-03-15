@@ -154,7 +154,7 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                   <hr className="border-t border-dashed border-gray-100" />
                   
                   {/* Row 3: Action Buttons */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 w-full pt-1">
+                  <div className="bg-[#fefaf3] rounded-xl py-1.5 px-3 flex flex-col sm:flex-row items-center justify-between gap-3 w-full border border-[#fef1d8]">
                      <span className="text-gray-500 text-[12px] font-semibold flex items-center gap-1.5">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-[14px] h-[14px] -scale-x-100"><path fillRule="evenodd" d="M14.707 9.293a1 1 0 00-1.414 0L11 11.586V3a1 1 0 00-2 0v8.586L6.707 9.293a1 1 0 10-1.414 1.414l4 4a1 1 0 001.414 0l4-4a1 1 0 000-1.414z" clipRule="evenodd" /></svg>
                         Odzovi se:
@@ -251,7 +251,7 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                   <hr className="border-t border-dashed border-gray-100" />
                   
                   {/* Row 3: Action Buttons (Already accepted state) */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 w-full pt-1">
+                  <div className="bg-[#fefaf3] rounded-xl py-1.5 px-3 flex flex-col sm:flex-row items-center justify-between gap-3 w-full shadow-inner border border-[#fef1d8]">
                      <span className="text-gray-500 text-[12px] font-semibold flex items-center gap-1.5">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-[14px] h-[14px] -scale-x-100"><path fillRule="evenodd" d="M14.707 9.293a1 1 0 00-1.414 0L11 11.586V3a1 1 0 00-2 0v8.586L6.707 9.293a1 1 0 10-1.414 1.414l4 4a1 1 0 001.414 0l4-4a1 1 0 000-1.414z" clipRule="evenodd" /></svg>
                         Tvoj odziv:
