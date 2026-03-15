@@ -17,9 +17,9 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
             <h1 className="text-[26px] font-bold text-gray-800 tracking-tight" style={{fontFamily: 'var(--font-montserrat)'}}>
               Dogodki
             </h1>
-            <button className="bg-[#6db59c] hover:bg-[#5ca087] transition-colors text-white font-medium h-[40px] px-4 rounded-lg text-[14px] flex items-center gap-1.5 shadow-sm">
+            <button className="flex items-center justify-center space-x-1.5 bg-[#6db592] hover:bg-[#5b9e7e] text-white px-5 py-2.5 rounded-lg font-bold transition-colors shadow-sm text-sm">
                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" /></svg>
-               Nov dogodek
+               <span>Nov dogodek</span>
             </button>
          </div>
 
@@ -64,9 +64,9 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
             <h2 className="text-[26px] font-bold text-gray-800 flex items-center gap-3 tracking-tight" style={{fontFamily: 'var(--font-montserrat)'}}>
               Igralci <span className="flex items-center justify-center bg-[#f0c265] text-white text-[15px] font-bold w-8 h-8 rounded-full leading-none pt-px">15</span>
             </h2>
-            <button className="bg-[#6db59c] hover:bg-[#5ca087] transition-colors text-white font-medium h-[40px] px-4 rounded-lg text-[14px] flex items-center gap-1.5 shadow-sm">
+            <button className="flex items-center justify-center space-x-1.5 bg-[#6db592] hover:bg-[#5b9e7e] text-white px-5 py-2.5 rounded-lg font-bold transition-colors shadow-sm text-sm">
                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-[18px] h-[18px]"><path d="M11 5a3 3 0 11-6 0 3 3 0 016 0zM2.615 16.428a1.224 1.224 0 01-.569-1.175 6.002 6.002 0 0111.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 018 18a9.953 9.953 0 01-5.385-1.572zM16.25 5.75a.75.75 0 00-1.5 0v2h-2a.75.75 0 000 1.5h2v2a.75.75 0 001.5 0v-2h2a.75.75 0 000-1.5h-2v-2z" /></svg>
-               Dodaj igralce
+               <span>Dodaj igralce</span>
             </button>
          </div>
 
@@ -75,11 +75,16 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
             
             {/* Birthday Alert Block */}
             <div className="flex items-stretch mb-5 overflow-hidden">
-               <div className="flex-1 bg-[#fbf1ce] rounded-l-[8px] py-3 px-4 flex items-center justify-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-[18px] h-[18px] text-[#efc463] shrink-0"><path fillRule="evenodd" d="M11 2a1 1 0 011 1v1.171a3.001 3.001 0 012 2.829h1a3.001 3.001 0 012-2.829V3a1 1 0 112 0v1.171a5.002 5.002 0 00-6-3.172V3a1 1 0 01-1-1zm-4 4.171a5.004 5.004 0 013-1.168V3a1 1 0 112 0v2.003L12 5h1a2 2 0 10-2-2 1 1 0 112 0 4 4 0 01-4 4H7a2 2 0 10-2-2 1 1 0 112 0 4 4 0 01-4 4v2a2 2 0 002 2h14a2 2 0 002-2v-2A6 6 0 005 6.171z" clipRule="evenodd" /></svg>
-                  <span className="text-[11px] sm:text-[12px] text-[#efc463] font-bold tracking-wide truncate">Naslednji časti: Žiga Kirsanov 06.09.2026</span>
+               <div className="flex-1 bg-[#fbf1ce] rounded-l-[8px] py-3 px-4 flex items-center justify-center gap-2 text-[#efc463]">
+                  {/* Distinctive custom cake icon matching the mockup */}
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-[16px] h-[16px] shrink-0 mb-px">
+                     <path d="M12 2C10.8954 2 10 2.89543 10 4V4.5H14V4C14 2.89543 13.1046 2 12 2Z" />
+                     <path d="M18.5 7H5.5C4.11929 7 3 8.11929 3 9.5V13C3 13.5523 3.44772 14 4 14H20C20.5523 14 21 13.5523 21 13V9.5C21 8.11929 19.8807 7 18.5 7ZM6 11.5C6 11.2239 6.22386 11 6.5 11C6.77614 11 7 11.2239 7 11.5V12.5C7 12.7761 6.77614 13 6.5 13C6.22386 13 6 12.7761 6 12.5V11.5ZM10.5 11.5C10.5 11.2239 10.7239 11 11 11C11.2761 11 11.5 11.2239 11.5 11.5V12.5C11.5 12.7761 11.2761 13 11 13C10.7239 13 10.5 12.7761 10.5 12.5V11.5ZM15 11.5C15 11.2239 15.2239 11 15.5 11C15.7761 11 16 11.2239 16 11.5V12.5C16 12.7761 15.7761 13 15.5 13C15.2239 13 15 12.7761 15 12.5V11.5Z" />
+                     <path d="M3 15.5C3 15.2239 3.22386 15 3.5 15H20.5C20.7761 15 21 15.2239 21 15.5V16.5C21 16.7761 20.7761 17 20.5 17H3.5C3.22386 17 3 16.7761 3 16.5V15.5Z" className="opacity-90" />
+                  </svg>
+                  <span className="text-[10px] sm:text-[11px] font-bold tracking-wide truncate">Naslednji časti: Žiga Kirsanov 06.09.2026</span>
                </div>
-               <div className="w-[8px] bg-[#efc463] shadow-sm rounded-r-[3px]"></div>
+               <div className="w-[5px] bg-[#efc463] shadow-inner rounded-r-[3px]"></div>
             </div>
             
             <div className="flex-1 overflow-y-auto pr-1">
