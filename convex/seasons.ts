@@ -69,7 +69,8 @@ export const createSeason = mutation({
       name: args.name,
       isActive: args.isActive,
       joinCode: seasonJoinCode,
-      // We can add desc, dateStart, dateEnd to schema later, for now we let it pass if schema allows or just ignore
+      dateStart: args.dateStart,
+      dateEnd: args.dateEnd,
     });
 
     // 2. Add the creator (admin) as an admin member of the season

@@ -15,6 +15,7 @@ import type * as events from "../events.js";
 import type * as http from "../http.js";
 import type * as messages from "../messages.js";
 import type * as rides from "../rides.js";
+import type * as seasons from "../seasons.js";
 import type * as seed from "../seed.js";
 import type * as seedData from "../seedData.js";
 import type * as teams from "../teams.js";
@@ -35,6 +36,7 @@ declare const fullApi: ApiFromModules<{
   http: typeof http;
   messages: typeof messages;
   rides: typeof rides;
+  seasons: typeof seasons;
   seed: typeof seed;
   seedData: typeof seedData;
   teams: typeof teams;

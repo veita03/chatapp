@@ -80,6 +80,8 @@ export default defineSchema({
     name: v.string(), // e.g., "Jesen 2025"
     isActive: v.boolean(),
     joinCode: v.string(),
+    dateStart: v.optional(v.string()),
+    dateEnd: v.optional(v.string()),
   }).index("by_team", ["teamId"]).index("by_joinCode", ["joinCode"]),
 
   events: defineTable({
