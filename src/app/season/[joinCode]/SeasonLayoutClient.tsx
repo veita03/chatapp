@@ -64,7 +64,7 @@ export default function SeasonLayoutClient({
   const { season, team } = data;
 
   return (
-    <div className="min-h-[100dvh] bg-[#F4F6F8] font-sans flex flex-col relative overflow-hidden">
+    <div className="h-[100dvh] bg-[#F4F6F8] font-sans flex flex-col relative overflow-hidden">
       
       {/* GLOBAL HEADER WITH SWITCHERS */}
       <Header leftElement={<SeasonTeamSwitcher currentTeam={team} currentSeason={season} />} />
@@ -149,7 +149,7 @@ export default function SeasonLayoutClient({
         </aside>
 
         {/* MAIN CONTENT PORTION */}
-        <main className="flex-1 flex flex-col overflow-hidden w-full p-4 md:p-8">
+        <main className="flex-1 flex flex-col overflow-hidden w-full px-4 pt-3 pb-4 md:px-8 md:pt-3 md:pb-8 relative">
           {children}
         </main>
       </div>

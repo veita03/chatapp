@@ -2,28 +2,73 @@
 
 import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
-import { use } from "react";
+import Link from "next/link";
+import { use, useState } from "react";
 
 export default function SeasonDashboardPage({ params }: { params: Promise<{ joinCode: string }> }) {
   const { joinCode } = use(params);
+  const [showFilters, setShowFilters] = useState(false);
+  const [activeAttendanceTab, setActiveAttendanceTab] = useState<'pridejo' | 'ne-pridejo' | 'povabljeni'>('pridejo');
 
   // Temporary mock data layout until we connect backend queries
+  
+  const mockAttendance = {
+    'pridejo': [
+      { name: 'Simon Novak', avatar: 'Simon', status: 'pridejo' },
+      { name: 'Tadej Serne', avatar: 'Tadej', status: 'pridejo' },
+      { name: 'Robi Klasinc', avatar: 'Robi', status: 'pridejo' },
+      { name: 'Ales Turk', avatar: 'Ales', status: 'pridejo' },
+      { name: 'Rok Janc', avatar: 'Rok', status: 'pridejo' },
+    ],
+    'ne-pridejo': [
+      { name: 'Matej Tomazic', avatar: 'Matej', status: 'ne-pridejo' },
+      { name: 'Jure Kokol', avatar: 'Jure', status: 'ne-pridejo' },
+      { name: 'Miha Zupan', avatar: 'Miha', status: 'ne-pridejo' },
+    ],
+    'povabljeni': [
+       { name: 'Jan Petek', avatar: 'Jan', status: 'povabljeni' },
+       { name: 'Nejc Vidmar', avatar: 'Nejc', status: 'povabljeni' },
+       { name: 'Aljaž Krajnc', avatar: 'Aljaz', status: 'povabljeni' },
+       { name: 'Denis Hren', avatar: 'Denis', status: 'povabljeni' }
+    ]
+  };
+
+  const currentList = mockAttendance[activeAttendanceTab];
+
+  const renderAttendanceIcon = (status: string) => {
+    switch(status) {
+      case 'pridejo': return <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-2.5 h-2.5 text-white"><path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" /></svg></div>;
+      case 'ne-pridejo': return <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-red-500 rounded-full border-2 border-white flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-2.5 h-2.5 text-white"><path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" /></svg></div>;
+      default: return null;
+    }
+  };
+
   return (
-    <div className="h-full flex flex-col lg:flex-row gap-8">
+    <div className="h-full flex flex-col lg:flex-row gap-8 min-h-0">
       
       {/* CENTER COLUMN: Events (Dogodki) */}
-      <div className="flex-1 flex flex-col h-full bg-transparent overflow-hidden">
+      <div className="flex-1 flex flex-col h-full bg-transparent overflow-hidden min-h-0 min-w-0">
          <div className="flex items-center justify-between mb-4 shrink-0 mt-0">
-            <h1 className="text-[26px] font-bold text-gray-800 tracking-tight leading-none" style={{fontFamily: 'var(--font-montserrat)'}}>
-              Dogodki
-            </h1>
-            <button className="flex items-center justify-center space-x-1.5 bg-[#6db592] hover:bg-[#5b9e7e] text-white px-5 py-2.5 rounded-lg font-bold transition-colors shadow-sm text-sm">
+            <div className="flex items-center gap-4">
+              <h1 className="text-[26px] font-bold text-gray-800 tracking-tight leading-none" style={{fontFamily: 'var(--font-montserrat)'}}>
+                Dogodki
+              </h1>
+              <button 
+                onClick={() => setShowFilters(!showFilters)}
+                className="flex items-center gap-1.5 text-[11px] font-bold text-gray-400 hover:text-gray-600 uppercase tracking-widest transition-colors bg-gray-100 hover:bg-gray-200 px-2.5 py-1.5 rounded-md"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" /></svg>
+                {showFilters ? 'Skrij filtre' : 'Prikaži filtre'}
+              </button>
+            </div>
+            <Link href={`/season/${joinCode}/event/create`} className="flex items-center justify-center space-x-1.5 bg-[#6db592] hover:bg-[#5b9e7e] text-white px-5 py-2.5 rounded-lg font-bold transition-colors shadow-sm text-sm">
                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" /></svg>
                <span>Nov dogodek</span>
-            </button>
+            </Link>
          </div>
 
          {/* Filters Row */}
+         {showFilters && (
          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3 mb-4 flex items-center gap-4 shrink-0">
             <div className="flex-1">
               <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1 block">Status</label>
@@ -44,14 +89,15 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
               </select>
             </div>
          </div>
+         )}
 
          {/* Events List Scrollable Area */}
-         <div className="flex-1 overflow-y-auto pr-2 space-y-3 pb-10 custom-scrollbar">
+         <div className="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
             {/* Sample Event Card 1 (Matches Complex Mockup) */}
-            <div className="bg-white rounded-[14px] border border-gray-100 shadow-sm flex flex-col overflow-hidden hover:border-gray-200 transition-colors cursor-pointer group">
+            <div className="bg-white rounded-[14px] border border-gray-100 shadow-sm flex flex-col hover:border-gray-200 transition-colors cursor-pointer group relative hover:z-50">
                {/* Event Header Strip */}
-               <div className="flex bg-[#efc463] text-white items-stretch">
-                  <div className="flex flex-col items-center justify-center bg-[#e4ba5e] w-[60px] shrink-0 py-1.5 px-2">
+               <div className="flex bg-[#efc463] text-white items-stretch rounded-t-[14px] relative z-20">
+                  <div className="flex flex-col items-center justify-center bg-[#e4ba5e] w-[60px] shrink-0 py-1.5 px-2 rounded-tl-[14px]">
                      <span className="text-[9px] font-bold uppercase tracking-wider text-white/90">Avg</span>
                      <span className="text-xl font-bold leading-none -mt-0.5">10</span>
                   </div>
@@ -62,12 +108,12 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                      </div>
                      <div className="flex flex-wrap sm:flex-nowrap items-center gap-1.5">
                         {/* Share Button with Dropdown Mockup */}
-                        <div className="relative group/share">
-                           <button className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors">
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-[11px] h-[11px]"><path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" /></svg>
+                        <div className="relative group/share z-[100]">
+                           <button className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors">
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-[15px] h-[15px]"><path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" /></svg>
                            </button>
                            {/* Popup Window positioned below */}
-                           <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-100 p-4 opacity-0 invisible group-hover/share:opacity-100 group-hover/share:visible transition-all z-50">
+                           <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 p-4 opacity-0 invisible group-hover/share:opacity-100 group-hover/share:visible transition-all z-[200]">
                               <h4 className="text-center font-bold text-gray-600 text-[13px] mb-3">Povabi v aplikaciji</h4>
                               <div className="flex items-center justify-center gap-3 mb-4">
                                  <button className="w-9 h-9 rounded-full bg-[#efc463] text-white flex items-center justify-center hover:bg-[#e4ba5e] transition-colors"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.068.157 2.148.279 3.238.364.466.037.893.281 1.153.671L12 21l2.652-3.978c.26-.39.687-.634 1.153-.67 1.09-.086 2.17-.208 3.238-.365 1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" /></svg></button>
@@ -86,19 +132,57 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                            </div>
                         </div>
 
-                        <button className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 hover:bg-white/30 transition-colors text-white text-[10px] font-bold tracking-wide">
-                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3"><path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" /><path fillRule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" /></svg>
+                        <button className="hidden sm:flex items-center gap-1.5 px-3.5 h-8 rounded-full bg-white/20 hover:bg-white/30 transition-colors text-white text-[11px] font-bold tracking-wide">
+                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5"><path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" /><path fillRule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" /></svg>
                            Ogled dogodka
                         </button>
-                        <button className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors">
-                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-[11px] h-[11px]"><path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" /></svg>
-                        </button>
+                        
+                        {/* Event Menu Dropdown */}
+                        <div className="relative group/menu z-[100]">
+                           <button className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-[#e4ba5e] transition-colors focus:bg-[#e4ba5e] peer">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-[20px] h-[20px]"><path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" /></svg>
+                           </button>
+                           
+                           {/* Invisible overlay to keep hover state active */}
+                           <div className="absolute top-full -right-4 w-32 h-4 hidden group-hover/menu:block"></div>
+                           
+                           {/* Popup Window */}
+                           <div className="absolute right-0 top-full mt-2 w-[160px] bg-white rounded-[14px] shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all z-[200] origin-top-right flex flex-col pointer-events-none group-hover/menu:pointer-events-auto">
+                              
+                              {/* Triangle pointer */}
+                              <div className="absolute -top-[6px] right-3 w-3 h-3 bg-white border-t border-l border-gray-100 rotate-45"></div>
+                              
+                              <div className="flex flex-col relative z-10 bg-white rounded-[14px] overflow-hidden">
+                                 <button className="flex items-center justify-between w-full px-4 py-2.5 text-left text-[#e5b352] hover:bg-orange-50 transition-colors border-b border-gray-100 group/btn">
+                                    <div className="flex items-center gap-2">
+                                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" /></svg>
+                                       <span className="font-bold text-[13px] tracking-wide">Uredi</span>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-[#e5b352]/50 group-hover/btn:translate-x-0.5 transition-transform"><path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" /></svg>
+                                 </button>
+                                 <button className="flex items-center justify-between w-full px-4 py-2.5 text-left text-[#e5b352] hover:bg-orange-50 transition-colors border-b border-gray-100 group/btn">
+                                    <div className="flex items-center gap-2">
+                                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" /></svg>
+                                       <span className="font-bold text-[13px] tracking-wide">Kopiraj</span>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-[#e5b352]/50 group-hover/btn:translate-x-0.5 transition-transform"><path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" /></svg>
+                                 </button>
+                                 <button className="flex items-center justify-between w-full px-4 py-2.5 text-left text-[#e5b352] hover:bg-orange-50 transition-colors group/btn">
+                                    <div className="flex items-center gap-2">
+                                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
+                                       <span className="font-bold text-[13px] tracking-wide">Izbriši</span>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-[#e5b352]/50 group-hover/btn:translate-x-0.5 transition-transform"><path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" /></svg>
+                                 </button>
+                              </div>
+                           </div>
+                        </div>
                      </div>
                   </div>
                </div>
                
                {/* Event Body */}
-               <div className="p-3 sm:p-4 sm:pb-3 flex flex-col gap-2">
+               <div className="p-3 sm:p-4 sm:pb-3 flex flex-col gap-2 rounded-b-[14px] relative z-0">
                   {/* Row 1: Time and Location details */}
                   <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-gray-400 font-medium text-[12px]">
                      <div className="flex items-center gap-1.5 border-r border-gray-100 pr-2 sm:pr-4">
@@ -136,17 +220,57 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                         </div>
                      </div>
                      
-                     <div className="flex items-center gap-1 shrink-0 bg-transparent pr-1">
-                        <div className="flex -space-x-2.5">
-                           {[1, 2, 3, 4, 5, 6].map((i) => (
-                              <div key={i} className="w-[24px] h-[24px] rounded-full bg-teal-100 border-2 border-white overflow-hidden flex items-center justify-center shrink-0 shadow-sm relative z-0">
-                                 {/* Simple silhouette for mock */}
-                                 <svg className="w-4 h-4 text-teal-600 mt-1" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" /></svg>
-                              </div>
-                           ))}
+                     {/* Attendance Popup Container */}
+                     <div className="relative group/attendance z-[100] cursor-pointer">
+                        <div className="flex items-center gap-1 shrink-0 bg-transparent pr-1">
+                           <div className="flex -space-x-2.5">
+                              {[1, 2, 3, 4, 5, 6].map((i) => (
+                                 <div key={i} className="w-[24px] h-[24px] rounded-full bg-teal-100 border-2 border-white overflow-hidden flex items-center justify-center shrink-0 shadow-sm relative z-0">
+                                    <svg className="w-4 h-4 text-teal-600 mt-1" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" /></svg>
+                                 </div>
+                              ))}
+                           </div>
+                           <div className="bg-[#e4ba5e] text-white text-[11px] font-bold px-2 py-0.5 pb-1 rounded-full relative -ml-1 z-10 shadow-sm transition-transform group-hover/attendance:scale-105" style={{clipPath: 'polygon(15% 0, 100% 0, 100% 100%, 15% 100%, 0 50%)', paddingLeft: '10px', marginRight: '-4px'}}>
+                              6 / 14
+                           </div>
                         </div>
-                        <div className="bg-[#e4ba5e] text-white text-[11px] font-bold px-2 py-0.5 pb-1 rounded-full relative -ml-1 z-10 shadow-sm" style={{clipPath: 'polygon(15% 0, 100% 0, 100% 100%, 15% 100%, 0 50%)', paddingLeft: '10px', marginRight: '-4px'}}>
-                           6 / 14
+
+                        {/* Dropdown Popup */}
+                        <div className="absolute right-0 top-full mt-2 w-[340px] bg-white rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 opacity-0 invisible group-hover/attendance:opacity-100 group-hover/attendance:visible transition-all z-[200] flex flex-col overflow-hidden origin-top-right">
+                           {/* Header */}
+                           <div className="py-2.5 text-center border-b border-gray-100">
+                              <h4 className="font-bold text-[#eeb054] text-[13px] tracking-wide">Udeležba</h4>
+                           </div>
+                           
+                           {/* Tabs */}
+                           <div className="flex border-b border-gray-100 text-[11px] font-bold text-gray-500 bg-gray-50">
+                              <button 
+                                onClick={(e) => { e.stopPropagation(); setActiveAttendanceTab('pridejo'); }}
+                                className={`flex-1 py-2 transition-colors ${activeAttendanceTab === 'pridejo' ? 'text-[#eeb054] bg-white border-b-2 border-[#eeb054]' : 'hover:bg-gray-100'}`}>Pridejo (5)</button>
+                              <button 
+                                onClick={(e) => { e.stopPropagation(); setActiveAttendanceTab('ne-pridejo'); }}
+                                className={`flex-1 py-2 transition-colors ${activeAttendanceTab === 'ne-pridejo' ? 'text-red-500 bg-white border-b-2 border-red-500' : 'hover:bg-gray-100'}`}>Ne pridejo (3)</button>
+                              
+                              <button 
+                                onClick={(e) => { e.stopPropagation(); setActiveAttendanceTab('povabljeni'); }}
+                                className={`flex-1 py-2 transition-colors ${activeAttendanceTab === 'povabljeni' ? 'text-gray-800 bg-white border-b-2 border-gray-800' : 'hover:bg-gray-100'}`}>Povabljeni (4)</button>
+                           </div>
+
+                           {/* List */}
+                           <div className="max-h-[220px] overflow-y-auto custom-scrollbar bg-white" onClick={(e) => e.stopPropagation()}>
+                              {currentList.map((player, idx) => (
+                                <div key={idx} className="flex items-center gap-3 px-4 py-2 border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors">
+                                   <div className="relative">
+                                      <div className="w-8 h-8 rounded-full bg-[#39b4ad] overflow-hidden"><img src={`https://api.dicebear.com/9.x/avataaars/svg?seed=${player.avatar}`} alt="avatar" className="w-full h-full object-cover" /></div>
+                                      {renderAttendanceIcon(player.status)}
+                                   </div>
+                                   <span className="text-[13px] font-bold text-gray-700">{player.name}</span>
+                                </div>
+                              ))}
+                              {currentList.length === 0 && (
+                                <div className="text-center py-6 text-gray-400 text-sm font-medium">Brez igralcev</div>
+                              )}
+                           </div>
                         </div>
                      </div>
                   </div>
@@ -172,10 +296,10 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
             </div>
             
             {/* Sample Event Card 2 (Already RSVP'd State) */}
-            <div className="bg-white rounded-[14px] border border-gray-100 shadow-sm flex flex-col overflow-hidden hover:border-gray-200 transition-colors cursor-pointer group mb-3">
+            <div className="bg-white rounded-[14px] border border-gray-100 shadow-sm flex flex-col hover:border-gray-200 transition-colors cursor-pointer group mb-3 relative hover:z-50">
                {/* Event Header Strip (Gray Variant) */}
-               <div className="flex bg-[#efc463] text-white items-stretch">
-                  <div className="flex flex-col items-center justify-center bg-[#e4ba5e] w-[60px] shrink-0 py-1.5 px-2">
+               <div className="flex bg-[#efc463] text-white items-stretch rounded-t-[14px] relative z-20">
+                  <div className="flex flex-col items-center justify-center bg-[#fac660] w-[60px] shrink-0 py-1.5 px-2 rounded-tl-[14px]">
                      <span className="text-[9px] font-bold uppercase tracking-wider text-white/90">Sep</span>
                      <span className="text-xl font-bold leading-none -mt-0.5">02</span>
                   </div>
@@ -185,21 +309,59 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                         <h3 className="font-bold text-white text-[14px] truncate">Redni trening - kondicija</h3>
                      </div>
                      <div className="flex flex-wrap sm:flex-nowrap items-center gap-1.5">
-                        <button className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors">
-                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-[11px] h-[11px]"><path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" /></svg>
+                        <button className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors">
+                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-[15px] h-[15px]"><path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" /></svg>
                         </button>
-                        <button className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 hover:bg-white/30 transition-colors text-white text-[10px] font-bold tracking-wide">
-                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3"><path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" /><path fillRule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" /></svg>
+                        <button className="hidden sm:flex items-center gap-1.5 px-3.5 h-8 rounded-full bg-white/20 hover:bg-white/30 transition-colors text-white text-[11px] font-bold tracking-wide">
+                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5"><path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" /><path fillRule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" /></svg>
                            Ogled dogodka
                         </button>
-                        <button className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors">
-                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-[11px] h-[11px]"><path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" /></svg>
-                        </button>
+                        
+                        {/* Event Menu Dropdown */}
+                        <div className="relative group/menu z-[100]">
+                           <button className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-[#e4ba5e] transition-colors focus:bg-[#e4ba5e] peer">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-[20px] h-[20px]"><path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" /></svg>
+                           </button>
+                           
+                           {/* Invisible overlay to keep hover state active */}
+                           <div className="absolute top-full -right-4 w-32 h-4 hidden group-hover/menu:block"></div>
+                           
+                           {/* Popup Window */}
+                           <div className="absolute right-0 top-full mt-2 w-[160px] bg-white rounded-[14px] shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all z-[200] origin-top-right flex flex-col pointer-events-none group-hover/menu:pointer-events-auto">
+                              
+                              {/* Triangle pointer */}
+                              <div className="absolute -top-[6px] right-3 w-3 h-3 bg-white border-t border-l border-gray-100 rotate-45"></div>
+                              
+                              <div className="flex flex-col relative z-10 bg-white rounded-[14px] overflow-hidden">
+                                 <button className="flex items-center justify-between w-full px-4 py-2.5 text-left text-[#e5b352] hover:bg-orange-50 transition-colors border-b border-gray-100 group/btn">
+                                    <div className="flex items-center gap-2">
+                                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" /></svg>
+                                       <span className="font-bold text-[13px] tracking-wide">Uredi</span>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-[#e5b352]/50 group-hover/btn:translate-x-0.5 transition-transform"><path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" /></svg>
+                                 </button>
+                                 <button className="flex items-center justify-between w-full px-4 py-2.5 text-left text-[#e5b352] hover:bg-orange-50 transition-colors border-b border-gray-100 group/btn">
+                                    <div className="flex items-center gap-2">
+                                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" /></svg>
+                                       <span className="font-bold text-[13px] tracking-wide">Kopiraj</span>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-[#e5b352]/50 group-hover/btn:translate-x-0.5 transition-transform"><path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" /></svg>
+                                 </button>
+                                 <button className="flex items-center justify-between w-full px-4 py-2.5 text-left text-[#e5b352] hover:bg-orange-50 transition-colors group/btn">
+                                    <div className="flex items-center gap-2">
+                                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
+                                       <span className="font-bold text-[13px] tracking-wide">Izbriši</span>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-[#e5b352]/50 group-hover/btn:translate-x-0.5 transition-transform"><path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" /></svg>
+                                 </button>
+                              </div>
+                           </div>
+                        </div>
                      </div>
                   </div>
                </div>
                {/* Event Body */}
-               <div className="p-3 sm:p-4 sm:pb-3 flex flex-col gap-2">
+               <div className="p-3 sm:p-4 sm:pb-3 flex flex-col gap-2 relative z-0">
                   <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-gray-400 font-medium text-[12px]">
                      <div className="flex items-center gap-1.5 border-r border-gray-100 pr-2 sm:pr-4">
                         <div className="bg-[#fdfaf1] text-[#efc463] p-1.5 rounded-md border border-[#fbf1ce]">
@@ -257,63 +419,135 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                         Tvoj odziv:
                      </span>
                      <div className="flex items-center gap-2">
-                        <button className="bg-[#efc463] text-white px-6 py-1.5 rounded-full font-bold text-[12px] hover:bg-[#e4ba5e] transition-colors flex items-center gap-1.5 shadow-md hover:shadow-lg">
-                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4"><path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" /></svg>
+                        <button className="bg-white border text-[#6db59c] border-[#6db59c] px-4 py-1.5 rounded-full font-bold text-[12px] hover:bg-[#6db59c] hover:text-white transition-colors shadow-sm tracking-wide">
                            Pridem
+                        </button>
+                        <button className="bg-white border text-[#e18e8a] border-[#e18e8a] px-4 py-1.5 rounded-full font-bold text-[12px] hover:bg-[#e18e8a] hover:text-white transition-colors shadow-sm tracking-wide">
+                           Ne pridem
                         </button>
                      </div>
                   </div>
                </div>
             </div>
             
-            {/* Sample Event Card 3 (Finished / New Minimalist Variant) */}
-            <div className="bg-[#fff6f5] rounded-[14px] border border-red-50 flex flex-col p-4 mb-3 transition-colors cursor-pointer group">
-               <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-center flex-wrap gap-2.5">
-                     <span className="bg-[#fae6e6] text-[#cd5c5a] text-[10px] font-bold px-2.5 py-1 rounded-md tracking-wide w-[50px] text-center flex flex-col leading-tight"><span className="text-[8px] opacity-70">FEB</span><span className="text-[14px]">23</span></span>
-                     <span className="bg-[#eaf1ff] text-[#548bf2] text-[10px] font-bold px-2.5 py-0.5 rounded-full tracking-wide">Tekma</span>
-                     <h3 className="font-bold text-gray-800 text-[15px]">Fuzbal 23.2.2026</h3>
-                     <span className="bg-[#cd5c5a] text-white text-[9px] font-bold px-2.5 py-0.5 rounded-full tracking-wide">ZAKLJUČENO</span>
+            {/* Sample Event Card 3 (Finished / Red variant) */}
+            <div className="bg-white rounded-[14px] border border-gray-100 shadow-sm flex flex-col opacity-80 hover:opacity-100 transition-opacity cursor-pointer group mb-3 relative hover:z-50">
+               {/* Event Header Strip (Red Variant) */}
+               <div className="flex bg-[#fcf2f2] text-[#cd5c5a] border-b border-[#faeaea] items-stretch rounded-t-[14px] relative z-20">
+                  <div className="flex flex-col items-center justify-center bg-[#f8e4e3] w-[60px] shrink-0 py-1.5 px-2 rounded-tl-[14px]">
+                     <span className="text-[9px] font-bold uppercase tracking-wider text-[#cd5c5a]/90">Feb</span>
+                     <span className="text-xl font-bold leading-none -mt-0.5">23</span>
                   </div>
-                  <button className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#f8e4e3] hover:bg-[#facccc] transition-colors text-[#cd5c5a] text-[11px] font-bold shrink-0">
-                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-[14px] h-[14px] opacity-80"><path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" /><path fillRule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" /></svg>
-                     Ogled dogodka
-                  </button>
+                  <div className="flex-1 px-4 py-2 flex items-center justify-between">
+                     <div className="flex items-center gap-2">
+                        <span className="bg-[#eaf1ff] text-[#548bf2] text-[9px] font-bold px-2 py-0.5 rounded-md tracking-wide uppercase">Tekma</span>
+                        <h3 className="font-bold text-gray-800 text-[14px] truncate">Fuzbal 23.2.2026</h3>
+                        <span className="bg-[#cd5c5a] text-white text-[9px] font-bold px-2 py-0.5 rounded-md tracking-wide uppercase ml-1">Zaključeno</span>
+                     </div>
+                     <div className="flex flex-wrap sm:flex-nowrap items-center gap-1.5">
+                        <button className="hidden sm:flex items-center gap-1.5 px-3.5 h-8 rounded-full bg-[#f8e4e3] hover:bg-[#facccc] transition-colors text-[#cd5c5a] text-[11px] font-bold tracking-wide">
+                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5"><path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" /><path fillRule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" /></svg>
+                           Ogled dogodka
+                        </button>
+                        
+                        {/* Event Menu Dropdown */}
+                        <div className="relative group/menu z-[100]">
+                           <button className="w-8 h-8 rounded-full bg-[#f8e4e3] flex items-center justify-center hover:bg-[#cd5c5a] hover:text-white text-[#cd5c5a] transition-colors focus:bg-[#cd5c5a] peer">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-[20px] h-[20px]"><path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" /></svg>
+                           </button>
+                           
+                           {/* Invisible overlay to keep hover state active */}
+                           <div className="absolute top-full -right-4 w-32 h-4 hidden group-hover/menu:block"></div>
+                           
+                           {/* Popup Window */}
+                           <div className="absolute right-0 top-full mt-2 w-[160px] bg-white rounded-[14px] shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all z-[200] origin-top-right flex flex-col pointer-events-none group-hover/menu:pointer-events-auto">
+                              
+                              {/* Triangle pointer */}
+                              <div className="absolute -top-[6px] right-3 w-3 h-3 bg-white border-t border-l border-gray-100 rotate-45"></div>
+                              
+                              <div className="flex flex-col relative z-10 bg-white rounded-[14px] overflow-hidden">
+                                 <button className="flex items-center justify-between w-full px-4 py-2.5 text-left text-[#cd5c5a] hover:bg-red-50 transition-colors border-b border-gray-100 group/btn">
+                                    <div className="flex items-center gap-2">
+                                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" /></svg>
+                                       <span className="font-bold text-[13px] tracking-wide">Uredi</span>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-[#cd5c5a]/50 group-hover/btn:translate-x-0.5 transition-transform"><path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" /></svg>
+                                 </button>
+                                 <button className="flex items-center justify-between w-full px-4 py-2.5 text-left text-[#cd5c5a] hover:bg-red-50 transition-colors border-b border-gray-100 group/btn">
+                                    <div className="flex items-center gap-2">
+                                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" /></svg>
+                                       <span className="font-bold text-[13px] tracking-wide">Kopiraj</span>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-[#cd5c5a]/50 group-hover/btn:translate-x-0.5 transition-transform"><path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" /></svg>
+                                 </button>
+                                 <button className="flex items-center justify-between w-full px-4 py-2.5 text-left text-[#cd5c5a] hover:bg-red-50 transition-colors group/btn">
+                                    <div className="flex items-center gap-2">
+                                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
+                                       <span className="font-bold text-[13px] tracking-wide">Izbriši</span>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-[#cd5c5a]/50 group-hover/btn:translate-x-0.5 transition-transform"><path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" /></svg>
+                                 </button>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
                </div>
                
-               {/* Time and Location details */}
-               <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-gray-400 font-medium text-[12px] mb-4 mt-2">
-                  <div className="flex items-center gap-1.5 border-r border-[#fadee0] pr-4">
-                     <div className="bg-[#fffcfc] text-[#efc463] p-1.5 rounded-md border border-[#faeaea]">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-[14px] h-[14px]"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" /></svg>
+               {/* Event Body */}
+               <div className="p-3 sm:p-4 sm:pb-3 flex flex-col gap-2 bg-[#fff6f5] rounded-b-[14px] relative z-0">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-gray-400 font-medium text-[12px]">
+                     <div className="flex items-center gap-1.5 border-r border-[#fadee0] pr-2 sm:pr-4">
+                        <div className="bg-[#fffcfc] text-[#cd5c5a] p-1.5 rounded-md border border-[#faeaea]">
+                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" /></svg>
+                        </div>
+                        <span>Poned. 23.02.2026</span>
                      </div>
-                     <span>Ponedeljek, 23.02.2026</span>
+                     <div className="flex items-center gap-1.5 border-r border-[#fadee0] pr-2 sm:pr-4">
+                        <div className="bg-[#fffcfc] text-[#cd5c5a] p-1.5 rounded-md border border-[#faeaea]">
+                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        </div>
+                        <span>20:00 - 21:30</span>
+                     </div>
+                     <div className="flex items-center gap-1.5">
+                        <div className="bg-[#fffcfc] text-[#cd5c5a] p-1.5 rounded-md border border-[#faeaea]">
+                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3"><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>
+                        </div>
+                        <span className="truncate max-w-[150px]">Športno društvo studenci Maribor...</span>
+                     </div>
                   </div>
-                  <div className="flex items-center gap-1.5 border-r border-[#fadee0] pr-4">
-                     <div className="bg-[#fffcfc] text-[#efc463] p-1.5 rounded-md border border-[#faeaea]">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-[14px] h-[14px]"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  
+                  <hr className="border-t border-dashed border-[#fadee0]" />
+                  
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                     <div className="flex flex-wrap items-center gap-2 sm:gap-4">
+                        <div className="flex items-center gap-1.5 text-[#cd5c5a] h-[26px]">
+                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" /></svg>
+                           <span className="text-[13px] font-bold tracking-wide">Tvoj strošek: 5,00 €</span>
+                        </div>
+                        
+                        <div className="flex items-center gap-2 mt-2 sm:mt-0">
+                           {/* Plačilo Status */}
+                           <div className="flex items-center gap-1 text-[#6db59c] bg-[#f0f9f5] px-2.5 py-1.5 rounded-md font-bold text-[11px] tracking-widest uppercase h-[26px]">
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-[11px] h-[11px]"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                              PLAČANO
+                           </div>
+                           
+                           {/* Udeležba Status */}
+                           <div className="flex items-center gap-1 text-[#648df4] bg-[#f0f5ff] px-2.5 py-1.5 rounded-md font-bold text-[11px] tracking-widest uppercase h-[26px]">
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-[11px] h-[11px]"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                              PRISOTEN
+                           </div>
+                        </div>
                      </div>
-                     <span>20:00 - 21:30</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                     <div className="bg-[#fffcfc] text-[#efc463] p-1.5 rounded-md border border-[#faeaea]">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-[14px] h-[14px]"><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>
-                     </div>
-                     <span className="truncate max-w-[150px]">Športno društvo studenci Maribor...</span>
                   </div>
                </div>
-               
-               <hr className="border-t border-dashed border-[#fadee0] mb-3" />
-               
-               <div className="flex items-center gap-1.5 text-[#cd5c5a]">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" /></svg>
-                  <span className="text-[12px] font-bold tracking-wide">Tvoj strošek: €</span>
-               </div>
-            </div></div>
+            </div>
+         </div>
       </div>
 
       {/* RIGHT COLUMN: Players (Igralci) */}
-      <div className="w-full lg:w-[320px] xl:w-[380px] flex flex-col h-full shrink-0">
+      <div className="w-full lg:w-[320px] xl:w-[380px] flex flex-col shrink-0 overflow-hidden min-h-0">
          <div className="flex items-center justify-between mb-4 shrink-0 mt-0">
             <h2 className="text-[26px] font-bold text-gray-800 flex items-center gap-3 tracking-tight leading-none" style={{fontFamily: 'var(--font-montserrat)'}}>
               Igralci <span className="flex items-center justify-center bg-[#f0c265] text-white text-[15px] font-bold w-8 h-8 rounded-full leading-none pt-px">15</span>
@@ -328,7 +562,7 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
          <div className="bg-white rounded-[20px] shadow-sm border border-gray-100 flex-1 flex flex-col p-4">
             
             {/* Birthday Alert Block */}
-            <div className="flex items-stretch mb-5 overflow-hidden">
+            <div className="flex items-stretch mb-2 overflow-hidden">
                <div className="flex-1 bg-[#fbf1ce] rounded-l-[8px] py-2.5 px-3 flex items-center justify-center gap-2 text-[#e5b352]">
                   {/* Unambiguous classic Birthday Cake icon */}
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 shrink-0">
@@ -339,9 +573,9 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                <div className="w-[5px] bg-[#efc463] shadow-inner rounded-r-[3px]"></div>
             </div>
             
-            <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar ">
+            <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-0.5">
                {/* Player Item - Paid Full */}
-               <div className="flex items-center gap-3 py-2 rounded-none hover:bg-gray-50 transition-colors cursor-pointer group border-b border-gray-100 last:border-0">
+               <div className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer group border-b border-gray-100 last:border-0">
                   <div className="relative">
                      <div className="w-10 h-10 rounded-full bg-[#39b4ad] flex items-center justify-center overflow-hidden w-10 h-10 max-w-[40px] max-h-[40px]">
                         <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Ziga" alt="avatar" className="w-full h-full object-cover" />
@@ -357,7 +591,7 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                </div>
 
                {/* Player Item - Debt */}
-               <div className="flex items-center gap-3 py-2 rounded-none hover:bg-gray-50 transition-colors cursor-pointer group border-b border-gray-100 last:border-0">
+               <div className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer group border-b border-gray-100 last:border-0">
                   <div className="relative">
                      <div className="w-10 h-10 rounded-full bg-[#39b4ad] flex items-center justify-center overflow-hidden w-10 h-10 max-w-[40px] max-h-[40px]">
                         <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Marko" alt="avatar" className="w-full h-full object-cover" />
@@ -374,10 +608,12 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                </div>
                
                {/* Player Item - Missing */}
-               <div className="flex items-center gap-3 py-2 rounded-none hover:bg-gray-50 transition-colors cursor-pointer group border-b border-gray-100 last:border-0 opacity-60">
+               <div className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer group border-b border-gray-100 last:border-0">
                   <div className="relative">
-                     <div className="w-10 h-10 rounded-full bg-[#39b4ad] flex items-center justify-center overflow-hidden grayscale opacity-70 w-10 h-10 max-w-[40px] max-h-[40px]">
-                        <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Jure" alt="avatar" className="w-full h-full object-cover" />
+                     <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-gray-400 mt-2">
+                          <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clipRule="evenodd" />
+                        </svg>
                      </div>
                      <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-gray-400 rounded-full border-2 border-white"></div>
                   </div>
@@ -390,7 +626,7 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                </div>
                
                {/* Player Item - Normal */}
-               <div className="flex items-center gap-3 py-2 rounded-none hover:bg-gray-50 transition-colors cursor-pointer group border-b border-gray-100 last:border-0">
+               <div className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer group border-b border-gray-100 last:border-0">
                   <div className="relative">
                      <div className="w-10 h-10 rounded-full bg-[#39b4ad] flex items-center justify-center overflow-hidden w-10 h-10 max-w-[40px] max-h-[40px]">
                         <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Aljosa" alt="avatar" className="w-full h-full object-cover" />
@@ -410,7 +646,7 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                </div>
                
                {/* Player Item - Normal */}
-               <div className="flex items-center gap-3 py-2 rounded-none hover:bg-gray-50 transition-colors cursor-pointer group border-b border-gray-100 last:border-0">
+               <div className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer group border-b border-gray-100 last:border-0">
                   <div className="relative">
                      <div className="w-10 h-10 rounded-full bg-[#39b4ad] flex items-center justify-center overflow-hidden w-10 h-10 max-w-[40px] max-h-[40px]">
                         <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Tomaz" alt="avatar" className="w-full h-full object-cover" />
@@ -427,7 +663,7 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                </div>
                
                {/* Player Item - Normal */}
-               <div className="flex items-center gap-3 py-2 rounded-none hover:bg-gray-50 transition-colors cursor-pointer group border-b border-gray-100 last:border-0">
+               <div className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer group border-b border-gray-100 last:border-0">
                   <div className="relative">
                      <div className="w-10 h-10 rounded-full bg-[#39b4ad] flex items-center justify-center overflow-hidden w-10 h-10 max-w-[40px] max-h-[40px]">
                         <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Luka" alt="avatar" className="w-full h-full object-cover" />
