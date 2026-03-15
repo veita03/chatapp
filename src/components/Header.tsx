@@ -31,9 +31,10 @@ const languageOptions: { key: Language; label: string }[] = [
 interface HeaderProps {
   onLoginClick?: () => void;
   onRegisterClick?: () => void;
+  leftElement?: React.ReactNode;
 }
 
-export default function Header({ onLoginClick, onRegisterClick }: HeaderProps) {
+export default function Header({ onLoginClick, onRegisterClick, leftElement }: HeaderProps) {
   const { isAuthenticated } = useConvexAuth();
   const { signOut } = useAuthActions();
   const router = useRouter();
@@ -67,14 +68,24 @@ export default function Header({ onLoginClick, onRegisterClick }: HeaderProps) {
 
   return (
     <header className="absolute top-0 left-0 right-0 z-50 flex flex-col md:flex-row items-center justify-between px-4 md:px-8 lg:px-12 py-3 md:py-0 gap-3 md:gap-0" style={{minHeight: '60px', background: 'linear-gradient(90deg, #eeaf53 0%, #edca78 50%, #ecdf9b 100%)'}}>
-      {/* Logo */}
-      <a href="/" className="flex items-center space-x-2 hover:opacity-90 transition-opacity">
-        <img src="https://www.sport2go.app/image/logo.svg" alt="SPORT2GO Logo" className="h-6 md:h-8 w-auto brightness-0 invert"/>
-        <span className="text-xl md:text-2xl text-white tracking-wide leading-none drop-shadow-sm flex items-baseline select-none" style={{fontFamily: 'var(--font-montserrat)'}}>
-          <span className="pr-0.5" style={{fontWeight: 400}}>SPORT</span>
-          <span className="opacity-90" style={{fontWeight: 600}}>2GO</span>
-        </span>
-      </a>
+      {/* Left Side: Logo + Addons */}
+      <div className="flex items-center gap-6">
+        {/* Logo */}
+        <a href="/" className="flex items-center space-x-2 hover:opacity-90 transition-opacity shrink-0">
+          <img src="https://www.sport2go.app/image/logo.svg" alt="SPORT2GO Logo" className="h-6 md:h-8 w-auto brightness-0 invert"/>
+          <span className="text-xl md:text-2xl text-white tracking-wide leading-none drop-shadow-sm flex items-baseline select-none" style={{fontFamily: 'var(--font-montserrat)'}}>
+            <span className="pr-0.5" style={{fontWeight: 400}}>SPORT</span>
+            <span className="opacity-90" style={{fontWeight: 600}}>2GO</span>
+          </span>
+        </a>
+
+        {/* Custom Left Element (e.g. Switchers) */}
+        {leftElement && (
+           <div className="hidden md:flex items-center">
+             {leftElement}
+           </div>
+        )}
+      </div>
 
       {/* Right nav */}
       <div className="flex items-center gap-1.5 md:gap-2">
