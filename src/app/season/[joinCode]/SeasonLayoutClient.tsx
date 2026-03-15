@@ -149,7 +149,7 @@ export default function SeasonLayoutClient({
         </aside>
 
         {/* MAIN CONTENT PORTION */}
-        <main className="flex-1 overflow-y-auto w-full p-4 md:p-8">
+        <main className="flex-1 flex flex-col overflow-hidden w-full p-4 md:p-8">
           {children}
         </main>
       </div>
