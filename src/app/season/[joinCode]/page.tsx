@@ -2,12 +2,10 @@
 
 import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
-import { useParams } from "next/navigation";
-import { useState } from "react";
+import { use } from "react";
 
-export default function SeasonDashboardPage() {
-  const params = useParams();
-  const joinCode = params.joinCode as string;
+export default function SeasonDashboardPage({ params }: { params: Promise<{ joinCode: string }> }) {
+  const { joinCode } = use(params);
 
   // Temporary mock data layout until we connect backend queries
   return (

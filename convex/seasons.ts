@@ -175,6 +175,25 @@ export const getSeason = query({
   },
 });
 
+export const getSeasonByJoinCode = query({
+  args: { joinCode: v.string() },
+  handler: async (ctx, args) => {
+    const season = await ctx.db
+      .query("seasons")
+      .withIndex("by_joinCode", (q) => q.eq("joinCode", args.joinCode))
+      .first();
+
+    if (!season) return null;
+
+    const team = await ctx.db.get(season.teamId);
+    
+    return {
+      season,
+      team
+    };
+  },
+});
+
 export const updateSeason = mutation({
   args: {
     seasonId: v.id("seasons"),
