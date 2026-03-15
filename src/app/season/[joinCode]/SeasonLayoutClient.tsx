@@ -76,7 +76,7 @@ export default function SeasonLayoutClient({
       <div className="flex flex-1 h-[calc(100dvh-60px)] overflow-hidden">
         
         {/* LEFT SIDEBAR */}
-        <aside className={`hidden md:flex flex-col ${isSidebarOpen ? 'w-64' : 'w-[72px]'} bg-[#efc463] text-white shrink-0 overflow-y-auto z-10 pt-6 transition-all duration-300 relative`}>
+        <aside className={`hidden md:flex flex-col ${isSidebarOpen ? 'w-64' : 'w-[80px]'} bg-[#efc463] text-white shrink-0 overflow-y-auto z-10 pt-14 transition-all duration-300 relative hide-scrollbar`}>
           
           {/* Toggle Button */}
           <button 
@@ -85,19 +85,19 @@ export default function SeasonLayoutClient({
               setIsSidebarOpen(newState);
               localStorage.setItem("sport2go_sidebar_open", String(newState));
             }}
-            className="absolute top-2 right-2 text-white/80 hover:text-white p-1 hover:bg-white/10 rounded-lg transition-colors z-20"
+            className={`absolute top-4 ${isSidebarOpen ? 'right-4' : 'left-1/2 -translate-x-1/2'} w-8 h-8 flex items-center justify-center bg-white/20 hover:bg-white/30 text-white rounded-xl transition-all z-20 shadow-sm`}
             title={isSidebarOpen ? "Skrči meni" : "Razširi meni"}
           >
             {isSidebarOpen ? (
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
             ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
             )}
           </button>
 
           {/* Team Context Profile */}
-          <div className="flex flex-col items-center px-2 mb-8 text-center mt-2 transition-all duration-300">
-              <div className={`rounded-full bg-white/20 p-1 mb-3 transition-all duration-300 ${isSidebarOpen ? 'w-24 h-24' : 'w-10 h-10'}`}>
+          <div className="flex flex-col items-center px-2 mb-8 text-center transition-all duration-300">
+              <div className={`rounded-full bg-white/20 p-1 mb-3 transition-all duration-300 ${isSidebarOpen ? 'w-24 h-24' : 'w-12 h-12'}`}>
                  <div className="w-full h-full rounded-full bg-white overflow-hidden flex items-center justify-center shadow-inner">
                     {team?.image ? (
                        <img src={team.image} alt={team.name} className="w-full h-full object-cover" />
