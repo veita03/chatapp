@@ -341,7 +341,7 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
             
             <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar ">
                {/* Player Item - Paid Full */}
-               <div className="flex items-center gap-3 py-3 rounded-none hover:bg-gray-50 transition-colors cursor-pointer group border-b border-gray-100 last:border-0">
+               <div className="flex items-center gap-3 py-2 rounded-none hover:bg-gray-50 transition-colors cursor-pointer group border-b border-gray-100 last:border-0">
                   <div className="relative">
                      <div className="w-10 h-10 rounded-full bg-[#39b4ad] flex items-center justify-center overflow-hidden w-10 h-10 max-w-[40px] max-h-[40px]">
                         <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Ziga" alt="avatar" className="w-full h-full object-cover" />
@@ -349,8 +349,7 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                      <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white"></div>
                   </div>
                   <div className="flex-1 min-w-0">
-                     <h4 className="text-[13px] font-bold text-gray-800 truncate group-hover:text-[#efc463] transition-colors">Žiga Kirsanov</h4>
-                     <p className="text-[11px] text-gray-400 font-medium truncate">Vezist • 22 nastopov</p>
+                     <h4 className="text-[13.5px] font-bold text-gray-800 truncate group-hover:text-[#efc463] transition-colors">Žiga Kirsanov</h4>
                   </div>
                   <div className="flex flex-col items-end gap-1">
                      <div className="flex items-center justify-center w-8 h-8 rounded-full text-gray-400 group-hover:text-[#efc463] group-hover:bg-[#fdf8ed] transition-colors cursor-pointer shrink-0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" /></svg></div>
@@ -358,7 +357,7 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                </div>
 
                {/* Player Item - Debt */}
-               <div className="flex items-center gap-3 py-3 rounded-none hover:bg-gray-50 transition-colors cursor-pointer group border-b border-gray-100 last:border-0">
+               <div className="flex items-center gap-3 py-2 rounded-none hover:bg-gray-50 transition-colors cursor-pointer group border-b border-gray-100 last:border-0">
                   <div className="relative">
                      <div className="w-10 h-10 rounded-full bg-[#39b4ad] flex items-center justify-center overflow-hidden w-10 h-10 max-w-[40px] max-h-[40px]">
                         <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Marko" alt="avatar" className="w-full h-full object-cover" />
@@ -366,8 +365,8 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                      <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white"></div>
                   </div>
                   <div className="flex-1 min-w-0">
-                     <h4 className="text-[13px] font-bold text-gray-800 truncate group-hover:text-blue-500 transition-colors">Marko Vršič</h4>
-                     <p className="text-[11px] text-gray-400 font-medium truncate">Napadalec • 18 nastopov</p>
+                     <h4 className="text-[13px] font-bold text-gray-800 truncate group-hover:text-[#efc463] transition-colors">Marko Vršič</h4>
+                     
                   </div>
                   <div className="flex flex-col items-end gap-1">
                      <div className="flex items-center justify-center w-8 h-8 rounded-full text-gray-400 group-hover:text-[#efc463] group-hover:bg-[#fdf8ed] transition-colors cursor-pointer shrink-0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" /></svg></div>
@@ -375,7 +374,7 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                </div>
                
                {/* Player Item - Missing */}
-               <div className="flex items-center gap-3 py-3 rounded-none hover:bg-gray-50 transition-colors cursor-pointer group border-b border-gray-100 last:border-0 opacity-60">
+               <div className="flex items-center gap-3 py-2 rounded-none hover:bg-gray-50 transition-colors cursor-pointer group border-b border-gray-100 last:border-0 opacity-60">
                   <div className="relative">
                      <div className="w-10 h-10 rounded-full bg-[#39b4ad] flex items-center justify-center overflow-hidden grayscale opacity-70 w-10 h-10 max-w-[40px] max-h-[40px]">
                         <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Jure" alt="avatar" className="w-full h-full object-cover" />
@@ -383,8 +382,7 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                      <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-gray-400 rounded-full border-2 border-white"></div>
                   </div>
                   <div className="flex-1 min-w-0">
-                     <h4 className="text-[13px] font-bold text-gray-600 truncate">Jure Novak</h4>
-                     <p className="text-[11px] text-gray-400 font-medium truncate">Branilec • 12 nastopov</p>
+                     <h4 className="text-[13.5px] font-bold text-gray-600 truncate">Jure Novak</h4>
                   </div>
                   <div className="flex flex-col items-end gap-1">
                      <div className="flex items-center justify-center w-8 h-8 rounded-full text-gray-400 group-hover:text-[#efc463] group-hover:bg-[#fdf8ed] transition-colors cursor-pointer shrink-0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" /></svg></div>
@@ -392,16 +390,19 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                </div>
                
                {/* Player Item - Normal */}
-               <div className="flex items-center gap-3 py-3 rounded-none hover:bg-gray-50 transition-colors cursor-pointer group border-b border-gray-100 last:border-0">
+               <div className="flex items-center gap-3 py-2 rounded-none hover:bg-gray-50 transition-colors cursor-pointer group border-b border-gray-100 last:border-0">
                   <div className="relative">
                      <div className="w-10 h-10 rounded-full bg-[#39b4ad] flex items-center justify-center overflow-hidden w-10 h-10 max-w-[40px] max-h-[40px]">
                         <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Aljosa" alt="avatar" className="w-full h-full object-cover" />
                      </div>
-                     <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white"></div>
+                     <div className="absolute -bottom-0.5 -right-0.5 w-[14px] h-[14px] bg-green-500 rounded-full border border-white flex items-center justify-center shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-2.5 h-2.5 text-white">
+                          <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clipRule="evenodd" />
+                        </svg>
+                     </div>
                   </div>
                   <div className="flex-1 min-w-0">
-                     <div className="flex items-center gap-1.5"><h4 className="text-[13px] font-bold text-gray-800 truncate group-hover:text-[#efc463] transition-colors">Aljoša Veit</h4><span className="bg-[#efc463] text-white text-[8px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider leading-none">Super Admin</span></div>
-                     <p className="text-[11px] text-gray-400 font-medium truncate">Vratar • 25 nastopov</p>
+                     <div className="flex items-center gap-2"><h4 className="text-[13.5px] font-bold text-gray-800 truncate group-hover:text-[#efc463] transition-colors">Aljoša Veit</h4><span className="bg-[#efc463] text-white text-[8px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider leading-none relative top-px">Super Admin</span></div>
                   </div>
                   <div className="flex flex-col items-end gap-1">
                      <div className="flex items-center justify-center w-8 h-8 rounded-full text-gray-400 group-hover:text-[#efc463] group-hover:bg-[#fdf8ed] transition-colors cursor-pointer shrink-0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" /></svg></div>
@@ -409,7 +410,7 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                </div>
                
                {/* Player Item - Normal */}
-               <div className="flex items-center gap-3 py-3 rounded-none hover:bg-gray-50 transition-colors cursor-pointer group border-b border-gray-100 last:border-0">
+               <div className="flex items-center gap-3 py-2 rounded-none hover:bg-gray-50 transition-colors cursor-pointer group border-b border-gray-100 last:border-0">
                   <div className="relative">
                      <div className="w-10 h-10 rounded-full bg-[#39b4ad] flex items-center justify-center overflow-hidden w-10 h-10 max-w-[40px] max-h-[40px]">
                         <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Tomaz" alt="avatar" className="w-full h-full object-cover" />
@@ -417,8 +418,8 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                      <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-yellow-400 rounded-full border-2 border-white"></div>
                   </div>
                   <div className="flex-1 min-w-0">
-                     <h4 className="text-[13px] font-bold text-gray-800 truncate group-hover:text-purple-500 transition-colors">Tomaž Bizjak</h4>
-                     <p className="text-[11px] text-gray-400 font-medium truncate">Vezist • 20 nastopov</p>
+                     <h4 className="text-[13px] font-bold text-gray-800 truncate group-hover:text-[#efc463] transition-colors">Tomaž Bizjak</h4>
+                     
                   </div>
                   <div className="flex flex-col items-end gap-1">
                      <div className="flex items-center justify-center w-8 h-8 rounded-full text-gray-400 group-hover:text-[#efc463] group-hover:bg-[#fdf8ed] transition-colors cursor-pointer shrink-0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" /></svg></div>
@@ -426,7 +427,7 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                </div>
                
                {/* Player Item - Normal */}
-               <div className="flex items-center gap-3 py-3 rounded-none hover:bg-gray-50 transition-colors cursor-pointer group border-b border-gray-100 last:border-0">
+               <div className="flex items-center gap-3 py-2 rounded-none hover:bg-gray-50 transition-colors cursor-pointer group border-b border-gray-100 last:border-0">
                   <div className="relative">
                      <div className="w-10 h-10 rounded-full bg-[#39b4ad] flex items-center justify-center overflow-hidden w-10 h-10 max-w-[40px] max-h-[40px]">
                         <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Luka" alt="avatar" className="w-full h-full object-cover" />
@@ -434,11 +435,11 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                      <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white"></div>
                   </div>
                   <div className="flex-1 min-w-0">
-                     <h4 className="text-[13px] font-bold text-gray-800 truncate group-hover:text-pink-500 transition-colors">Luka Mlakar</h4>
-                     <p className="text-[11px] text-gray-400 font-medium truncate">Napadalec • 15 nastopov</p>
+                     <h4 className="text-[13px] font-bold text-gray-800 truncate group-hover:text-[#efc463] transition-colors">Luka Mlakar</h4>
+                     
                   </div>
                   <div className="flex flex-col items-end gap-1">
-                     <span className="text-gray-400 text-[10px] font-bold"></span>
+                     <div className="flex items-center justify-center w-8 h-8 rounded-full text-gray-400 group-hover:text-[#efc463] group-hover:bg-[#fdf8ed] transition-colors cursor-pointer shrink-0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" /></svg></div>
                   </div>
                </div>
             </div>
