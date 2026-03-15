@@ -131,7 +131,10 @@ export const createSeason = mutation({
       }
     }
 
-    return seasonId;
+    return {
+      seasonId,
+      joinCode: seasonJoinCode
+    };
   },
 });
 

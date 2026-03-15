@@ -87,7 +87,7 @@ export default function CreateSeasonPage() {
     setIsSubmitting(true);
     
     try {
-      await createSeason({
+      const result = await createSeason({
         teamId,
         name: formData.name.trim(),
         desc: formData.desc.trim() || undefined,
@@ -95,7 +95,7 @@ export default function CreateSeasonPage() {
         dateEnd: formData.dateEnd,
         isActive: formData.isActive
       });
-      router.push(`/team/${teamId}`); // Redirect back to team dashboard after creation
+      router.push(`/season/${result.joinCode}`); // Redirect to new season dashboard
     } catch (error: any) {
        console.error(error);
        setSubmitError(error.message || "Napaka pri ustvarjanju sezone");
