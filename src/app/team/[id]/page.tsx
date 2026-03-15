@@ -29,6 +29,10 @@ export default function TeamDashboardPage() {
   const [teamToDelete, setTeamToDelete] = useState<Id<"teams"> | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const deleteTeam = useMutation(api.teams.deleteTeam);
+
+  const [seasonToDelete, setSeasonToDelete] = useState<Id<"seasons"> | null>(null);
+  const [isDeletingSeason, setIsDeletingSeason] = useState(false);
+  const deleteSeason = useMutation(api.seasons.deleteSeason);
   
   const teamId = params.id as Id<"teams">;
   
@@ -44,6 +48,20 @@ export default function TeamDashboardPage() {
     } finally {
       setIsDeleting(false);
       setTeamToDelete(null);
+    }
+  };
+
+  const handleDeleteSeason = async () => {
+    if (!seasonToDelete) return;
+    setIsDeletingSeason(true);
+    try {
+      await deleteSeason({ seasonId: seasonToDelete });
+    } catch (error) {
+      console.error(error);
+      alert("Napaka pri brisanju sezone");
+    } finally {
+      setIsDeletingSeason(false);
+      setSeasonToDelete(null);
     }
   };
   // For now, let's use getTeam and assume we have the raw data to build the subheader.
@@ -278,13 +296,22 @@ export default function TeamDashboardPage() {
                           </div>
                           
                           {team.userRole === "admin" && (
-                            <button 
-                              onClick={() => router.push(`/team/${teamId}/seasons/${season._id}/edit`)}
-                              className="w-8 h-8 flex items-center justify-center bg-white border border-gray-100 text-gray-400 hover:text-gray-600 hover:border-gray-200 hover:bg-gray-50 rounded-lg transition-colors shadow-sm"
-                              title="Uredi sezono"
-                            >
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5"><path d="M2.695 14.763l-1.262 3.152a.5.5 0 00.65.65l3.151-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" /></svg>
-                            </button>
+                            <div className="flex items-center gap-1.5 p-1">
+                               <button 
+                                 onClick={() => router.push(`/team/${teamId}/seasons/${season._id}/edit`)}
+                                 className="w-8 h-8 flex items-center justify-center bg-white border border-gray-100 text-gray-400 hover:text-gray-600 hover:border-gray-200 hover:bg-gray-50 rounded-lg transition-colors shadow-sm"
+                                 title="Uredi sezono"
+                               >
+                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5"><path d="M2.695 14.763l-1.262 3.152a.5.5 0 00.65.65l3.151-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" /></svg>
+                               </button>
+                               <button 
+                                 onClick={() => setSeasonToDelete(season._id)}
+                                 className="w-8 h-8 flex items-center justify-center bg-red-50 border border-red-100 text-red-400 hover:text-red-500 hover:border-red-200 hover:bg-red-100 rounded-lg transition-colors shadow-sm"
+                                 title="Izbriši sezono"
+                               >
+                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5"><path fillRule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z" clipRule="evenodd" /></svg>
+                               </button>
+                            </div>
                           )}
                        </div>
                     </div>
@@ -332,6 +359,40 @@ export default function TeamDashboardPage() {
                   className="flex-1 px-4 py-2.5 bg-red-500 text-white rounded-lg font-bold text-xs sm:text-sm hover:bg-red-600 shadow-sm flex items-center justify-center space-x-2 disabled:opacity-50 transition-colors"
                 >
                   {isDeleting ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : null}
+                  <span>{t.deleteBtn || "Izbriši"}</span>
+                </button>
+             </div>
+           </div>
+        </div>
+      )}
+
+      {/* Delete Season Confirmation Modal */}
+      {seasonToDelete && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+             <div className="p-6 text-center">
+               <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-white shadow-[0_0_0_4px_rgba(239,68,68,0.1)]">
+                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8"><path fillRule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z" clipRule="evenodd" /></svg>
+               </div>
+               <h3 className="text-xl font-bold text-gray-800 mb-2 tracking-wide" style={{fontFamily: 'var(--font-montserrat)'}}>Izbriši sezono</h3>
+               <p className="text-gray-500 text-sm">
+                 Ali si prepričan, da želiš izbrisati to sezono in s tem odstraniti vse udeležence v njej? Tega dejanja ni mogoče razveljaviti.
+               </p>
+             </div>
+             <div className="bg-gray-50 p-4 flex items-center space-x-3">
+                <button 
+                  onClick={() => setSeasonToDelete(null)}
+                  disabled={isDeletingSeason}
+                  className="flex-1 px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-700 font-bold text-xs sm:text-sm hover:bg-gray-50 disabled:opacity-50 transition-colors shadow-sm"
+                >
+                  {t.cancelBtn || "Prekliči"}
+                </button>
+                <button 
+                  onClick={handleDeleteSeason}
+                  disabled={isDeletingSeason}
+                  className="flex-1 px-4 py-2.5 bg-red-500 text-white rounded-lg font-bold text-xs sm:text-sm hover:bg-red-600 shadow-sm flex items-center justify-center space-x-2 disabled:opacity-50 transition-colors"
+                >
+                  {isDeletingSeason ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : null}
                   <span>{t.deleteBtn || "Izbriši"}</span>
                 </button>
              </div>

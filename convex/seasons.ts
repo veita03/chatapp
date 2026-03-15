@@ -213,3 +213,41 @@ export const updateSeason = mutation({
     return args.seasonId;
   },
 });
+
+export const deleteSeason = mutation({
+  args: {
+    seasonId: v.id("seasons"),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) throw new Error("Unauthorized");
+
+    const season = await ctx.db.get(args.seasonId);
+    if (!season) throw new Error("Season not found");
+
+    // Check if user is an admin of the team
+    const adminMembership = await ctx.db
+      .query("memberships")
+      .withIndex("by_user", (q) => q.eq("userId", userId))
+      .filter((q) => q.eq(q.field("teamId"), season.teamId))
+      .first();
+
+    if (!adminMembership || adminMembership.role !== "admin") {
+      throw new Error("Only team admins can delete a season.");
+    }
+
+    // Delete members of the season
+    const memberships = await ctx.db
+      .query("memberships")
+      .withIndex("by_team", (q) => q.eq("teamId", season.teamId))
+      .filter((q) => q.eq(q.field("seasonId"), args.seasonId))
+      .collect();
+
+    for (const member of memberships) {
+      await ctx.db.delete(member._id);
+    }
+
+    // Delete the season
+    await ctx.db.delete(args.seasonId);
+  },
+});
