@@ -70,6 +70,9 @@ export default function TeamDashboardPage() {
       setSeasonToDelete(null);
     }
   };
+
+  // Mock players for now until backend query is written
+  const players: any[] = [];
   // For now, let's use getTeam and assume we have the raw data to build the subheader.
   const team = useQuery(api.teams.getTeam, { teamId });
   const seasons = useQuery(api.seasons.getSeasonsByTeam, { teamId });
@@ -435,9 +438,34 @@ export default function TeamDashboardPage() {
             <h2 className="text-2xl font-bold text-[#353b41] mb-4" style={{fontFamily: 'var(--font-montserrat)'}}>
                {t.playersInTeam || "Igralci v ekipi"}
             </h2>
-            <div className="bg-white rounded-xl border border-gray-100 p-6 text-center text-gray-500 shadow-sm min-h-[150px] flex items-center justify-center">
-               Tukaj bo kmalu seznam igralcev...
-            </div>
+            
+            {players === undefined ? (
+               <div className="bg-white rounded-xl border border-gray-100 p-6 text-center text-gray-500 shadow-sm min-h-[150px] flex items-center justify-center">
+                  <div className="animate-pulse flex space-x-2 items-center">
+                    <div className="w-2 h-2 rounded-full bg-gray-300"></div>
+                    <div className="w-2 h-2 rounded-full bg-gray-300"></div>
+                    <div className="w-2 h-2 rounded-full bg-gray-300"></div>
+                  </div>
+               </div>
+            ) : players.length === 0 ? (
+               <div className="bg-white rounded-xl border border-gray-100 p-10 text-center text-gray-500 shadow-sm min-h-[150px] flex flex-col items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 text-gray-300 mb-3">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+                  </svg>
+                  <p className="font-medium">Ekipa trenutno nima igralcev.</p>
+                  <p className="text-sm mt-1 max-w-sm mx-auto text-gray-400">
+                     Igralci bodo samodejno prikazani na tem seznamu, ko se bodo preko vabila pridružili kateri izmed sezon.
+                  </p>
+               </div>
+            ) : (
+               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {players.map((player) => (
+                    <div key={player._id} className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
+                       {/* Placeholder for player cards */}
+                    </div>
+                  ))}
+               </div>
+            )}
           </div>
 
       </div>
