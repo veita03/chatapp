@@ -378,7 +378,11 @@ export default function TeamDashboardPage() {
                  ) : (
                    <div className={viewMode === 'grid' ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4" : "flex flex-col gap-4"}>
                       {filteredSeasons?.map((season) => (
-                    <div key={season._id} className="bg-white rounded-xl border border-gray-100 p-5 shadow-[0_2px_8px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_12px_-4px_rgba(0,0,0,0.1)] transition-all flex flex-col group relative overflow-hidden">
+                    <div 
+                      key={season._id} 
+                      onClick={() => router.push(`/season/${season.joinCode}`)}
+                      className="bg-white rounded-xl border border-gray-100 p-5 shadow-[0_2px_8px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_12px_-4px_rgba(0,0,0,0.1)] transition-all flex flex-col group relative overflow-hidden cursor-pointer"
+                    >
                        <div className="absolute top-0 left-0 w-1 h-full bg-[#dba032]" />
                        
                        <div className="flex justify-between items-start mb-3 ml-2">
@@ -409,14 +413,20 @@ export default function TeamDashboardPage() {
                           {team.userRole === "admin" && (
                             <div className="flex items-center gap-1.5 p-1">
                                <button 
-                                 onClick={() => router.push(`/team/${teamId}/seasons/${season._id}/edit`)}
+                                 onClick={(e) => {
+                                   e.stopPropagation();
+                                   router.push(`/team/${teamId}/seasons/${season._id}/edit`);
+                                 }}
                                  className="w-8 h-8 flex items-center justify-center bg-white border border-gray-100 text-gray-400 hover:text-gray-600 hover:border-gray-200 hover:bg-gray-50 rounded-lg transition-colors shadow-sm"
                                  title="Uredi sezono"
                                >
                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5"><path d="M2.695 14.763l-1.262 3.152a.5.5 0 00.65.65l3.151-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" /></svg>
                                </button>
                                <button 
-                                 onClick={() => setSeasonToDelete(season._id)}
+                                 onClick={(e) => {
+                                   e.stopPropagation();
+                                   setSeasonToDelete(season._id);
+                                 }}
                                  className="w-8 h-8 flex items-center justify-center bg-red-50 border border-red-100 text-red-400 hover:text-red-500 hover:border-red-200 hover:bg-red-100 rounded-lg transition-colors shadow-sm"
                                  title="Izbriši sezono"
                                >
