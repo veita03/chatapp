@@ -98,7 +98,7 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                </div>
                
                {/* Event Body */}
-               <div className="p-3 sm:p-4 flex flex-col gap-2">
+               <div className="p-3 sm:p-4 sm:pb-3 flex flex-col gap-2">
                   {/* Row 1: Time and Location details */}
                   <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-gray-400 font-medium text-[12px]">
                      <div className="flex items-center gap-1.5 border-r border-gray-100 pr-2 sm:pr-4">
@@ -154,8 +154,8 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                   <hr className="border-t border-dashed border-gray-100" />
                   
                   {/* Row 3: Action Buttons */}
-                  <div className="bg-[#fefaf3] rounded-xl py-1.5 px-3 flex flex-col sm:flex-row items-center justify-center gap-3 w-full">
-                     <span className="text-[#e5b352] text-[12px] font-bold flex items-center gap-1.5">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 w-full pt-1">
+                     <span className="text-gray-500 text-[12px] font-semibold flex items-center gap-1.5">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-[14px] h-[14px] -scale-x-100"><path fillRule="evenodd" d="M14.707 9.293a1 1 0 00-1.414 0L11 11.586V3a1 1 0 00-2 0v8.586L6.707 9.293a1 1 0 10-1.414 1.414l4 4a1 1 0 001.414 0l4-4a1 1 0 000-1.414z" clipRule="evenodd" /></svg>
                         Odzovi se:
                      </span>
@@ -199,7 +199,7 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                   </div>
                </div>
                {/* Event Body */}
-               <div className="p-3 sm:p-4 flex flex-col gap-2">
+               <div className="p-3 sm:p-4 sm:pb-3 flex flex-col gap-2">
                   <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-gray-400 font-medium text-[12px]">
                      <div className="flex items-center gap-1.5 border-r border-gray-100 pr-2 sm:pr-4">
                         <div className="bg-[#fcfaf4] text-[#e5b352] p-1.5 rounded-md border border-gray-100">
@@ -251,8 +251,8 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                   <hr className="border-t border-dashed border-gray-100" />
                   
                   {/* Row 3: Action Buttons (Already accepted state) */}
-                  <div className="bg-[#fefaf3] rounded-xl py-1.5 px-3 flex flex-col sm:flex-row items-center justify-center gap-3 w-full shadow-inner border border-[#fef1d8]">
-                     <span className="text-[#e5b352] text-[12px] font-bold flex items-center gap-1.5">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 w-full pt-1">
+                     <span className="text-gray-500 text-[12px] font-semibold flex items-center gap-1.5">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-[14px] h-[14px] -scale-x-100"><path fillRule="evenodd" d="M14.707 9.293a1 1 0 00-1.414 0L11 11.586V3a1 1 0 00-2 0v8.586L6.707 9.293a1 1 0 10-1.414 1.414l4 4a1 1 0 001.414 0l4-4a1 1 0 000-1.414z" clipRule="evenodd" /></svg>
                         Tvoj odziv:
                      </span>
@@ -290,7 +290,7 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                </div>
                
                {/* Event Body */}
-               <div className="p-3 sm:p-4 flex flex-col gap-2 bg-[#fff6f5]">
+               <div className="p-3 sm:p-4 sm:pb-3 flex flex-col gap-2 bg-[#fff6f5]">
                   <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-gray-400 font-medium text-[12px]">
                      <div className="flex items-center gap-1.5 border-r border-[#fadee0] pr-2 sm:pr-4">
                         <div className="bg-[#fffcfc] text-[#efc463] p-1.5 rounded-md border border-[#faeaea]">
@@ -351,10 +351,107 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
                <div className="w-[5px] bg-[#efc463] shadow-inner rounded-r-[3px]"></div>
             </div>
             
-            <div className="flex-1 overflow-y-auto pr-1">
-               {/* Empty Players State */}
-               <div className="flex flex-col items-center justify-center h-full text-center text-gray-500 py-10">
-                  <p className="font-medium text-sm">V tej sezoni še ni igralcev.</p>
+            <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-2">
+               {/* Player Item - Paid Full */}
+               <div className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer group border border-transparent hover:border-gray-100">
+                  <div className="relative">
+                     <div className="w-10 h-10 rounded-full bg-[#fdfaf1] border border-[#fbf1ce] flex items-center justify-center text-[#efc463] font-bold shadow-sm">
+                        ŽK
+                     </div>
+                     <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white"></div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                     <h4 className="text-[13px] font-bold text-gray-800 truncate group-hover:text-[#efc463] transition-colors">Žiga Kirsanov</h4>
+                     <p className="text-[11px] text-gray-400 font-medium truncate">Vezist • 22 nastopov</p>
+                  </div>
+                  <div className="flex flex-col items-end gap-1">
+                     <span className="bg-[#eef8f3] text-[#5ba582] text-[10px] font-bold px-2 py-0.5 rounded-md">Plačano</span>
+                  </div>
+               </div>
+
+               {/* Player Item - Debt */}
+               <div className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer group border border-transparent hover:border-gray-100">
+                  <div className="relative">
+                     <div className="w-10 h-10 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-500 font-bold shadow-sm">
+                        MV
+                     </div>
+                     <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white"></div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                     <h4 className="text-[13px] font-bold text-gray-800 truncate group-hover:text-blue-500 transition-colors">Marko Vršič</h4>
+                     <p className="text-[11px] text-gray-400 font-medium truncate">Napadalec • 18 nastopov</p>
+                  </div>
+                  <div className="flex flex-col items-end gap-1">
+                     <span className="bg-[#fcf2f2] text-[#cd5c5a] text-[10px] font-bold px-2 py-0.5 rounded-md">-15 €</span>
+                  </div>
+               </div>
+               
+               {/* Player Item - Missing */}
+               <div className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer group border border-transparent hover:border-gray-100 opacity-60">
+                  <div className="relative">
+                     <div className="w-10 h-10 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center text-gray-500 font-bold shadow-sm">
+                        JN
+                     </div>
+                     <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-gray-400 rounded-full border-2 border-white"></div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                     <h4 className="text-[13px] font-bold text-gray-600 truncate">Jure Novak</h4>
+                     <p className="text-[11px] text-gray-400 font-medium truncate">Branilec • 12 nastopov</p>
+                  </div>
+                  <div className="flex flex-col items-end gap-1">
+                     <span className="text-gray-400 text-[10px] font-bold">Odsoten</span>
+                  </div>
+               </div>
+               
+               {/* Player Item - Normal */}
+               <div className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer group border border-transparent hover:border-gray-100">
+                  <div className="relative">
+                     <div className="w-10 h-10 rounded-full bg-[#fdfaf1] border border-[#fbf1ce] flex items-center justify-center text-[#efc463] font-bold shadow-sm">
+                        AV
+                     </div>
+                     <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white"></div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                     <h4 className="text-[13px] font-bold text-gray-800 truncate group-hover:text-[#efc463] transition-colors">Aljoša Veit</h4>
+                     <p className="text-[11px] text-gray-400 font-medium truncate">Vratar • 25 nastopov</p>
+                  </div>
+                  <div className="flex flex-col items-end gap-1">
+                     <span className="bg-[#eef8f3] text-[#5ba582] text-[10px] font-bold px-2 py-0.5 rounded-md">Plačano</span>
+                  </div>
+               </div>
+               
+               {/* Player Item - Normal */}
+               <div className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer group border border-transparent hover:border-gray-100">
+                  <div className="relative">
+                     <div className="w-10 h-10 rounded-full bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-500 font-bold shadow-sm">
+                        TB
+                     </div>
+                     <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-yellow-400 rounded-full border-2 border-white"></div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                     <h4 className="text-[13px] font-bold text-gray-800 truncate group-hover:text-purple-500 transition-colors">Tomaž Bizjak</h4>
+                     <p className="text-[11px] text-gray-400 font-medium truncate">Vezist • 20 nastopov</p>
+                  </div>
+                  <div className="flex flex-col items-end gap-1">
+                     <span className="bg-[#fcf2f2] text-[#cd5c5a] text-[10px] font-bold px-2 py-0.5 rounded-md">-5 €</span>
+                  </div>
+               </div>
+               
+               {/* Player Item - Normal */}
+               <div className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer group border border-transparent hover:border-gray-100">
+                  <div className="relative">
+                     <div className="w-10 h-10 rounded-full bg-pink-50 border border-pink-100 flex items-center justify-center text-pink-500 font-bold shadow-sm">
+                        LM
+                     </div>
+                     <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white"></div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                     <h4 className="text-[13px] font-bold text-gray-800 truncate group-hover:text-pink-500 transition-colors">Luka Mlakar</h4>
+                     <p className="text-[11px] text-gray-400 font-medium truncate">Napadalec • 15 nastopov</p>
+                  </div>
+                  <div className="flex flex-col items-end gap-1">
+                     <span className="text-gray-400 text-[10px] font-bold"></span>
+                  </div>
                </div>
             </div>
          </div>
