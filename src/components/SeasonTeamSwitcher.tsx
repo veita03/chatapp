@@ -52,12 +52,12 @@ export default function SeasonTeamSwitcher({ currentTeam, currentSeason }: Seaso
       <div className="relative">
         <button 
           onClick={() => setOpenDropdown(openDropdown === 'team' ? null : 'team')}
-          className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white font-medium px-3 md:px-4 py-1.5 md:py-2 rounded-lg transition-colors text-xs md:text-sm max-w-[200px] md:max-w-[250px]"
+          className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white font-medium px-3 md:px-4 h-[36px] md:h-[42px] rounded-[8px] md:rounded-[10px] transition-colors max-w-[200px] md:max-w-[250px]"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 shrink-0 hidden sm:block"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" /></svg>
-          <div className="truncate text-left border-l border-white/20 pl-2 ml-1">
-             <span className="text-[9px] md:text-[10px] uppercase font-bold text-white/80 block leading-tight tracking-wider" style={{fontFamily: 'var(--font-cabin)'}}>EKIPA</span>
-             <span className="truncate block font-bold text-white" style={{fontFamily: 'var(--font-cabin)'}}>{currentTeam?.name || "Nalaganje..."}</span>
+          <div className="truncate text-left border-l border-white/20 pl-2 ml-1 flex flex-col justify-center">
+             <span className="text-[8px] md:text-[9px] uppercase font-bold text-white/80 block leading-[1] tracking-wider mb-0.5" style={{fontFamily: 'var(--font-cabin)'}}>EKIPA</span>
+             <span className="truncate block font-bold text-white text-[11px] md:text-[13px] leading-[1]" style={{fontFamily: 'var(--font-cabin)'}}>{currentTeam?.name || "Nalaganje..."}</span>
           </div>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className={`w-3.5 h-3.5 shrink-0 transition-transform ${openDropdown === 'team' ? 'rotate-180' : ''}`}><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
         </button>
@@ -108,12 +108,12 @@ export default function SeasonTeamSwitcher({ currentTeam, currentSeason }: Seaso
       <div className="relative">
         <button 
           onClick={() => setOpenDropdown(openDropdown === 'season' ? null : 'season')}
-          className="flex items-center gap-2 bg-[#d8993c] hover:bg-[#c98e37] text-white px-3 md:px-4 py-1.5 md:py-2 rounded-lg transition-colors text-xs md:text-sm shadow-inner max-w-[200px] md:max-w-[250px]"
+          className="flex items-center gap-2 bg-[#d8993c] hover:bg-[#c98e37] text-white px-3 md:px-4 h-[36px] md:h-[42px] rounded-[8px] md:rounded-[10px] transition-colors shadow-inner max-w-[200px] md:max-w-[250px]"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4 shrink-0 hidden sm:block"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
-          <div className="truncate text-left border-l border-white/20 pl-2 ml-1">
-             <span className="text-[9px] md:text-[10px] uppercase font-bold text-white/90 block leading-tight tracking-wider" style={{fontFamily: 'var(--font-cabin)'}}>SEZONA</span>
-             <span className="truncate block font-bold text-white" style={{fontFamily: 'var(--font-cabin)'}}>{currentSeason?.name || "Nalaganje..."}</span>
+          <div className="truncate text-left border-l border-white/20 pl-2 ml-1 flex flex-col justify-center">
+             <span className="text-[8px] md:text-[9px] uppercase font-bold text-white/90 block leading-[1] tracking-wider mb-0.5" style={{fontFamily: 'var(--font-cabin)'}}>SEZONA</span>
+             <span className="truncate block font-bold text-white text-[11px] md:text-[13px] leading-[1]" style={{fontFamily: 'var(--font-cabin)'}}>{currentSeason?.name || "Nalaganje..."}</span>
           </div>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className={`w-3.5 h-3.5 shrink-0 transition-transform ${openDropdown === 'season' ? 'rotate-180' : ''}`}><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
         </button>
