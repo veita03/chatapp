@@ -149,11 +149,11 @@ export const getSeasonsByTeam = query({
     // 2. Augment with participant counts
     return Promise.all(
       seasons.map(async (season) => {
-        // Find memberships that map to this specific seasonId
+        // Find memberships that map to this specific seasonId using the index
         const members = await ctx.db
           .query("memberships")
+          .withIndex("by_season", (q) => q.eq("seasonId", season._id))
           .filter((q) => q.eq(q.field("teamId"), args.teamId))
-          .filter((q) => q.eq(q.field("seasonId"), season._id))
           .collect();
         
         // Ensure unique user counts (though usually 1 user per 1 season membership)
@@ -258,8 +258,7 @@ export const deleteSeason = mutation({
     // Delete members of the season
     const memberships = await ctx.db
       .query("memberships")
-      .withIndex("by_team", (q) => q.eq("teamId", season.teamId))
-      .filter((q) => q.eq(q.field("seasonId"), args.seasonId))
+      .withIndex("by_season", (q) => q.eq("seasonId", args.seasonId))
       .collect();
 
     for (const member of memberships) {
