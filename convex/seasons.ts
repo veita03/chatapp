@@ -133,3 +133,36 @@ export const createSeason = mutation({
     return seasonId;
   },
 });
+
+export const getSeasonsByTeam = query({
+  args: {
+    teamId: v.id("teams"),
+  },
+  handler: async (ctx, args) => {
+    // 1. Fetch seasons
+    const seasons = await ctx.db
+      .query("seasons")
+      .withIndex("by_team", (q) => q.eq("teamId", args.teamId))
+      .collect();
+
+    // 2. Augment with participant counts
+    return Promise.all(
+      seasons.map(async (season) => {
+        // Find memberships that map to this specific seasonId
+        const members = await ctx.db
+          .query("memberships")
+          .filter((q) => q.eq(q.field("teamId"), args.teamId))
+          .filter((q) => q.eq(q.field("seasonId"), season._id))
+          .collect();
+        
+        // Ensure unique user counts (though usually 1 user per 1 season membership)
+        const uniqueUsers = new Set(members.map((m) => m.userId));
+
+        return {
+          ...season,
+          memberCount: uniqueUsers.size,
+        };
+      })
+    );
+  },
+});

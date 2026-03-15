@@ -31,9 +31,7 @@ export default function CreateSeasonPage() {
   const teamId = params.id as Id<"teams">;
   const team = useQuery(api.teams.getTeam, { teamId });
 
-  // TODO: Create a proper mutation inside convex/seasons.ts or teams.ts for creating a season
-  // For now we'll mock it or provide a generic one if it exists
-  // const createSeason = useMutation(api.seasons.createSeason);
+  const createSeason = useMutation(api.seasons.createSeason);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -89,11 +87,14 @@ export default function CreateSeasonPage() {
     setIsSubmitting(true);
     
     try {
-      // await createSeason({
-      //   teamId,
-      //   ...formData
-      // });
-      console.log("Create season:", formData);
+      await createSeason({
+        teamId,
+        name: formData.name.trim(),
+        desc: formData.desc.trim() || undefined,
+        dateStart: formData.dateStart,
+        dateEnd: formData.dateEnd,
+        isActive: formData.isActive
+      });
       router.push(`/team/${teamId}`); // Redirect back to team dashboard after creation
     } catch (error: any) {
        console.error(error);

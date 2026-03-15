@@ -222,9 +222,61 @@ export default function TeamDashboardPage() {
                </button>
             </div>
             
-            <div className="bg-white rounded-xl border border-gray-100 p-6 text-center text-gray-500 shadow-sm min-h-[150px] flex items-center justify-center">
-               Tukaj bo kmalu seznam sezon...
-            </div>
+            {seasons === undefined ? (
+               <div className="bg-white rounded-xl border border-gray-100 p-6 text-center text-gray-500 shadow-sm min-h-[150px] flex items-center justify-center">
+                  <div className="animate-pulse flex space-x-2 items-center">
+                    <div className="w-2 h-2 rounded-full bg-gray-300"></div>
+                    <div className="w-2 h-2 rounded-full bg-gray-300"></div>
+                    <div className="w-2 h-2 rounded-full bg-gray-300"></div>
+                  </div>
+               </div>
+            ) : seasons.length === 0 ? (
+               <div className="bg-white rounded-xl border border-gray-100 p-10 text-center text-gray-500 shadow-sm min-h-[150px] flex flex-col items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 text-gray-300 mb-3">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                  </svg>
+                  <p className="font-medium">Ekipa še nima dodanih sezon.</p>
+                  <p className="text-sm mt-1">Klikni na gumb "Nova sezona" za ustvarjanje prve.</p>
+               </div>
+            ) : (
+               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {seasons.map((season) => (
+                    <div key={season._id} className="bg-white rounded-xl border border-gray-100 p-5 shadow-[0_2px_8px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_12px_-4px_rgba(0,0,0,0.1)] transition-all flex flex-col group relative overflow-hidden">
+                       <div className="absolute top-0 left-0 w-1 h-full bg-[#dba032]" />
+                       
+                       <div className="flex justify-between items-start mb-3 ml-2">
+                          <h3 className="font-bold text-gray-800 text-[16px] pr-2">{season.name}</h3>
+                          <span className={`px-2.5 py-1 rounded-md text-[10px] uppercase font-bold tracking-wider whitespace-nowrap ${season.isActive ? 'bg-[#5ba582]/10 text-[#5ba582]' : 'bg-gray-100 text-gray-500'}`}>
+                             {season.isActive ? 'Aktivno' : 'Neaktivno'}
+                          </span>
+                       </div>
+
+                       <div className="flex items-center gap-3 text-sm text-gray-500 mb-5 ml-2">
+                          <div className="flex items-center gap-1.5" title="Število članov">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-gray-400"><path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" /></svg>
+                            <span className="font-medium">{season.memberCount || 0}</span>
+                          </div>
+                       </div>
+                       
+                       <div className="mt-auto ml-2 flex items-center justify-between border-t border-gray-50 pt-3">
+                          <div className="text-xs text-gray-400 font-mono tracking-wider font-semibold">
+                             Koda: <span className="text-[#dba032]">{season.joinCode}</span>
+                          </div>
+                          
+                          {team.userRole === "admin" && (
+                            <button 
+                              onClick={() => router.push(`/team/${teamId}/seasons/${season._id}/edit`)}
+                              className="text-gray-400 hover:text-[#3b879c] transition-colors p-1"
+                              title="Uredi sezono"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4"><path d="M2.695 14.763l-1.262 3.152a.5.5 0 00.65.65l3.151-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" /></svg>
+                            </button>
+                          )}
+                       </div>
+                    </div>
+                  ))}
+               </div>
+            )}
           </div>
 
           {/* Players Block Placeholder */}
