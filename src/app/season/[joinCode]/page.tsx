@@ -17,7 +17,7 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
             <h1 className="text-[26px] font-bold text-gray-800 tracking-tight" style={{fontFamily: 'var(--font-montserrat)'}}>
               Dogodki
             </h1>
-            <button className="bg-[#6db59c] hover:bg-[#5ca087] transition-colors text-white font-medium px-4 py-2.5 rounded-[10px] text-[15px] flex items-center gap-1.5 shadow-sm">
+            <button className="bg-[#6db59c] hover:bg-[#5ca087] transition-colors text-white font-medium h-[40px] px-4 rounded-lg text-[14px] flex items-center gap-1.5 shadow-sm">
                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" /></svg>
                Nov dogodek
             </button>
@@ -64,7 +64,7 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
             <h2 className="text-[26px] font-bold text-gray-800 flex items-center gap-3 tracking-tight" style={{fontFamily: 'var(--font-montserrat)'}}>
               Igralci <span className="flex items-center justify-center bg-[#f0c265] text-white text-[15px] font-bold w-8 h-8 rounded-full leading-none pt-px">15</span>
             </h2>
-            <button className="bg-[#6db59c] hover:bg-[#5ca087] transition-colors text-white font-medium px-4 py-2.5 rounded-[10px] text-[15px] flex items-center gap-1.5 shadow-sm">
+            <button className="bg-[#6db59c] hover:bg-[#5ca087] transition-colors text-white font-medium h-[40px] px-4 rounded-lg text-[14px] flex items-center gap-1.5 shadow-sm">
                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-[18px] h-[18px]"><path d="M11 5a3 3 0 11-6 0 3 3 0 016 0zM2.615 16.428a1.224 1.224 0 01-.569-1.175 6.002 6.002 0 0111.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 018 18a9.953 9.953 0 01-5.385-1.572zM16.25 5.75a.75.75 0 00-1.5 0v2h-2a.75.75 0 000 1.5h2v2a.75.75 0 001.5 0v-2h2a.75.75 0 000-1.5h-2v-2z" /></svg>
                Dodaj igralce
             </button>
