@@ -19,14 +19,14 @@ export default function CreateEventPage({ params }: { params: Promise<{ joinCode
   const [isPeriodicExpanded, setIsPeriodicExpanded] = useState(false);
 
   return (
-    <div className="absolute inset-0 z-10 font-sans flex flex-col bg-white">
+    <div className="absolute inset-0 z-10 font-sans flex flex-col bg-transparent">
       
       {/* Scrollable Form Area */}
-      <div className="flex-1 overflow-y-auto custom-scrollbar px-4 sm:px-6 md:px-8 pt-6 pb-2 w-full">
+      <div className="flex-1 overflow-y-auto custom-scrollbar px-4 md:px-8 pt-3 pb-2 w-full">
         <div className="w-full">
            
            {/* Top Header section */}
-           <div className="flex items-center justify-between mb-8">
+           <div className="flex items-center justify-between mb-6 shrink-0 mt-0">
               <h1 className="text-[26px] font-bold text-gray-800 tracking-tight leading-none" style={{ fontFamily: 'var(--font-montserrat)' }}>
                 Ustvari dogodek
               </h1>
