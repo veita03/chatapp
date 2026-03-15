@@ -75,11 +75,11 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
             
             {/* Birthday Alert Block */}
             <div className="flex items-stretch mb-5 overflow-hidden">
-               <div className="flex-1 bg-[#fef1d8] rounded-l-[8px] py-2.5 px-4 flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-[18px] h-[18px] text-[#eebd70] shrink-0 mb-0.5"><path fillRule="evenodd" d="M12 2.25a.75.75 0 0 1 .75.75v.858a2 2 0 0 1 .74 1.055 3.5 3.5 0 0 1 1.83 2.193 4.981 4.981 0 0 1 2.37.18 6.513 6.513 0 0 1 4.298 4.67A8.006 8.006 0 0 1 22 14.5a.75.75 0 0 1-.75.75H2.75A.75.75 0 0 1 2 14.5a8.006 8.006 0 0 1-.012-2.545 6.513 6.513 0 0 1 4.298-4.67 4.981 4.981 0 0 1 2.37-.18 3.5 3.5 0 0 1 1.83-2.193 2 2 0 0 1 .764-1.055V3a.75.75 0 0 1 .75-.75Zm0 13a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V16A.75.75 0 0 1 12 15.25Zm-4.5.75v2.25a.75.75 0 0 0 1.5 0V16a.75.75 0 0 0-1.5 0Zm9 0v2.25a.75.75 0 0 0 1.5 0V16a.75.75 0 0 0-1.5 0Z" clipRule="evenodd" /></svg>
-                  <span className="text-[14px] text-[#eecd85] font-semibold tracking-wide">Naslednji časti: <strong className="font-bold">Žiga Kirsanov 06.09.2026</strong></span>
+               <div className="flex-1 bg-[#fbf1ce] rounded-l-[8px] py-3 px-4 flex items-center justify-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-[18px] h-[18px] text-[#efc463] shrink-0"><path fillRule="evenodd" d="M11.25 2.25a.75.75 0 0 1 1.5 0v2.818c.335-.114.68-.198 1.036-.245.986-.131 1.956.12 2.688.753.692.599 1.026 1.487 1.026 2.424 0 .937-.334 1.825-1.026 2.424-.492.426-1.077.674-1.683.743L14.75 14.5a.75.75 0 0 1-1.5 0v-4h-2.5v4a.75.75 0 0 1-1.5 0v-3.332c-.606-.069-1.191-.317-1.683-.743-.692-.599-1.026-1.487-1.026-2.424 0-.937.334-1.825 1.026-2.424.732-.633 1.702-.884 2.688-.753.355.047.7.131 1.036.245V2.25Zm-3.5 13.5c-1.397.058-2.529.434-3.264 1.025-.572.46-.861 1.066-.861 1.725s.289 1.265.861 1.725c1.076.866 3.193 1.375 5.464 1.375s4.388-.509 5.464-1.375c.572-.46.861-1.065.861-1.725s-.289-1.265-.861-1.725c-.735-.591-1.867-.967-3.264-1.025v2.25a.75.75 0 0 1-1.5 0v-2.25h-2.5v2.25a.75.75 0 0 1-1.5 0v-2.25ZM11.054 7c.48.096.945.244 1.392.443a.75.75 0 0 1-.39 1.4c-.606-.234-1.258-.2-1.834.19-.516.349-.722.846-.722 1.341s.206.992.722 1.34c.734.498 1.666.498 2.399 0 .516-.348.722-.845.722-1.34 0-.495-.206-.992-.722-1.341a.75.75 0 1 1 .843-1.246c.928.628 1.385 1.583 1.385 2.587 0 1.004-.457 1.96-1.385 2.587-1.127.763-2.618.763-3.744 0C8.328 10.59 8.8 8.8 8.8 8.8c0-1.004.457-1.959 1.385-2.587A4.62 4.62 0 0 1 11.054 7Z" clipRule="evenodd" /></svg>
+                  <span className="text-[13px] sm:text-[14px] text-[#efc463] font-bold tracking-wide truncate">Naslednji časti: Žiga Kirsanov 06.09.2026</span>
                </div>
-               <div className="w-[6px] bg-[#e1ad5b] shadow-sm rounded-r-[3px]"></div>
+               <div className="w-[8px] bg-[#efc463] shadow-sm rounded-r-[3px]"></div>
             </div>
             
             <div className="flex-1 overflow-y-auto pr-1">
