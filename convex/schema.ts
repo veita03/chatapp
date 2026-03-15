@@ -78,6 +78,7 @@ export default defineSchema({
   seasons: defineTable({
     teamId: v.id("teams"),
     name: v.string(), // e.g., "Jesen 2025"
+    desc: v.optional(v.string()), // Added for the build error
     isActive: v.boolean(),
     joinCode: v.string(),
     dateStart: v.optional(v.string()),
