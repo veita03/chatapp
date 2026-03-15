@@ -34,6 +34,12 @@ export default function TeamDashboardPage() {
   const [isDeletingSeason, setIsDeletingSeason] = useState(false);
   const deleteSeason = useMutation(api.seasons.deleteSeason);
   
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [filterStartDate, setFilterStartDate] = useState<string>('');
+  const [filterEndDate, setFilterEndDate] = useState<string>('');
+  const [sortBy, setSortBy] = useState<'name' | 'date'>('date');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+
   const teamId = params.id as Id<"teams">;
   
   const handleDelete = async () => {
@@ -67,7 +73,21 @@ export default function TeamDashboardPage() {
   // For now, let's use getTeam and assume we have the raw data to build the subheader.
   const team = useQuery(api.teams.getTeam, { teamId });
   const seasons = useQuery(api.seasons.getSeasonsByTeam, { teamId });
-  console.log("Fetched seasons:", seasons);
+
+  const filteredSeasons = seasons ? seasons.filter(season => {
+    if (filterStartDate && (!season.dateEnd || season.dateEnd < filterStartDate)) return false;
+    if (filterEndDate && (!season.dateStart || season.dateStart > filterEndDate)) return false;
+    return true;
+  }).sort((a, b) => {
+    if (sortBy === 'name') {
+      const cmp = a.name.localeCompare(b.name, 'sl');
+      return sortOrder === 'asc' ? cmp : -cmp;
+    } else {
+      const dA = a.dateStart ? new Date(a.dateStart).getTime() : 0;
+      const dB = b.dateStart ? new Date(b.dateStart).getTime() : 0;
+      return sortOrder === 'asc' ? dA - dB : dB - dA;
+    }
+  }) : undefined;
 
   useEffect(() => {
     if (!isAuthLoading && !isAuthenticated) {
@@ -120,6 +140,24 @@ export default function TeamDashboardPage() {
     if (!dateStr) return "";
     const d = new Date(dateStr);
     return new Intl.DateTimeFormat(currentLang, { day: '2-digit', month: '2-digit', year: 'numeric' }).format(d);
+  };
+
+  const getIgralciText = (count: number) => {
+    const n = Math.abs(count) % 100;
+    if (n === 1) return `${count} pooblascenec/ekipa (TBD)`;
+    // To match screenshot which says "3 igralcev" (?) It said 'Nogometna ekipa' -> "1 sezon", user said "1 igralec, 2 igralca, 3/4 igralci, 5 6,7+igralcev" 
+    if (n === 1) return `${count} igralec`;
+    if (n === 2) return `${count} igralca`;
+    if (n === 3 || n === 4) return `${count} igralci`;
+    return `${count} igralcev`;
+  };
+
+  const getSezoneText = (count: number) => {
+    const n = Math.abs(count) % 100;
+    if (n === 1) return `${count} sezona`;
+    if (n === 2) return `${count} sezoni`;
+    if (n === 3 || n === 4) return `${count} sezone`;
+    return `${count} sezon`;
   };
 
   return (
@@ -192,7 +230,7 @@ export default function TeamDashboardPage() {
                  {team.memberCount > 0 && (
                    <div className="flex items-center gap-2 px-3 py-1.5 bg-white/95 rounded-full text-gray-700 text-[13px] font-bold shadow-sm whitespace-nowrap">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-gray-500"><path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" /></svg>
-                      {team.memberCount}
+                      {getIgralciText(team.memberCount)}
                    </div>
                  )}
 
@@ -200,7 +238,7 @@ export default function TeamDashboardPage() {
                  {team.seasonCount > 0 && (
                    <div className="flex items-center gap-1.5 px-3 py-1.5 bg-white/95 rounded-full text-gray-700 text-[13px] font-bold shadow-sm whitespace-nowrap">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-gray-500"><path fillRule="evenodd" d="M14.5 4V3.25a.75.75 0 0 0-1.5 0V4h-6V3.25a.75.75 0 0 0-1.5 0V4H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.5zM4 6h12v2H4V6zm0 3.5h12V16H4V9.5z" clipRule="evenodd" /></svg>
-                      {team.seasonCount} <span className="font-normal text-gray-600">sezon</span>
+                      {getSezoneText(team.seasonCount)}
                    </div>
                  )}
 
@@ -265,8 +303,78 @@ export default function TeamDashboardPage() {
                   <p className="text-sm mt-1">Klikni na gumb "Nova sezona" za ustvarjanje prve.</p>
                </div>
             ) : (
-               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {seasons.map((season) => (
+               <>
+                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6 flex flex-col md:flex-row gap-4 items-end md:items-center justify-between">
+                    <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
+                       <div className="flex flex-col gap-1.5 text-sm w-full md:w-auto">
+                          <label className="text-gray-500 font-medium text-xs">Datum od:</label>
+                          <input 
+                            type="date" 
+                            value={filterStartDate} 
+                            onChange={(e) => setFilterStartDate(e.target.value)}
+                            className="border border-gray-200 rounded-lg px-3 py-1.5 text-gray-700 outline-none focus:border-[#5BA582] transition-colors"
+                          />
+                       </div>
+                       <div className="flex flex-col gap-1.5 text-sm w-full md:w-auto">
+                          <label className="text-gray-500 font-medium text-xs">Datum do:</label>
+                          <input 
+                            type="date" 
+                            value={filterEndDate} 
+                            onChange={(e) => setFilterEndDate(e.target.value)}
+                            className="border border-gray-200 rounded-lg px-3 py-1.5 text-gray-700 outline-none focus:border-[#5BA582] transition-colors"
+                          />
+                       </div>
+                       <div className="flex flex-col gap-1.5 text-sm w-full md:w-auto">
+                          <label className="text-gray-500 font-medium text-xs">Razvrsti po:</label>
+                          <div className="flex gap-2">
+                            <select 
+                              value={sortBy} 
+                              onChange={(e) => setSortBy(e.target.value as 'name' | 'date')}
+                              className="border border-gray-200 rounded-lg px-3 py-1.5 text-gray-700 outline-none focus:border-[#5BA582] transition-colors bg-white cursor-pointer"
+                            >
+                              <option value="date">Datumu začetka</option>
+                              <option value="name">Imenu</option>
+                            </select>
+                            <button 
+                              onClick={() => setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')}
+                              className="border border-gray-200 rounded-lg px-2 py-1.5 text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors bg-white shadow-sm"
+                              title={sortOrder === 'asc' ? "Naraščajoče" : "Padajoče"}
+                            >
+                              {sortOrder === 'asc' ? (
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h9.75m4.5-4.5v12m0 0l-3.75-3.75M17.25 21L21 17.25" /></svg>
+                              ) : (
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h5.25m5.25-.75L17.25 9m0 0L21 12.75M17.25 9v12" /></svg>
+                              )}
+                            </button>
+                          </div>
+                       </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-1 bg-gray-100 p-1 rounded-lg self-end shrink-0 hidden md:flex">
+                       <button 
+                         onClick={() => setViewMode('grid')}
+                         className={`p-1.5 rounded-md transition-all ${viewMode === 'grid' ? 'bg-white shadow-sm text-gray-800' : 'text-gray-500 hover:text-gray-700'}`}
+                         title="Mrežni pogled"
+                       >
+                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" /></svg>
+                       </button>
+                       <button 
+                         onClick={() => setViewMode('list')}
+                         className={`p-1.5 rounded-md transition-all ${viewMode === 'list' ? 'bg-white shadow-sm text-gray-800' : 'text-gray-500 hover:text-gray-700'}`}
+                         title="Seznamski pogled"
+                       >
+                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5" /></svg>
+                       </button>
+                    </div>
+                 </div>
+
+                 {filteredSeasons && filteredSeasons.length === 0 ? (
+                   <div className="bg-white rounded-xl border border-gray-100 p-10 text-center text-gray-500 shadow-sm flex flex-col items-center justify-center">
+                      <p className="font-medium">Nobena sezona ne ustreza iskalnim filtrom.</p>
+                   </div>
+                 ) : (
+                   <div className={viewMode === 'grid' ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4" : "flex flex-col gap-4"}>
+                      {filteredSeasons?.map((season) => (
                     <div key={season._id} className="bg-white rounded-xl border border-gray-100 p-5 shadow-[0_2px_8px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_12px_-4px_rgba(0,0,0,0.1)] transition-all flex flex-col group relative overflow-hidden">
                        <div className="absolute top-0 left-0 w-1 h-full bg-[#dba032]" />
                        
@@ -316,7 +424,9 @@ export default function TeamDashboardPage() {
                        </div>
                     </div>
                   ))}
-               </div>
+                   </div>
+                 )}
+               </>
             )}
           </div>
 
