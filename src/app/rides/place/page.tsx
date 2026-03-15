@@ -65,7 +65,7 @@ export default function RidesPlacePage() {
         <title>{t.searchByLocation || 'Išči po lokaciji'} | Sport2Go</title>
       </Head>
       <Header />
-      <div className="h-[100px] md:h-[60px] shrink-0" />
+      <div className="h-[60px] md:h-[60px] shrink-0" />
 
       <div className="w-full flex-grow flex flex-col relative h-[calc(100vh-100px)] md:h-[calc(100vh-60px)]">
         {/* Search Header Overlay */}

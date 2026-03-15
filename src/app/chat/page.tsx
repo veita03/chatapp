@@ -63,7 +63,7 @@ export default function ChatInboxPage() {
   return (
     <div className="min-h-screen bg-[#F4F6F8] font-sans flex flex-col relative pb-20">
       <Header />
-      <div className="h-[100px] md:h-[60px]" />
+      <div className="h-[60px] md:h-[60px]" />
 
       <div className="w-full" style={{background: '#efc463'}}>
         <div className="max-w-6xl mx-auto px-4 sm:px-8 py-5 flex items-center space-x-3">

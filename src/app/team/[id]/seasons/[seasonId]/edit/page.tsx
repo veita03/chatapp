@@ -124,7 +124,7 @@ export default function EditSeasonPage() {
      return (
         <div className="min-h-screen bg-[#F4F6F8] font-sans flex flex-col relative pb-20">
           <Header />
-          <div className="h-[100px] md:h-[60px]" />
+          <div className="h-[60px] md:h-[60px]" />
           <div className="text-center py-20">
              <h2 className="text-2xl font-bold text-gray-800">Stran ne obstaja</h2>
              <button onClick={() => router.push('/teams')} className="mt-4 text-[#3b879c] underline font-bold">{t.backToTeams || "Nazaj na ekipe"}</button>
@@ -136,7 +136,7 @@ export default function EditSeasonPage() {
   return (
     <div className="min-h-screen bg-[#F4F6F8] font-sans flex flex-col relative pb-20">
       <Header />
-      <div className="h-[100px] md:h-[60px]" />
+      <div className="h-[60px] md:h-[60px]" />
 
       {/* Banner */}
       <div className="w-full" style={{background: '#efc463'}}>

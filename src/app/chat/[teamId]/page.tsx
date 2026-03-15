@@ -515,7 +515,7 @@ export default function ChatTeamPage() {
   return (
     <div className="flex flex-col h-[100dvh] bg-[#F4F6F8] text-[#444] font-sans overflow-hidden">
       <Header />
-      <div className="h-[100px] md:h-[60px] shrink-0" />
+      <div className="h-[60px] md:h-[60px] shrink-0" />
 
       {/* Main Chat Area Wrapper */}
       <div className="flex flex-1 overflow-hidden relative flex-col w-full h-full max-w-6xl mx-auto sm:px-8 sm:py-6">

@@ -145,7 +145,7 @@ export default function EditTeamPage() {
     return (
       <div className="min-h-screen bg-[#F4F6F8] font-sans flex flex-col relative pb-20">
         <Header />
-        <div className="h-[100px] md:h-[60px]" />
+        <div className="h-[60px] md:h-[60px]" />
         <div className="flex h-64 items-center justify-center">
             <div className="w-8 h-8 border-4 border-[#eeb054]/30 border-t-[#eeb054] rounded-full animate-spin"></div>
         </div>
@@ -157,7 +157,7 @@ export default function EditTeamPage() {
      return (
         <div className="min-h-screen bg-[#F4F6F8] font-sans flex flex-col relative pb-20">
           <Header />
-          <div className="h-[100px] md:h-[60px]" />
+          <div className="h-[60px] md:h-[60px]" />
           <div className="text-center py-20">
              <h2 className="text-2xl font-bold text-gray-800">{t.teamDoesNotExist}</h2>
              <button onClick={() => router.push('/teams')} className="mt-4 text-[#3b879c] underline font-bold">{t.backToTeams}</button>
@@ -169,7 +169,7 @@ export default function EditTeamPage() {
   return (
     <div className="min-h-screen bg-[#F4F6F8] font-sans flex flex-col relative pb-20">
       <Header />
-      <div className="h-[100px] md:h-[60px]" />
+      <div className="h-[60px] md:h-[60px]" />
 
       {/* Banner */}
       <div className="w-full" style={{background: '#efc463'}}>

@@ -49,7 +49,7 @@ export default function RidesPage() {
         <title>{t.ridesTitle} | Sport2Go</title>
       </Head>
       <Header />
-      <div className="h-[100px] md:h-[60px]" />
+      <div className="h-[60px] md:h-[60px]" />
 
       {/* Banner */}
       <div className="w-full" style={{background: '#efc463'}}>

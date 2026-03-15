@@ -51,7 +51,7 @@ export default function SeasonLayoutClient({
     return (
       <div className="min-h-[100dvh] bg-[#F4F6F8] font-sans flex flex-col relative pb-20">
         <Header />
-        <div className="h-[100px] md:h-[60px]" />
+        <div className="h-[60px] md:h-[60px]" />
         <div className="text-center py-20">
            <h2 className="text-2xl font-bold text-gray-800">Sezona ne obstaja</h2>
            <p className="text-gray-500 mb-6 mt-2">Povezava je napačna ali pa je bila sezona izbrisana.</p>
