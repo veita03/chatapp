@@ -48,6 +48,7 @@ export default function TeamDashboardPage() {
   };
   // For now, let's use getTeam and assume we have the raw data to build the subheader.
   const team = useQuery(api.teams.getTeam, { teamId });
+  const seasons = useQuery(api.seasons.getSeasonsByTeam, { teamId });
 
   useEffect(() => {
     if (!isAuthLoading && !isAuthenticated) {
