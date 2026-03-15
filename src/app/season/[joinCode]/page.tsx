@@ -17,8 +17,8 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
             <h1 className="text-3xl font-bold text-gray-800" style={{fontFamily: 'var(--font-montserrat)'}}>
               Dogodki
             </h1>
-            <button className="bg-[#5ba582] hover:bg-[#4d8f70] transition-colors text-white font-bold px-4 py-2.5 rounded-lg text-sm shadow-sm flex items-center gap-2">
-               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4"><path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" /></svg>
+            <button className="bg-[#5ba582] hover:bg-[#4d8f70] transition-colors text-white font-medium px-4 py-2.5 rounded-[10px] text-[15px] shadow-sm flex items-center gap-2">
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-[18px] h-[18px]"><path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" /></svg>
                Nov dogodek
             </button>
          </div>
