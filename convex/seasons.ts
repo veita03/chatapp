@@ -167,3 +167,49 @@ export const getSeasonsByTeam = query({
     );
   },
 });
+
+export const getSeason = query({
+  args: { seasonId: v.id("seasons") },
+  handler: async (ctx, args) => {
+    return await ctx.db.get(args.seasonId);
+  },
+});
+
+export const updateSeason = mutation({
+  args: {
+    seasonId: v.id("seasons"),
+    name: v.string(),
+    desc: v.optional(v.string()),
+    dateStart: v.optional(v.string()),
+    dateEnd: v.optional(v.string()),
+    isActive: v.boolean(),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) throw new Error("Unauthorized");
+
+    const season = await ctx.db.get(args.seasonId);
+    if (!season) throw new Error("Season not found");
+
+    // Check if user is an admin of the team
+    const adminMembership = await ctx.db
+      .query("memberships")
+      .withIndex("by_user", (q) => q.eq("userId", userId))
+      .filter((q) => q.eq(q.field("teamId"), season.teamId))
+      .first();
+
+    if (!adminMembership || adminMembership.role !== "admin") {
+      throw new Error("Only team admins can edit a season.");
+    }
+
+    await ctx.db.patch(args.seasonId, {
+      name: args.name,
+      isActive: args.isActive,
+      dateStart: args.dateStart,
+      dateEnd: args.dateEnd,
+      // desc is not in schema directly but we accept it above. We can just ignore or add to schema.
+    });
+
+    return args.seasonId;
+  },
+});

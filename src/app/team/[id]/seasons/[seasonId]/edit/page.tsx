@@ -20,20 +20,8 @@ export default function EditSeasonPage() {
   const seasonId = params.seasonId as Id<"seasons">;
   
   const team = useQuery(api.teams.getTeam, { teamId });
-  
-  // TODO: Create a proper query inside convex/seasons.ts for getting a season
-  // const season = useQuery(api.seasons.getSeason, { seasonId });
-  // For now, mocking season data locally so UI works 
-  const season = {
-     name: "Primera Sezone",
-     desc: "Opis",
-     dateStart: "2025-01-01",
-     dateEnd: "2025-12-31",
-     isActive: true
-  };
-
-  // TODO: Create a proper mutation inside convex/seasons.ts for updating a season
-  // const updateSeason = useMutation(api.seasons.updateSeason);
+  const season = useQuery(api.seasons.getSeason, { seasonId });
+  const updateSeason = useMutation(api.seasons.updateSeason);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -54,7 +42,7 @@ export default function EditSeasonPage() {
         isActive: season.isActive ?? true,
       });
     }
-  }, [/*season*/]); // Re-enable dependency when using real useQuery
+  }, [season]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<{name?: string, dateStart?: string, dateEnd?: string}>({});
@@ -102,11 +90,14 @@ export default function EditSeasonPage() {
     setIsSubmitting(true);
     
     try {
-      // await updateSeason({
-      //   seasonId,
-      //   ...formData
-      // });
-      console.log("Update season:", formData);
+      await updateSeason({
+        seasonId,
+        name: formData.name.trim(),
+        desc: formData.desc.trim() || undefined,
+        dateStart: formData.dateStart,
+        dateEnd: formData.dateEnd,
+        isActive: formData.isActive
+      });
       router.push(`/team/${teamId}`); // Redirect back to team dashboard after update
     } catch (error: any) {
        console.error(error);
@@ -117,7 +108,7 @@ export default function EditSeasonPage() {
     }
   };
 
-  if (isAuthLoading || !isAuthenticated || team === undefined) {
+  if (isAuthLoading || !isAuthenticated || team === undefined || season === undefined) {
     return (
       <div className="flex h-[100dvh] items-center justify-center bg-[#F4F6F8]">
         <div className="animate-pulse flex space-x-3 items-center">
@@ -129,13 +120,13 @@ export default function EditSeasonPage() {
     );
   }
 
-  if (team === null) {
+  if (team === null || season === null) {
      return (
         <div className="min-h-screen bg-[#F4F6F8] font-sans flex flex-col relative pb-20">
           <Header />
           <div className="h-[100px] md:h-[60px]" />
           <div className="text-center py-20">
-             <h2 className="text-2xl font-bold text-gray-800">Ekipa ne obstaja</h2>
+             <h2 className="text-2xl font-bold text-gray-800">Stran ne obstaja</h2>
              <button onClick={() => router.push('/teams')} className="mt-4 text-[#3b879c] underline font-bold">{t.backToTeams || "Nazaj na ekipe"}</button>
           </div>
         </div>
