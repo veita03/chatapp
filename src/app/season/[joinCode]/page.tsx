@@ -75,22 +75,12 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
             
             {/* Birthday Alert Block */}
             <div className="flex items-stretch mb-5 overflow-hidden">
-               <div className="flex-1 bg-[#fbf1ce] rounded-l-[8px] py-3 px-4 flex items-center justify-center gap-2.5 text-[#e5b352]">
-                  {/* Distinctive custom cake icon with 3 dots matching the exact mockup */}
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-[18px] h-[18px] shrink-0 mb-px">
-                    <path d="M12 2.5a1 1 0 0 1 1 1v1.171a3.001 3.001 0 0 1 2 2.829h1a3.001 3.001 0 0 1 2 2.829V11a1 1 0 1 1 2 0v1.171a5.002 5.002 0 0 0-6-3.172V7a1 1 0 0 1-1-1zm-4 4.171a5.004 5.004 0 0 1 3-1.168V7a1 1 0 1 1 2 0v2.003L12 9h1a2 2 0 1 0-2-2 1 1 0 1 1 2 0 4 4 0 0 1-4 4H7a2 2 0 1 0-2-2 1 1 0 1 1 2 0 4 4 0 0 1-4 4v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2A6 6 0 0 0 5 10.171z" opacity="0.3" />
-                     {/* Base Tray */}
-                     <path d="M4 14C4 13.4477 4.44772 13 5 13H19C19.5523 13 20 13.4477 20 14V15C20 15.5523 19.5523 16 19 16H5C4.44772 16 4 15.5523 4 15V14Z" />
-                     {/* Dome */}
-                     <path d="M6 12V11C6 7.68629 8.68629 5 12 5C15.3137 5 18 7.68629 18 11V12H6Z" />
-                     {/* Dots */}
-                     <circle cx="9" cy="9.5" r="1" fill="#fbf1ce" />
-                     <circle cx="12" cy="9.5" r="1" fill="#fbf1ce" />
-                     <circle cx="15" cy="9.5" r="1" fill="#fbf1ce" />
-                     {/* Knob */}
-                     <path d="M11 3C11 2.44772 11.4477 2 12 2C12.5523 2 13 2.44772 13 3V4H11V3Z" />
+               <div className="flex-1 bg-[#fbf1ce] rounded-l-[8px] py-2.5 px-3 flex items-center justify-center gap-2 text-[#e5b352]">
+                  {/* Unambiguous classic Birthday Cake icon */}
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 shrink-0">
+                     <path d="M12 2C11.4477 2 11 2.44772 11 3V5.59088C10.0818 5.86797 9.5 6.46743 9.5 7.5C9.5 8.3516 10.1557 9.38076 11 10.364V12H7C5.34315 12 4 13.3431 4 15V19C4 20.1046 4.89543 21 6 21H18C19.1046 21 20 20.1046 20 19V15C20 13.3431 18.6569 12 17 12H13V10.364C13.8443 9.38076 14.5 8.3516 14.5 7.5C14.5 6.46743 13.9182 5.86797 13 5.59088V3C13 2.44772 12.5523 2 12 2ZM9 15C9.55228 15 10 14.5523 10 14H14C14 14.5523 14.4477 15 15 15C15.5523 15 16 14.5523 16 14H17C17.5523 14 18 14.4477 18 15V16C16.8954 16 16 16.8954 16 18C16 19.1046 16.8954 20 18 20H6C7.10457 20 8 19.1046 8 18C8 16.8954 7.10457 16 6 16V15C6 14.4477 6.44772 14 7 14H8C8 14.5523 8.44772 15 9 15ZM12 7C12.3333 7 12.5 7.16667 12.5 7.5C12.5 7.95758 12.1895 8.71803 11.5 9.47959C10.8105 8.71803 10.5 7.95758 10.5 7.5C10.5 7.16667 10.6667 7 11 7H12Z" />
                   </svg>
-                  <span className="text-[12px] sm:text-[13px] font-bold tracking-wide truncate">Naslednji časti: Žiga Kirsanov 06.09.2026</span>
+                  <span className="text-[10px] font-bold tracking-wide truncate">Naslednji časti: Žiga Kirsanov 06.09.2026</span>
                </div>
                <div className="w-[5px] bg-[#efc463] shadow-inner rounded-r-[3px]"></div>
             </div>
