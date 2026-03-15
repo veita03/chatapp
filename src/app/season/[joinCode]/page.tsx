@@ -47,13 +47,97 @@ export default function SeasonDashboardPage({ params }: { params: Promise<{ join
 
          {/* Events List Scrollable Area */}
          <div className="flex-1 overflow-y-auto pr-2 space-y-4 pb-10">
-            {/* Empty State / Placeholder */}
-            <div className="bg-white rounded-xl border border-gray-100 p-8 text-center text-gray-500 shadow-sm flex flex-col items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-12 h-12 text-gray-300 mb-4">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-                </svg>
-                <p className="font-bold text-gray-700">Ni ustvarjenih dogodkov</p>
-                <p className="text-sm mt-1 max-w-sm mx-auto">Kliknite na gumb "Nov dogodek" za ustvarjanje prve tekme ali treninga v tej sezoni.</p>
+            {/* Sample Event Card (Matches Mockup) */}
+            <div className="bg-white rounded-[16px] border border-gray-100 shadow-sm flex flex-col overflow-hidden hover:border-gray-200 transition-colors cursor-pointer group">
+               {/* Event Header Strip */}
+               <div className="flex bg-[#efc463] text-white items-stretch">
+                  {/* Date Block */}
+                  <div className="flex flex-col items-center justify-center bg-[#e4ba5e] w-[65px] shrink-0 py-1.5 px-2">
+                     <span className="text-[10px] font-bold uppercase tracking-wider text-white/90">Avg</span>
+                     <span className="text-[22px] font-bold leading-none -mt-0.5">10</span>
+                  </div>
+                  
+                  {/* Title & Tag */}
+                  <div className="flex-1 px-4 py-2.5 flex items-center justify-between">
+                     <div className="flex items-center gap-2">
+                        <span className="bg-white/25 text-white text-[10px] font-bold px-2 py-0.5 rounded-md tracking-wide uppercase">Družabno</span>
+                        <h3 className="font-bold text-white text-[15px] truncate">Piknik in zaključek sezone</h3>
+                     </div>
+                     <div className="flex items-center gap-1.5 text-white/90">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-[14px] h-[14px] -mt-0.5"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clipRule="evenodd" /></svg>
+                        <span className="text-[13px] font-bold">18:00</span>
+                     </div>
+                  </div>
+               </div>
+               
+               {/* Event Body */}
+               <div className="p-4 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                  <div className="flex items-center gap-4 flex-1">
+                     {/* Sport/Event Icon Avatar */}
+                     <div className="w-[42px] h-[42px] shrink-0 rounded-full border border-gray-100 flex items-center justify-center bg-[#fcfaf4] shadow-sm text-lg">
+                        🍻
+                     </div>
+                     
+                     {/* Location & Details */}
+                     <div className="flex flex-col">
+                        <p className="text-gray-500 text-[13px] leading-snug line-clamp-2 pr-4">
+                           Zbrali se bomo na običajnem mestu za piknike. S seboj prinesite pijačo, hrano pa...
+                        </p>
+                     </div>
+                  </div>
+                  
+                  {/* Right Action / Location */}
+                  <div className="w-full sm:w-auto flex items-center sm:justify-end shrink-0 gap-3 pt-2 sm:pt-0 border-t border-gray-50 sm:border-0 mt-2 sm:mt-0">
+                     <div className="flex items-center bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-[12px] h-[12px] text-gray-400 mr-1.5"><path fillRule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11-.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" clipRule="evenodd" /></svg>
+                        <span className="text-[12px] font-bold text-gray-600">Športni park</span>
+                     </div>
+                     <div className="flex -space-x-1.5">
+                        <div className="w-7 h-7 rounded-full bg-green-100 border-2 border-white flex items-center justify-center text-green-600 text-[10px] font-bold z-10">4</div>
+                        <div className="w-7 h-7 rounded-full bg-red-100 border-2 border-white flex items-center justify-center text-red-600 text-[10px] font-bold z-0">1</div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            
+            {/* Sample Event Card 2 */}
+            <div className="bg-white rounded-[16px] border border-gray-100 shadow-sm flex flex-col overflow-hidden hover:border-gray-200 transition-colors cursor-pointer group mb-4">
+               {/* Event Header Strip (Gray Variant) */}
+               <div className="flex bg-[#6db59c] text-white items-stretch">
+                  <div className="flex flex-col items-center justify-center bg-[#5ca087] w-[65px] shrink-0 py-1.5 px-2">
+                     <span className="text-[10px] font-bold uppercase tracking-wider text-white/90">Sep</span>
+                     <span className="text-[22px] font-bold leading-none -mt-0.5">02</span>
+                  </div>
+                  <div className="flex-1 px-4 py-2.5 flex items-center justify-between">
+                     <div className="flex items-center gap-2">
+                        <span className="bg-white/25 text-white text-[10px] font-bold px-2 py-0.5 rounded-md tracking-wide uppercase">Trening</span>
+                        <h3 className="font-bold text-white text-[15px] truncate">Redni trening - kondicija</h3>
+                     </div>
+                     <div className="flex items-center gap-1.5 text-white/90">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-[14px] h-[14px] -mt-0.5"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clipRule="evenodd" /></svg>
+                        <span className="text-[13px] font-bold">19:30</span>
+                     </div>
+                  </div>
+               </div>
+               {/* Event Body */}
+               <div className="p-4 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                  <div className="flex items-center gap-4 flex-1">
+                     <div className="w-[42px] h-[42px] shrink-0 rounded-full border border-gray-100 flex items-center justify-center bg-teal-50 shadow-sm text-teal-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" /><path strokeLinecap="round" strokeLinejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z" /></svg>
+                     </div>
+                     <div className="flex flex-col">
+                        <p className="text-gray-500 text-[13px] leading-snug line-clamp-2 pr-4">
+                           Začnemo z ogrevanjem pol ure prej, nato dolgi teki in kondicijska priprava za prvo ligo.
+                        </p>
+                     </div>
+                  </div>
+                  <div className="w-full sm:w-auto flex items-center sm:justify-end shrink-0 gap-3 pt-2 sm:pt-0 border-t border-gray-50 sm:border-0 mt-2 sm:mt-0">
+                     <div className="flex items-center bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-[12px] h-[12px] text-gray-400 mr-1.5"><path fillRule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11-.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" clipRule="evenodd" /></svg>
+                        <span className="text-[12px] font-bold text-gray-600">Glavni stadion</span>
+                     </div>
+                  </div>
+               </div>
             </div>
          </div>
       </div>
